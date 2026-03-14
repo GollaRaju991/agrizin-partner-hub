@@ -8,16 +8,19 @@ const services = [
     title: "Rent Vehicle",
     description: "Rent tractors, harvesters, and other agricultural vehicles at affordable rates. Available on-demand across your region.",
     image: rentVehicleImg,
+    serviceType: "rent_vehicle" as const,
   },
   {
     title: "Farm Maker",
     description: "Access professional farm preparation services — plowing, tilling, and land leveling with modern equipment.",
     image: farmMakerImg,
+    serviceType: "farm_maker" as const,
   },
   {
     title: "Agrizin Driver",
     description: "Hire experienced agricultural vehicle drivers for your farming operations. Skilled, verified, and reliable.",
     image: agrizinDriverImg,
+    serviceType: "agrizin_driver" as const,
   },
 ];
 
@@ -42,6 +45,7 @@ const ServicesSection = () => {
               title={service.title}
               description={service.description}
               image={service.image}
+              serviceType={service.serviceType}
               delay={`${0.2 + index * 0.15}s`}
             />
           ))}
