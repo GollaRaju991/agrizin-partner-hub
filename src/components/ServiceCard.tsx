@@ -1,14 +1,30 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+
 interface ServiceCardProps {
   title: string;
   description: string;
   image: string;
   delay: string;
+  serviceType: "rent_vehicle" | "farm_maker" | "agrizin_driver";
 }
 
-const ServiceCard = ({ title, description, image, delay }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, image, delay, serviceType }: ServiceCardProps) => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleClick = () => {
+    if (user) {
+      navigate(`/dashboard?service=${serviceType}`);
+    } else {
+      navigate(`/login?redirect=/dashboard?service=${serviceType}`);
+    }
+  };
+
   return (
     <div
-      className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 group animate-fade-up opacity-0"
+      onClick={handleClick}
+      className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 group animate-fade-up opacity-0 cursor-pointer"
       style={{ animationDelay: delay, animationFillMode: "forwards" }}
     >
       <div className="h-52 bg-accent flex items-center justify-center overflow-hidden p-6">
@@ -21,9 +37,9 @@ const ServiceCard = ({ title, description, image, delay }: ServiceCardProps) => 
       <div className="p-6">
         <h3 className="font-heading font-bold text-xl text-card-foreground mb-2">{title}</h3>
         <p className="text-muted-foreground leading-relaxed">{description}</p>
-        <button className="mt-4 text-primary font-semibold hover:underline transition-all">
-          Learn More →
-        </button>
+        <span className="mt-4 inline-block text-primary font-semibold hover:underline transition-all">
+          Register Now →
+        </span>
       </div>
     </div>
   );

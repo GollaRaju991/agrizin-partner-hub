@@ -1,8 +1,18 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Switch } from "@/components/ui/switch";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, profile, signOut, toggleOnline } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
@@ -17,13 +27,43 @@ const Navbar = () => {
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Services</a>
-          <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors font-medium">About</a>
-          <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Contact</a>
-          <a href="#services" className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-            Get Started
-          </a>
+        <div className="hidden md:flex items-center gap-6">
+          <a href="/#services" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Services</a>
+          <a href="/#about" className="text-muted-foreground hover:text-foreground transition-colors font-medium">About</a>
+          <a href="/#contact" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Contact</a>
+
+          {user && profile ? (
+            <>
+              {/* Online/Offline toggle */}
+              <div className="flex items-center gap-2 border border-border rounded-full px-3 py-1.5">
+                <span className={`w-2 h-2 rounded-full ${profile.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
+                <span className="text-sm font-medium text-foreground">
+                  {profile.is_online ? "Online" : "Offline"}
+                </span>
+                <Switch
+                  checked={profile.is_online}
+                  onCheckedChange={toggleOnline}
+                  className="scale-75"
+                />
+              </div>
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={handleSignOut}
+                className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <a href="/login" className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+              Get Started
+            </a>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -35,12 +75,41 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden bg-card border-b border-border px-6 pb-4 space-y-3">
-          <a href="#services" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Services</a>
-          <a href="#about" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">About</a>
-          <a href="#contact" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Contact</a>
-          <a href="#services" className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center hover:opacity-90 transition-opacity">
-            Get Started
-          </a>
+          <a href="/#services" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Services</a>
+          <a href="/#about" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">About</a>
+          <a href="/#contact" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Contact</a>
+
+          {user && profile ? (
+            <>
+              <div className="flex items-center gap-2 py-2">
+                <span className={`w-2 h-2 rounded-full ${profile.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
+                <span className="text-sm font-medium text-foreground">
+                  {profile.is_online ? "Online" : "Offline"}
+                </span>
+                <Switch
+                  checked={profile.is_online}
+                  onCheckedChange={toggleOnline}
+                  className="scale-75"
+                />
+              </div>
+              <button
+                onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
+                className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2 w-full text-left"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={handleSignOut}
+                className="block border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground w-full text-center"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <a href="/login" className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center hover:opacity-90 transition-opacity">
+              Get Started
+            </a>
+          )}
         </div>
       )}
     </nav>
