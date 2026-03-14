@@ -14,7 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          first_name: string
+          id: string
+          is_online: boolean
+          phone: string
+          reference_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          first_name: string
+          id?: string
+          is_online?: boolean
+          phone: string
+          reference_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          first_name?: string
+          id?: string
+          is_online?: boolean
+          phone?: string
+          reference_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      service_applications: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          email: string | null
+          equipment_owned: string | null
+          experience_years: number | null
+          farm_location: string | null
+          farm_size: string | null
+          first_name: string
+          id: string
+          last_name: string | null
+          phone: string
+          registration_number: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          state: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          vehicle_make: string | null
+          vehicle_model: string | null
+          vehicle_type: string | null
+          vehicle_year: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          equipment_owned?: string | null
+          experience_years?: number | null
+          farm_location?: string | null
+          farm_size?: string | null
+          first_name: string
+          id?: string
+          last_name?: string | null
+          phone: string
+          registration_number?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_type?: string | null
+          vehicle_year?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          equipment_owned?: string | null
+          experience_years?: number | null
+          farm_location?: string | null
+          farm_size?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string | null
+          phone?: string
+          registration_number?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vehicle_make?: string | null
+          vehicle_model?: string | null
+          vehicle_type?: string | null
+          vehicle_year?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +130,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      service_type: "rent_vehicle" | "farm_maker" | "agrizin_driver"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +257,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      service_type: ["rent_vehicle", "farm_maker", "agrizin_driver"],
+    },
   },
 } as const
