@@ -14,10 +14,18 @@ const ServiceCard = ({ title, description, image, delay, serviceType }: ServiceC
   const { user } = useAuth();
 
   const handleClick = () => {
-    if (user) {
-      navigate(`/dashboard?service=${serviceType}`);
+    if (serviceType === "farm_maker") {
+      if (user) {
+        navigate("/register/farm-worker");
+      } else {
+        navigate("/login?redirect=/register/farm-worker");
+      }
     } else {
-      navigate(`/login?redirect=/dashboard?service=${serviceType}`);
+      if (user) {
+        navigate(`/dashboard?service=${serviceType}`);
+      } else {
+        navigate(`/login?redirect=/dashboard?service=${serviceType}`);
+      }
     }
   };
 
