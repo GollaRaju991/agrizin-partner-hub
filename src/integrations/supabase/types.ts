@@ -50,19 +50,28 @@ export type Database = {
       service_applications: {
         Row: {
           address: string | null
+          age: number | null
+          availability: string | null
           city: string | null
+          country: string | null
           created_at: string
+          district: string | null
           email: string | null
           equipment_owned: string | null
+          expected_wage: number | null
           experience_years: number | null
           farm_location: string | null
           farm_size: string | null
           first_name: string
+          gender: string | null
           id: string
           last_name: string | null
+          mandal: string | null
           phone: string
+          profile_photo_url: string | null
           registration_number: string | null
           service_type: Database["public"]["Enums"]["service_type"]
+          skills: string[] | null
           state: string | null
           status: string
           updated_at: string
@@ -71,22 +80,33 @@ export type Database = {
           vehicle_model: string | null
           vehicle_type: string | null
           vehicle_year: string | null
+          village: string | null
+          wage_type: string | null
         }
         Insert: {
           address?: string | null
+          age?: number | null
+          availability?: string | null
           city?: string | null
+          country?: string | null
           created_at?: string
+          district?: string | null
           email?: string | null
           equipment_owned?: string | null
+          expected_wage?: number | null
           experience_years?: number | null
           farm_location?: string | null
           farm_size?: string | null
           first_name: string
+          gender?: string | null
           id?: string
           last_name?: string | null
+          mandal?: string | null
           phone: string
+          profile_photo_url?: string | null
           registration_number?: string | null
           service_type: Database["public"]["Enums"]["service_type"]
+          skills?: string[] | null
           state?: string | null
           status?: string
           updated_at?: string
@@ -95,22 +115,33 @@ export type Database = {
           vehicle_model?: string | null
           vehicle_type?: string | null
           vehicle_year?: string | null
+          village?: string | null
+          wage_type?: string | null
         }
         Update: {
           address?: string | null
+          age?: number | null
+          availability?: string | null
           city?: string | null
+          country?: string | null
           created_at?: string
+          district?: string | null
           email?: string | null
           equipment_owned?: string | null
+          expected_wage?: number | null
           experience_years?: number | null
           farm_location?: string | null
           farm_size?: string | null
           first_name?: string
+          gender?: string | null
           id?: string
           last_name?: string | null
+          mandal?: string | null
           phone?: string
+          profile_photo_url?: string | null
           registration_number?: string | null
           service_type?: Database["public"]["Enums"]["service_type"]
+          skills?: string[] | null
           state?: string | null
           status?: string
           updated_at?: string
@@ -119,6 +150,8 @@ export type Database = {
           vehicle_model?: string | null
           vehicle_type?: string | null
           vehicle_year?: string | null
+          village?: string | null
+          wage_type?: string | null
         }
         Relationships: []
       }
