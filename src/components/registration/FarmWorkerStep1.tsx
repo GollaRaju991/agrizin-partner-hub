@@ -1,19 +1,12 @@
-import { User, Phone, MapPin, Camera, ChevronDown } from "lucide-react";
+import { User, Phone, MapPin, Camera, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-
-// Indian states list
-const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-];
+import { getStates, getDistricts, getMandals } from "@/data/indianLocations";
+import { useState } from "react";
 
 export interface Step1Data {
   first_name: string;
@@ -33,11 +26,29 @@ interface Props {
   data: Step1Data;
   onChange: (data: Step1Data) => void;
   onNext: () => void;
+  onBack: () => void;
 }
 
-const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
-  const update = (field: keyof Step1Data, value: string | File | null) =>
+const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const update = (field: keyof Step1Data, value: string | File | null) => {
     onChange({ ...data, [field]: value });
+    // Clear error on change
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const handleStateChange = (state: string) => {
+    onChange({ ...data, state, district: "", mandal: "" });
+    setErrors((prev) => ({ ...prev, state: "", district: "", mandal: "" }));
+  };
+
+  const handleDistrictChange = (district: string) => {
+    onChange({ ...data, district, mandal: "" });
+    setErrors((prev) => ({ ...prev, district: "", mandal: "" }));
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,26 +59,35 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
     }
     const preview = URL.createObjectURL(file);
     onChange({ ...data, profileImage: file, profileImagePreview: preview });
-  };
-
-  const handleUseLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation not supported");
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      () => toast.success("Location detected! Please fill address details."),
-      () => toast.error("Could not detect location")
-    );
+    setErrors((prev) => ({ ...prev, profileImage: "" }));
   };
 
   const handleNext = () => {
-    if (!data.first_name.trim()) { toast.error("Name is required"); return; }
-    if (!data.phone.trim() || data.phone.length < 10) { toast.error("Valid phone number is required"); return; }
-    if (!data.gender) { toast.error("Gender is required"); return; }
-    if (!data.age || parseInt(data.age) < 14 || parseInt(data.age) > 100) { toast.error("Valid age is required"); return; }
+    const newErrors: Record<string, string> = {};
+
+    if (!data.first_name.trim()) newErrors.first_name = "Name is required";
+    if (!data.phone.trim() || data.phone.length < 10) newErrors.phone = "Valid 10-digit phone number is required";
+    if (!data.gender) newErrors.gender = "Gender is required";
+    if (!data.age || parseInt(data.age) < 14 || parseInt(data.age) > 100) newErrors.age = "Valid age (14-100) is required";
+    if (!data.state) newErrors.state = "State is required";
+    if (!data.district) newErrors.district = "District is required";
+    if (!data.profileImage && !data.profileImagePreview) newErrors.profileImage = "Profile photo is required";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      toast.error("Please fill all required fields");
+      return;
+    }
     onNext();
   };
+
+  const states = getStates();
+  const districts = data.state ? getDistricts(data.state) : [];
+  const mandals = data.state && data.district ? getMandals(data.state, data.district) : [];
+
+  const errorClass = (field: string) =>
+    errors[field] ? "border-destructive ring-1 ring-destructive" : "border-border";
 
   return (
     <div className="space-y-5 pb-24">
@@ -79,29 +99,35 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
         </div>
 
         <div className="space-y-3">
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Name"
-              value={data.first_name}
-              onChange={(e) => update("first_name", e.target.value)}
-              className="pl-10 h-11 rounded-xl border-border focus:border-primary"
-            />
-          </div>
-
-          <div className="relative">
-            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <span className="absolute left-9 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">+91</span>
-            <Input
-              placeholder="90000 00000"
-              value={data.phone}
-              onChange={(e) => update("phone", e.target.value.replace(/\D/g, "").slice(0, 10))}
-              className="pl-[4.5rem] h-11 rounded-xl border-border focus:border-primary"
-            />
+          <div>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Name *"
+                value={data.first_name}
+                onChange={(e) => update("first_name", e.target.value)}
+                className={`pl-10 h-11 rounded-xl focus:border-primary ${errorClass("first_name")}`}
+              />
+            </div>
+            {errors.first_name && <p className="text-destructive text-xs mt-1">{errors.first_name}</p>}
           </div>
 
           <div>
-            <Label className="text-sm font-medium text-foreground mb-2 block">Gender</Label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <span className="absolute left-9 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">+91</span>
+              <Input
+                placeholder="90000 00000"
+                value={data.phone}
+                onChange={(e) => update("phone", e.target.value.replace(/\D/g, "").slice(0, 10))}
+                className={`pl-[4.5rem] h-11 rounded-xl focus:border-primary ${errorClass("phone")}`}
+              />
+            </div>
+            {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
+          </div>
+
+          <div>
+            <Label className="text-sm font-medium text-foreground mb-2 block">Gender *</Label>
             <RadioGroup
               value={data.gender}
               onValueChange={(v) => update("gender", v)}
@@ -114,17 +140,21 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
                 </div>
               ))}
             </RadioGroup>
+            {errors.gender && <p className="text-destructive text-xs mt-1">{errors.gender}</p>}
           </div>
 
-          <div className="flex items-center gap-3">
-            <Label className="text-sm font-medium text-foreground whitespace-nowrap">Age</Label>
-            <Input
-              type="number"
-              placeholder="25"
-              value={data.age}
-              onChange={(e) => update("age", e.target.value.replace(/\D/g, "").slice(0, 3))}
-              className="h-11 rounded-xl border-border focus:border-primary w-24"
-            />
+          <div>
+            <div className="flex items-center gap-3">
+              <Label className="text-sm font-medium text-foreground whitespace-nowrap">Age *</Label>
+              <Input
+                type="number"
+                placeholder="25"
+                value={data.age}
+                onChange={(e) => update("age", e.target.value.replace(/\D/g, "").slice(0, 3))}
+                className={`h-11 rounded-xl focus:border-primary w-24 ${errorClass("age")}`}
+              />
+            </div>
+            {errors.age && <p className="text-destructive text-xs mt-1">{errors.age}</p>}
           </div>
         </div>
       </div>
@@ -136,48 +166,59 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
           Address
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleUseLocation}
-          className="w-full h-11 rounded-xl border-border text-muted-foreground gap-2 justify-start"
-        >
-          <MapPin className="w-4 h-4 text-primary" />
-          Use current location
-        </Button>
-
         <div className="flex items-center justify-between border border-border rounded-xl px-3 h-11">
           <span className="text-sm text-foreground">Country</span>
           <span className="text-sm text-muted-foreground">India</span>
         </div>
 
-        <Select value={data.state} onValueChange={(v) => update("state", v)}>
-          <SelectTrigger className="h-11 rounded-xl border-border">
-            <div className="flex items-center justify-between w-full">
-              <span className="text-sm text-foreground">State</span>
-              <SelectValue placeholder="Select state" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            {INDIAN_STATES.map((s) => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div>
+          <Select value={data.state} onValueChange={handleStateChange}>
+            <SelectTrigger className={`h-11 rounded-xl ${errorClass("state")}`}>
+              <SelectValue placeholder="Select state *" />
+            </SelectTrigger>
+            <SelectContent className="max-h-60">
+              {states.map((s) => (
+                <SelectItem key={s} value={s}>{s}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.state && <p className="text-destructive text-xs mt-1">{errors.state}</p>}
+        </div>
 
-        <Input
-          placeholder="District"
-          value={data.district}
-          onChange={(e) => update("district", e.target.value)}
-          className="h-11 rounded-xl border-border focus:border-primary"
-        />
+        <div>
+          <Select
+            value={data.district}
+            onValueChange={handleDistrictChange}
+            disabled={!data.state}
+          >
+            <SelectTrigger className={`h-11 rounded-xl ${errorClass("district")}`}>
+              <SelectValue placeholder="Select district *" />
+            </SelectTrigger>
+            <SelectContent className="max-h-60">
+              {districts.map((d) => (
+                <SelectItem key={d} value={d}>{d}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.district && <p className="text-destructive text-xs mt-1">{errors.district}</p>}
+        </div>
 
-        <Input
-          placeholder="Mandal"
-          value={data.mandal}
-          onChange={(e) => update("mandal", e.target.value)}
-          className="h-11 rounded-xl border-border focus:border-primary"
-        />
+        <div>
+          <Select
+            value={data.mandal}
+            onValueChange={(v) => update("mandal", v)}
+            disabled={!data.district}
+          >
+            <SelectTrigger className="h-11 rounded-xl border-border">
+              <SelectValue placeholder="Select mandal" />
+            </SelectTrigger>
+            <SelectContent className="max-h-60">
+              {mandals.map((m) => (
+                <SelectItem key={m} value={m}>{m}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <Input
           placeholder="Village"
@@ -188,10 +229,10 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
       </div>
 
       {/* Upload Photo */}
-      <div className="bg-card rounded-2xl border border-border p-4 shadow-card space-y-3">
+      <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.profileImage ? "border-destructive" : "border-border"}`}>
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Camera className="w-4 h-4 text-primary" />
-          Upload Photo
+          Upload Photo *
         </div>
         <p className="text-xs text-muted-foreground">Upload profile image. Max file size: 10 MB</p>
 
@@ -203,7 +244,7 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
               className="w-20 h-20 rounded-xl object-cover border border-border"
             />
           ) : (
-            <div className="w-20 h-20 rounded-xl bg-muted border border-border flex items-center justify-center">
+            <div className={`w-20 h-20 rounded-xl bg-muted border flex items-center justify-center ${errors.profileImage ? "border-destructive" : "border-border"}`}>
               <Camera className="w-6 h-6 text-muted-foreground" />
             </div>
           )}
@@ -214,16 +255,23 @@ const FarmWorkerStep1 = ({ data, onChange, onNext }: Props) => {
             <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
           </label>
         </div>
+        {errors.profileImage && <p className="text-destructive text-xs">{errors.profileImage}</p>}
       </div>
 
-      {/* Sticky Next button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t border-border">
+      {/* Sticky buttons */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t border-border space-y-2">
         <Button
           onClick={handleNext}
           className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-base hover:opacity-90"
         >
           Next →
         </Button>
+        <button
+          onClick={onBack}
+          className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1 flex items-center justify-center gap-1"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Back
+        </button>
       </div>
     </div>
   );
