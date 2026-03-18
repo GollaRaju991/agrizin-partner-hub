@@ -9,14 +9,21 @@ const Navbar = () => {
   const { user, profile, signOut, toggleOnline } = useAuth();
   const navigate = useNavigate();
 
+  const handleLogin = () => {
+    navigate("/login");
+    setIsOpen(false);
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+    setIsOpen(false);
   };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
         <a href="/" className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-heading font-bold text-xl">A</span>
@@ -27,11 +34,7 @@ const Navbar = () => {
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
-          <a href="/#services" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Services</a>
-          <a href="/#about" className="text-muted-foreground hover:text-foreground transition-colors font-medium">About</a>
-          <a href="/#contact" className="text-muted-foreground hover:text-foreground transition-colors font-medium">Contact</a>
-
+        <div className="hidden md:flex items-center gap-4">
           {user && profile ? (
             <>
               {/* Online/Offline toggle */}
@@ -46,23 +49,35 @@ const Navbar = () => {
                   className="scale-75"
                 />
               </div>
+
+              {/* My Earnings */}
               <button
                 onClick={() => navigate("/dashboard")}
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
               >
-                Dashboard
+                My Earnings
               </button>
-              <button
-                onClick={handleSignOut}
-                className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
-              >
-                Logout
-              </button>
+
+              {/* User name & logout */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-semibold text-foreground">
+                  {profile.first_name}
+                </span>
+                <button
+                  onClick={handleSignOut}
+                  className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
             </>
           ) : (
-            <a href="/login" className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-              Get Started
-            </a>
+            <button
+              onClick={handleLogin}
+              className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+            >
+              Login
+            </button>
           )}
         </div>
 
@@ -75,10 +90,6 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden bg-card border-b border-border px-6 pb-4 space-y-3">
-          <a href="/#services" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Services</a>
-          <a href="/#about" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">About</a>
-          <a href="/#contact" className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2">Contact</a>
-
           {user && profile ? (
             <>
               <div className="flex items-center gap-2 py-2">
@@ -96,19 +107,25 @@ const Navbar = () => {
                 onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
                 className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2 w-full text-left"
               >
-                Dashboard
+                My Earnings
               </button>
-              <button
-                onClick={handleSignOut}
-                className="block border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground w-full text-center"
-              >
-                Logout
-              </button>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-semibold text-foreground">{profile.first_name}</span>
+                <button
+                  onClick={handleSignOut}
+                  className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground"
+                >
+                  Logout
+                </button>
+              </div>
             </>
           ) : (
-            <a href="/login" className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center hover:opacity-90 transition-opacity">
-              Get Started
-            </a>
+            <button
+              onClick={handleLogin}
+              className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center w-full"
+            >
+              Login
+            </button>
           )}
         </div>
       )}
