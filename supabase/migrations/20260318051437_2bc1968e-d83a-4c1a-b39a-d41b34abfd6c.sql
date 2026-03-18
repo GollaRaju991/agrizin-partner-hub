@@ -1,0 +1,1 @@
+ALTER TABLE public.service_applications ALTER COLUMN status SET DEFAULT 'approved';
