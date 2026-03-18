@@ -9,8 +9,20 @@ const Navbar = () => {
   const { user, profile, signOut, toggleOnline } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate("/login");
+  const handleToggleOnline = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    toggleOnline();
+  };
+
+  const handleMyEarnings = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    navigate("/dashboard");
     setIsOpen(false);
   };
 
@@ -35,45 +47,38 @@ const Navbar = () => {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-4">
+          {/* Online/Offline toggle — always visible */}
+          <div className="flex items-center gap-2 border border-border rounded-full px-3 py-1.5 cursor-pointer">
+            <span className={`w-2 h-2 rounded-full ${user && profile?.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
+            <span className="text-sm font-medium text-foreground">
+              {user && profile?.is_online ? "Online" : "Offline"}
+            </span>
+            <Switch
+              checked={!!profile?.is_online}
+              onCheckedChange={handleToggleOnline}
+              className="scale-75"
+            />
+          </div>
+
+          {/* My Earnings — always visible */}
+          <button
+            onClick={handleMyEarnings}
+            className="text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
+          >
+            My Earnings
+          </button>
+
+          {/* Login / User Name */}
           {user && profile ? (
-            <>
-              {/* Online/Offline toggle */}
-              <div className="flex items-center gap-2 border border-border rounded-full px-3 py-1.5">
-                <span className={`w-2 h-2 rounded-full ${profile.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
-                <span className="text-sm font-medium text-foreground">
-                  {profile.is_online ? "Online" : "Offline"}
-                </span>
-                <Switch
-                  checked={profile.is_online}
-                  onCheckedChange={toggleOnline}
-                  className="scale-75"
-                />
-              </div>
-
-              {/* My Earnings */}
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium text-sm"
-              >
-                My Earnings
-              </button>
-
-              {/* User name & logout */}
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-foreground">
-                  {profile.first_name}
-                </span>
-                <button
-                  onClick={handleSignOut}
-                  className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            </>
+            <button
+              onClick={handleSignOut}
+              className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+            >
+              {profile.first_name}
+            </button>
           ) : (
             <button
-              onClick={handleLogin}
+              onClick={() => navigate("/login")}
               className="bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
               Login
@@ -90,38 +95,35 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden bg-card border-b border-border px-6 pb-4 space-y-3">
+          <div className="flex items-center gap-2 py-2">
+            <span className={`w-2 h-2 rounded-full ${user && profile?.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
+            <span className="text-sm font-medium text-foreground">
+              {user && profile?.is_online ? "Online" : "Offline"}
+            </span>
+            <Switch
+              checked={!!profile?.is_online}
+              onCheckedChange={handleToggleOnline}
+              className="scale-75"
+            />
+          </div>
+
+          <button
+            onClick={handleMyEarnings}
+            className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2 w-full text-left"
+          >
+            My Earnings
+          </button>
+
           {user && profile ? (
-            <>
-              <div className="flex items-center gap-2 py-2">
-                <span className={`w-2 h-2 rounded-full ${profile.is_online ? "bg-primary" : "bg-muted-foreground"}`} />
-                <span className="text-sm font-medium text-foreground">
-                  {profile.is_online ? "Online" : "Offline"}
-                </span>
-                <Switch
-                  checked={profile.is_online}
-                  onCheckedChange={toggleOnline}
-                  className="scale-75"
-                />
-              </div>
-              <button
-                onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
-                className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2 w-full text-left"
-              >
-                My Earnings
-              </button>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm font-semibold text-foreground">{profile.first_name}</span>
-                <button
-                  onClick={handleSignOut}
-                  className="border border-border px-4 py-2 rounded-lg text-sm font-medium text-foreground"
-                >
-                  Logout
-                </button>
-              </div>
-            </>
+            <button
+              onClick={handleSignOut}
+              className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center w-full"
+            >
+              {profile.first_name}
+            </button>
           ) : (
             <button
-              onClick={handleLogin}
+              onClick={() => { navigate("/login"); setIsOpen(false); }}
               className="block bg-primary text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-center w-full"
             >
               Login
