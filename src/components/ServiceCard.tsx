@@ -6,6 +6,7 @@ interface ServiceCardProps {
   description: string;
   image: string;
   delay: string;
+  badge?: string;
   serviceType: "rent_vehicle" | "farm_maker" | "agrizin_driver";
 }
 
