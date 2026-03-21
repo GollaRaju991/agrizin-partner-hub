@@ -19,18 +19,14 @@ export const INDIAN_LOCATIONS: Record<string, Record<string, string[]>> = {
     "West Godavari": ["Eluru", "Bhimavaram", "Tadepalligudem", "Tanuku", "Narasapuram", "Palacole", "Kovvur", "Nidadavole", "Jangareddygudem", "Chintalapudi"],
     "YSR Kadapa": ["Kadapa", "Proddatur", "Rajampet", "Jammalamadugu", "Pulivendla", "Mydukur", "Badvel", "Rayachoti", "Kamalapuram", "Lakkireddypalle"],
   },
-  "Telangana": {
-    "Adilabad": ["Adilabad", "Mancherial", "Nirmal", "Bellampalli", "Bhainsa", "Luxettipet", "Mandamarri", "Chennur", "Khanapur", "Utnoor"],
-    "Hyderabad": ["Ameerpet", "Begumpet", "Secunderabad", "Charminar", "Jubilee Hills", "Banjara Hills", "Kukatpally", "Malkajgiri", "Musheerabad", "Nampally"],
-    "Karimnagar": ["Karimnagar", "Huzurabad", "Jammikunta", "Peddapalli", "Sircilla", "Vemulawada", "Choppadandi", "Manakondur", "Shankarapatnam", "Gangadhara"],
-    "Khammam": ["Khammam", "Kothagudem", "Sathupalli", "Bhadrachalam", "Yellandu", "Palvancha", "Madhira", "Wyra", "Chintakani", "Kallur"],
-    "Mahabubnagar": ["Mahabubnagar", "Jadcherla", "Shadnagar", "Wanaparthy", "Nagarkurnool", "Gadwal", "Narayanpet", "Kollapur", "Achampet", "Alampur"],
-    "Medak": ["Sangareddy", "Siddipet", "Medak", "Zaheerabad", "Narayankhed", "Narsapur", "Toopran", "Patancheru", "Ramayampet", "Dubbak"],
-    "Nalgonda": ["Nalgonda", "Suryapet", "Miryalaguda", "Bhongir", "Devarakonda", "Kodad", "Huzurnagar", "Nakrekal", "Alair", "Chityala"],
-    "Nizamabad": ["Nizamabad", "Bodhan", "Kamareddy", "Armoor", "Banswada", "Yellareddy", "Balkonda", "Dichpally", "Bichkunda", "Domakonda"],
-    "Rangareddy": ["Shamshabad", "Ibrahimpatnam", "Chevella", "Vikarabad", "Tandur", "Pargi", "Maheshwaram", "Hayathnagar", "Rajendranagar", "Shabad"],
-    "Warangal": ["Warangal", "Hanamkonda", "Jangaon", "Mahabubabad", "Mulugu", "Narsampet", "Parkal", "Bhupalpally", "Dornakal", "Thorrur"],
-  },
+  "Telangana": (() => {
+    const result: Record<string, string[]> = {};
+    const districts = getTelanganaDistrictNames();
+    districts.forEach((d) => {
+      result[d] = getTelanganaMandals(d);
+    });
+    return result;
+  })(),
   "Karnataka": {
     "Bangalore Urban": ["Bangalore North", "Bangalore South", "Bangalore East", "Anekal", "Yelahanka"],
     "Bangalore Rural": ["Devanahalli", "Doddaballapur", "Hosakote", "Nelamangala"],
