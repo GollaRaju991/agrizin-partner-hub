@@ -15,17 +15,11 @@ const ServiceCard = ({ title, description, image, badge, serviceType }: ServiceC
 
   const handleClick = () => {
     if (serviceType === "farm_maker") {
-      if (user) {
-        navigate("/register/farm-worker");
-      } else {
-        navigate("/login?redirect=/register/farm-worker");
-      }
+      navigate(user ? "/register/farm-worker" : "/login?redirect=/register/farm-worker");
+    } else if (serviceType === "rent_vehicle") {
+      navigate(user ? "/register/vehicle" : "/login?redirect=/register/vehicle");
     } else {
-      if (user) {
-        navigate(`/dashboard?service=${serviceType}`);
-      } else {
-        navigate(`/login?redirect=/dashboard?service=${serviceType}`);
-      }
+      navigate(user ? `/dashboard?service=${serviceType}` : `/login?redirect=/dashboard?service=${serviceType}`);
     }
   };
 

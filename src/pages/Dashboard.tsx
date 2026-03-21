@@ -16,10 +16,13 @@ const Dashboard = () => {
   const [applications, setApplications] = useState<ServiceApplication[]>([]);
   const [showForm, setShowForm] = useState(!!serviceType && serviceType !== "farm_maker");
 
-  // Redirect farm_maker to dedicated registration page
+  // Redirect farm_maker and rent_vehicle to dedicated registration pages
   useEffect(() => {
     if (serviceType === "farm_maker" && user) {
       navigate("/register/farm-worker", { replace: true });
+    }
+    if (serviceType === "rent_vehicle" && user) {
+      navigate("/register/vehicle", { replace: true });
     }
   }, [serviceType, user, navigate]);
 
