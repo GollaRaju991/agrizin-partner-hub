@@ -14,6 +14,7 @@ const services = [
     title: "Farm Worker",
     description: "Hire experienced farm workers for harvesting, cutting, and field work or reaping hook.",
     image: farmWorkerImg,
+    badge: "Field Service",
     serviceType: "farm_maker" as const,
   },
   {
