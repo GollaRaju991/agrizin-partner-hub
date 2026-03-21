@@ -174,31 +174,39 @@ const RegisterFarmWorker = () => {
 
   return (
     <div className="min-h-screen bg-muted">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-card border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2 mb-2">
-          <button onClick={() => navigate("/")} className="mr-1 text-muted-foreground hover:text-foreground transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
-          </div>
-          <span className="font-heading font-bold text-base text-foreground">
-            Agrizin<span className="text-primary">Partner</span>
-          </span>
-        </div>
-        <h1 className="font-heading font-bold text-xl text-foreground">Register as Farm Worker</h1>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-sm text-muted-foreground">Step {step} of 2</span>
-          <div className="flex-1 flex gap-1.5">
-            <div className={`h-1.5 rounded-full flex-1 transition-colors ${step >= 1 ? "bg-primary" : "bg-border"}`} />
-            <div className={`h-1.5 rounded-full flex-1 transition-colors ${step >= 2 ? "bg-primary" : "bg-border"}`} />
+      {/* Green Banner Header */}
+      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
+        <button
+          onClick={() => navigate("/")}
+          className="absolute top-3 left-3 flex items-center gap-1.5 text-primary-foreground/80 hover:text-primary-foreground text-sm font-medium transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Back
+        </button>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <h1 className="font-heading font-bold text-2xl md:text-3xl">Farm Worker Registration</h1>
+            <p className="text-primary-foreground/80 text-sm mt-1">
+              {step === 1
+                ? "Enter your personal details below to proceed with your registration."
+                : "Enter your skills and work preferences to complete your registration."}
+            </p>
+            {/* Step indicator */}
+            <div className="flex items-center justify-center gap-3 mt-4">
+              <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+                Step 1
+              </div>
+              <div className="w-8 h-px bg-primary-foreground/40" />
+              <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+                Step 2
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Form content */}
-      <div className="max-w-lg mx-auto px-4 py-5">
+      <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
         {step === 1 ? (
           <FarmWorkerStep1
             data={step1}
