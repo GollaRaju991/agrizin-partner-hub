@@ -14,7 +14,14 @@ const Dashboard = () => {
   const [searchParams] = useSearchParams();
   const serviceType = searchParams.get("service") as "rent_vehicle" | "farm_maker" | "agrizin_driver" | null;
   const [applications, setApplications] = useState<ServiceApplication[]>([]);
-  const [showForm, setShowForm] = useState(!!serviceType);
+  const [showForm, setShowForm] = useState(!!serviceType && serviceType !== "farm_maker");
+
+  // Redirect farm_maker to dedicated registration page
+  useEffect(() => {
+    if (serviceType === "farm_maker" && user) {
+      navigate("/register/farm-worker", { replace: true });
+    }
+  }, [serviceType, user, navigate]);
 
   useEffect(() => {
     if (!loading && !user) {
