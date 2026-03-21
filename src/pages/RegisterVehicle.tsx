@@ -184,6 +184,7 @@ const RegisterVehicle = () => {
 
   return (
     <div className="min-h-screen bg-muted">
+      <SuccessDialog open={showSuccess} onClose={() => navigate("/")} />
       {/* Green Banner Header */}
       <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
         <button
