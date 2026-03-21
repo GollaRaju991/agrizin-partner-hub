@@ -136,8 +136,7 @@ const RegisterVehicle = () => {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
-        toast.success("Your vehicle registration has been submitted successfully.");
-        navigate("/dashboard");
+        setShowSuccess(true);
       }
     } catch (err) {
       console.error(err);
