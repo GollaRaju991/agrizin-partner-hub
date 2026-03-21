@@ -408,7 +408,7 @@ const languageOptions: { id: Language; label: string; flag: string }[] = [
 ];
 
 const AccountTab = () => {
-  const { user, profile, signUp, signIn, signOut } = useAuth();
+  const { user, profile, signUp, signIn, signOut, refreshProfile } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
   const navigate = useNavigate();
