@@ -103,206 +103,239 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
     errors[field] ? "border-destructive ring-1 ring-destructive" : "";
 
   const FieldLabel = ({ children }: { children: React.ReactNode }) => (
-    <label className="block text-sm font-semibold text-foreground mb-1.5">{children}</label>
+    <label className="block text-xs font-semibold text-foreground mb-1">{children}</label>
   );
 
-  const ImageUpload = ({
+  const DocImageUpload = ({
     label,
     field,
     previewField,
     preview,
-    rounded = false,
-    size = "md",
   }: {
     label: string;
-    field: "profileImage" | "aadhaarFront" | "aadhaarBack";
-    previewField: "profileImagePreview" | "aadhaarFrontPreview" | "aadhaarBackPreview";
+    field: "aadhaarFront" | "aadhaarBack";
+    previewField: "aadhaarFrontPreview" | "aadhaarBackPreview";
     preview: string;
-    rounded?: boolean;
-    size?: "sm" | "md" | "lg";
-  }) => {
-    const sizeClasses = size === "lg" ? "w-28 h-28" : size === "md" ? "w-24 h-24" : "w-20 h-20";
-    return (
-      <div className="flex flex-col items-center gap-2">
-        {preview ? (
-          <div className="relative">
-            <img
-              src={preview}
-              alt={label}
-              className={`${sizeClasses} ${rounded ? "rounded-full" : "rounded-lg"} object-cover border-2 border-primary/30`}
-            />
-            <button
-              type="button"
-              onClick={() => removeImage(field, previewField)}
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:opacity-80 shadow-md"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-            <label className="mt-1 cursor-pointer">
-              <span className="text-xs text-primary font-medium hover:underline">Change</span>
-              <input type="file" accept="image/*" onChange={handleImageUpload(field, previewField)} className="hidden" />
-            </label>
-          </div>
-        ) : (
-          <label
-            className={`${sizeClasses} ${rounded ? "rounded-full" : "rounded-lg"} border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 transition-colors ${errors[field] ? "border-destructive" : "border-border"}`}
+  }) => (
+    <div className="flex flex-col items-center gap-1.5">
+      {preview ? (
+        <div className="relative">
+          <img
+            src={preview}
+            alt={label}
+            className="w-[100px] h-[68px] md:w-28 md:h-20 rounded-lg object-cover border-2 border-primary/20 shadow-sm"
+          />
+          <button
+            type="button"
+            onClick={() => removeImage(field, previewField)}
+            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md"
           >
-            <Camera className="w-5 h-5 text-muted-foreground mb-1" />
-            <span className="text-[10px] text-muted-foreground">Upload</span>
+            <X className="w-3 h-3" />
+          </button>
+          <label className="mt-0.5 cursor-pointer block text-center">
+            <span className="text-[10px] text-primary font-medium hover:underline">Change</span>
             <input type="file" accept="image/*" onChange={handleImageUpload(field, previewField)} className="hidden" />
           </label>
-        )}
-        <span className="text-xs text-muted-foreground font-medium">{label}</span>
-        {errors[field] && <p className="text-destructive text-[10px]">{errors[field]}</p>}
-      </div>
-    );
-  };
+        </div>
+      ) : (
+        <label
+          className={`w-[100px] h-[68px] md:w-28 md:h-20 rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all ${errors[field] ? "border-destructive bg-destructive/5" : "border-border"}`}
+        >
+          <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
+          <span className="text-[9px] text-muted-foreground font-medium">Upload</span>
+          <input type="file" accept="image/*" onChange={handleImageUpload(field, previewField)} className="hidden" />
+        </label>
+      )}
+      <span className="text-[10px] text-muted-foreground font-medium">{label}</span>
+      {errors[field] && <p className="text-destructive text-[9px]">{errors[field]}</p>}
+    </div>
+  );
 
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-[var(--shadow-card)] overflow-hidden">
-      <div className="p-5 md:p-8 space-y-6">
-        {/* Mobile: Step title */}
-        <h2 className="md:hidden font-heading font-bold text-lg text-foreground">Step 1: Personal Details</h2>
+    <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="p-4 md:p-8 space-y-5">
 
-        {/* Desktop: 2-column layout for name+mobile+profile, Mobile: single column */}
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6">
-          <div className="space-y-4">
-            {/* Full Name & Mobile - 2 col on desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <FieldLabel>Full Name *</FieldLabel>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                  <Input
-                    placeholder="E.g. John Doe"
-                    value={data.full_name}
-                    onChange={(e) => update("full_name", e.target.value)}
-                    className={`pl-10 h-11 rounded-lg ${errorClass("full_name")}`}
-                  />
-                </div>
-                {errors.full_name && <p className="text-destructive text-xs mt-1">{errors.full_name}</p>}
-              </div>
-              <div>
-                <FieldLabel>Mobile Number *</FieldLabel>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                  <Input
-                    placeholder="E.g. 9876543210"
-                    value={data.mobile}
-                    onChange={(e) => update("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    className={`pl-10 h-11 rounded-lg ${errorClass("mobile")}`}
-                  />
-                </div>
-                {errors.mobile && <p className="text-destructive text-xs mt-1">{errors.mobile}</p>}
-              </div>
-            </div>
-
-            {/* Aadhaar / PAN */}
-            <div>
-              <FieldLabel>Aadhaar / PAN Number *</FieldLabel>
+        {/* Title row with profile image inline */}
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="font-heading font-bold text-base md:text-lg text-foreground pt-1">
+            Step 1: Personal Details
+          </h2>
+          {/* Profile Image - circular, top right */}
+          <div className="flex flex-col items-center shrink-0">
+            {data.profileImagePreview ? (
               <div className="relative">
-                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <Input
-                  placeholder="E.g. 123456789012 or ABCDE1234F"
-                  value={data.aadhaar_pan}
-                  onChange={(e) => update("aadhaar_pan", e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12))}
-                  className={`pl-10 h-11 rounded-lg ${errorClass("aadhaar_pan")}`}
+                <img
+                  src={data.profileImagePreview}
+                  alt="Profile"
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-primary/30 shadow-md"
                 />
+                <button
+                  type="button"
+                  onClick={() => removeImage("profileImage", "profileImagePreview")}
+                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+                <label className="block text-center mt-0.5 cursor-pointer">
+                  <span className="text-[9px] text-primary font-medium hover:underline">Change</span>
+                  <input type="file" accept="image/*" onChange={handleImageUpload("profileImage", "profileImagePreview")} className="hidden" />
+                </label>
               </div>
-              {errors.aadhaar_pan && <p className="text-destructive text-xs mt-1">{errors.aadhaar_pan}</p>}
-            </div>
-          </div>
-
-          {/* Profile Image - right side on desktop, below on mobile */}
-          <div className="flex flex-col items-center md:items-center justify-start">
-            <FieldLabel>Upload Profile Image *</FieldLabel>
-            <ImageUpload label="" field="profileImage" previewField="profileImagePreview" preview={data.profileImagePreview} rounded size="lg" />
+            ) : (
+              <label
+                className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all ${errors.profileImage ? "border-destructive bg-destructive/5" : "border-primary/30"}`}
+              >
+                <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
+                <span className="text-[8px] text-muted-foreground font-medium">Upload</span>
+                <input type="file" accept="image/*" onChange={handleImageUpload("profileImage", "profileImagePreview")} className="hidden" />
+              </label>
+            )}
+            {errors.profileImage && <p className="text-destructive text-[9px] mt-0.5">{errors.profileImage}</p>}
           </div>
         </div>
 
-        {/* Address Details */}
-        <div className="space-y-4">
-          <h3 className="font-heading font-semibold text-base text-foreground">Address Details</h3>
+        {/* Form Fields */}
+        <div className="space-y-3.5">
+          {/* Full Name */}
+          <div>
+            <FieldLabel>Full Name *</FieldLabel>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+              <Input
+                placeholder="E.g. John Doe"
+                value={data.full_name}
+                onChange={(e) => update("full_name", e.target.value)}
+                className={`pl-10 h-10 rounded-lg text-sm ${errorClass("full_name")}`}
+              />
+            </div>
+            {errors.full_name && <p className="text-destructive text-[10px] mt-0.5">{errors.full_name}</p>}
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Mobile */}
+          <div>
+            <FieldLabel>Mobile Number *</FieldLabel>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+              <Input
+                placeholder="E.g. 9876543210"
+                value={data.mobile}
+                onChange={(e) => update("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))}
+                className={`pl-10 h-10 rounded-lg text-sm ${errorClass("mobile")}`}
+              />
+            </div>
+            {errors.mobile && <p className="text-destructive text-[10px] mt-0.5">{errors.mobile}</p>}
+          </div>
+
+          {/* Aadhaar / PAN */}
+          <div>
+            <FieldLabel>Aadhaar / PAN Number *</FieldLabel>
+            <div className="relative">
+              <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+              <Input
+                placeholder="E.g. 123456789012 or ABCDE1234F"
+                value={data.aadhaar_pan}
+                onChange={(e) => update("aadhaar_pan", e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12))}
+                className={`pl-10 h-10 rounded-lg text-sm ${errorClass("aadhaar_pan")}`}
+              />
+            </div>
+            {errors.aadhaar_pan && <p className="text-destructive text-[10px] mt-0.5">{errors.aadhaar_pan}</p>}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-border" />
+
+        {/* Address Details */}
+        <div className="space-y-3.5">
+          <h3 className="font-heading font-semibold text-sm text-foreground">Address Details</h3>
+
+          <div className="grid grid-cols-2 gap-3">
+            {/* Country */}
             <div>
               <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary z-10" />
-                <div className="flex items-center h-11 rounded-lg border border-input bg-muted/50 pl-10 pr-3">
-                  <span className="text-sm text-foreground">Country</span>
-                  <span className="ml-auto text-sm text-muted-foreground">India</span>
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-primary z-10" />
+                <div className="flex items-center h-10 rounded-lg border border-input bg-muted/50 pl-9 pr-3">
+                  <span className="text-xs text-foreground">Country</span>
+                  <span className="ml-auto text-xs text-muted-foreground">India</span>
                 </div>
               </div>
             </div>
+            {/* State */}
             <div>
               <Select value={data.state} onValueChange={handleStateChange}>
-                <SelectTrigger className={`h-11 rounded-lg ${errorClass("state")}`}>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-primary" />
+                <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("state")}`}>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
                     <SelectValue placeholder="Select State *" />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                  {states.map((s) => <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>)}
                 </SelectContent>
               </Select>
-              {errors.state && <p className="text-destructive text-xs mt-1">{errors.state}</p>}
+              {errors.state && <p className="text-destructive text-[10px] mt-0.5">{errors.state}</p>}
             </div>
+            {/* District */}
             <div>
               <Select value={data.district} onValueChange={handleDistrictChange} disabled={!data.state}>
-                <SelectTrigger className={`h-11 rounded-lg ${errorClass("district")}`}>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <SelectValue placeholder="Select District *" />
+                <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("district")}`}>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
+                    <SelectValue placeholder="District *" />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {districts.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+                  {districts.map((d) => <SelectItem key={d} value={d} className="text-xs">{d}</SelectItem>)}
                 </SelectContent>
               </Select>
-              {errors.district && <p className="text-destructive text-xs mt-1">{errors.district}</p>}
+              {errors.district && <p className="text-destructive text-[10px] mt-0.5">{errors.district}</p>}
             </div>
+            {/* Mandal */}
             <div>
               <Select value={data.mandal} onValueChange={(v) => update("mandal", v)} disabled={!data.district}>
-                <SelectTrigger className="h-11 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Home className="w-4 h-4 text-primary" />
-                    <SelectValue placeholder="Mandal *" />
+                <SelectTrigger className="h-10 rounded-lg text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Home className="w-3.5 h-3.5 text-primary shrink-0" />
+                    <SelectValue placeholder="Mandal" />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {mandals.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                  {mandals.map((m) => <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            <div className="md:col-span-2 md:max-w-[calc(50%-0.5rem)]">
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-                <Input
-                  placeholder="E.g. Enter Village Name"
-                  value={data.village}
-                  onChange={(e) => update("village", e.target.value)}
-                  className="pl-10 h-11 rounded-lg"
-                />
-              </div>
+          </div>
+          {/* Village */}
+          <div>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-primary" />
+              <Input
+                placeholder="Enter Village Name"
+                value={data.village}
+                onChange={(e) => update("village", e.target.value)}
+                className="pl-9 h-10 rounded-lg text-sm"
+              />
             </div>
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="h-px bg-border" />
+
         {/* Aadhaar/PAN Images */}
-        <div className="space-y-3">
-          <h3 className="font-heading font-semibold text-base text-foreground">Aadhaar / PAN Images *</h3>
+        <div className="space-y-2.5">
+          <h3 className="font-heading font-semibold text-sm text-foreground">Aadhaar / PAN Images *</h3>
           <div className="flex gap-6 justify-center">
-            <ImageUpload label="Front Side" field="aadhaarFront" previewField="aadhaarFrontPreview" preview={data.aadhaarFrontPreview} />
-            <ImageUpload label="Back Side" field="aadhaarBack" previewField="aadhaarBackPreview" preview={data.aadhaarBackPreview} />
+            <DocImageUpload label="Front Side" field="aadhaarFront" previewField="aadhaarFrontPreview" preview={data.aadhaarFrontPreview} />
+            <DocImageUpload label="Back Side" field="aadhaarBack" previewField="aadhaarBackPreview" preview={data.aadhaarBackPreview} />
           </div>
         </div>
 
         {/* Next button */}
-        <div className="flex justify-end pt-2">
+        <div className="pt-1">
           <Button
             onClick={handleNext}
-            className="h-11 px-8 rounded-lg bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90"
+            className="w-full h-11 rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90 shadow-md"
           >
             Next →
           </Button>

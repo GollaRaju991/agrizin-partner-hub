@@ -194,22 +194,17 @@ const RegisterVehicle = () => {
         </button>
         <div className="max-w-4xl mx-auto">
           <div className="text-center">
-          <h1 className="font-heading font-bold text-2xl md:text-3xl">Vehicle Registration</h1>
-          <p className="text-primary-foreground/80 text-sm mt-1">
-            {step === 1
-              ? "Enter the personal details below to proceed with your vehicle registration."
-              : "Enter the vehicle details below to complete your registration."}
-          </p>
-          {/* Step indicator */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-              Step 1
+            <h1 className="font-heading font-bold text-xl md:text-3xl">Vehicle Registration</h1>
+            {/* Step indicator */}
+            <div className="flex items-center justify-center gap-3 mt-3">
+              <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+                Step 1
+              </div>
+              <div className="w-8 h-px bg-primary-foreground/40" />
+              <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+                Step 2
+              </div>
             </div>
-            <div className="w-8 h-px bg-primary-foreground/40" />
-            <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-              Step 2
-            </div>
-          </div>
           </div>
         </div>
       </div>
