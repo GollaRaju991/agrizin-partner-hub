@@ -80,9 +80,15 @@ const HomeTab = () => {
     }
   }, [userLocation]);
 
-  const handleToggle = () => {
+  const handleToggle = async () => {
     if (!user) { navigate("/login"); return; }
-    toggleOnline();
+    try {
+      await toggleOnline();
+    } catch (e: any) {
+      if (e?.message === "NO_COMPLETED_APP") {
+        toast.error(t("completeAppToGoOnline") || "Please log in and complete your application to go online.");
+      }
+    }
   };
 
   const isOnline = !!(user && profile?.is_online);

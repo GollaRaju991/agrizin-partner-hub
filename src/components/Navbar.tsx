@@ -20,9 +20,15 @@ const Navbar = () => {
   const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
 
-  const handleToggleOnline = () => {
+  const handleToggleOnline = async () => {
     if (!user) { navigate("/login"); return; }
-    toggleOnline();
+    try {
+      await toggleOnline();
+    } catch (e: any) {
+      if (e?.message === "NO_COMPLETED_APP") {
+        toast.success(t("completeAppToGoOnline") || "Please log in and complete your application to go online.");
+      }
+    }
   };
 
   const handleMyEarnings = () => {
