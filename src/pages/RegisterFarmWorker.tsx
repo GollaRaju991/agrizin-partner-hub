@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
+import SuccessDialog from "@/components/registration/SuccessDialog";
 import FarmWorkerStep1, { type Step1Data } from "@/components/registration/FarmWorkerStep1";
 import FarmWorkerStep2, { type Step2Data } from "@/components/registration/FarmWorkerStep2";
 
@@ -14,6 +15,7 @@ const RegisterFarmWorker = () => {
   const [submitting, setSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [step1, setStep1] = useState<Step1Data>({
     first_name: "",
@@ -135,8 +137,7 @@ const RegisterFarmWorker = () => {
       if (data) {
         syncApplicationToExternal(data);
       }
-      toast.success("Registration submitted successfully!");
-      navigate("/dashboard");
+      setShowSuccess(true);
     }
   };
 
@@ -174,6 +175,7 @@ const RegisterFarmWorker = () => {
 
   return (
     <div className="min-h-screen bg-muted">
+      <SuccessDialog open={showSuccess} onClose={() => navigate("/")} />
       {/* Green Banner Header */}
       <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
         <button

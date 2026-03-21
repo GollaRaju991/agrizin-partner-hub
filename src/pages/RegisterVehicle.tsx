@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
+import SuccessDialog from "@/components/registration/SuccessDialog";
 
 const BUCKET = "vehicle-documents";
 
@@ -27,6 +28,7 @@ const RegisterVehicle = () => {
   const [submitting, setSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [step1, setStep1] = useState<VehicleStep1Data>({
     full_name: "",
@@ -134,8 +136,7 @@ const RegisterVehicle = () => {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
-        toast.success("Your vehicle registration has been submitted successfully.");
-        navigate("/dashboard");
+        setShowSuccess(true);
       }
     } catch (err) {
       console.error(err);
@@ -183,6 +184,7 @@ const RegisterVehicle = () => {
 
   return (
     <div className="min-h-screen bg-muted">
+      <SuccessDialog open={showSuccess} onClose={() => navigate("/")} />
       {/* Green Banner Header */}
       <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
         <button
