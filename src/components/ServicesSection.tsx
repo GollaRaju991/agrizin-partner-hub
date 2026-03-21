@@ -40,7 +40,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <ServiceCard
               key={service.title}
               title={service.title}
@@ -48,7 +48,6 @@ const ServicesSection = () => {
               image={service.image}
               badge={(service as any).badge}
               serviceType={service.serviceType}
-              delay={`${0.2 + index * 0.15}s`}
             />
           ))}
         </div>
