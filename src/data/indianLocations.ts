@@ -1,6 +1,8 @@
 // Indian location data: State → District → Mandal mapping
 // Covers major agricultural states with key districts and mandals
 
+import { getTelanganaDistrictNames, getTelanganaMandals } from './telanganaLocations';
+
 export const INDIAN_LOCATIONS: Record<string, Record<string, string[]>> = {
   "Andhra Pradesh": {
     "Anantapur": ["Anantapur", "Dharmavaram", "Hindupur", "Kadiri", "Kalyanadurgam", "Penukonda", "Rayadurg", "Tadipatri", "Uravakonda", "Guntakal"],
