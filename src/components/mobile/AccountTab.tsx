@@ -413,6 +413,46 @@ const AccountTab = () => {
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | null>(null);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const startEditProfile = () => {
+    setEditName(profile?.first_name || "");
+    setProfilePhotoUrl(null);
+    setEditingProfile(true);
+  };
+
+  const handleProfilePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    const ext = file.name.split(".").pop();
+    const path = `profile-photos/${user.id}.${ext}`;
+    const { error } = await supabase.storage.from("profile-photos").upload(path, file, { upsert: true });
+    if (error) { toast.error("Failed to upload photo"); return; }
+    const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+    setProfilePhotoUrl(urlData.publicUrl + "?t=" + Date.now());
+    toast.success("Photo uploaded!");
+  };
+
+  const handleDeletePhoto = () => {
+    setProfilePhotoUrl("REMOVE");
+    toast.info("Photo will be removed on save");
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user || !editName.trim()) { toast.error("Name cannot be empty"); return; }
+    setSavingProfile(true);
+    const updateData: Record<string, string> = { first_name: editName.trim() };
+    const { error } = await supabase.from("profiles").update(updateData).eq("user_id", user.id);
+    setSavingProfile(false);
+    if (error) { toast.error(t("updateError")); return; }
+    toast.success(t("updateSuccess"));
+    setEditingProfile(false);
+    await refreshProfile();
+  };
 
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
