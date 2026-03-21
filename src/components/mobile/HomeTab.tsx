@@ -1,19 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
 import { MapPin, Bell } from "lucide-react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { supabase } from "@/integrations/supabase/client";
 
-const mapContainerStyle = { width: "100%", height: "100%" };
-const defaultCenter = { lat: 17.385, lng: 78.4867 }; // Hyderabad
+const defaultCenter = { lat: 17.385, lng: 78.4867 };
 
 const HomeTab = () => {
   const { user, profile, toggleOnline } = useAuth();
   const navigate = useNavigate();
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState(defaultCenter);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // Fetch Google Maps API key
   useEffect(() => {
@@ -27,24 +26,47 @@ const HomeTab = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => {} // fallback to default
+        () => {}
       );
     }
   }, []);
 
-  const handleToggle = () => {
-    if (!user) {
-      navigate("/login");
+  // Load Google Maps script manually to avoid re-initialization issues
+  useEffect(() => {
+    if (!apiKey || mapLoaded) return;
+    if (document.getElementById("google-maps-script")) {
+      setMapLoaded(true);
       return;
     }
+    const script = document.createElement("script");
+    script.id = "google-maps-script";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setMapLoaded(true);
+    document.head.appendChild(script);
+  }, [apiKey, mapLoaded]);
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapLoaded || !(window as any).google) return;
+    const mapDiv = document.getElementById("google-map-container");
+    if (!mapDiv) return;
+    new (window as any).google.maps.Map(mapDiv, {
+      center: userLocation,
+      zoom: 14,
+      disableDefaultUI: true,
+      zoomControl: true,
+      styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }],
+    });
+  }, [mapLoaded, userLocation]);
+
+  const handleToggle = () => {
+    if (!user) { navigate("/login"); return; }
     toggleOnline();
   };
 
   const isOnline = !!(user && profile?.is_online);
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: apiKey || "",
-  });
 
   return (
     <div className="flex flex-col h-full">
@@ -55,11 +77,7 @@ const HomeTab = () => {
           <span className="text-sm font-medium text-foreground">
             {isOnline ? "Online" : "Offline"}
           </span>
-          <Switch
-            checked={isOnline}
-            onCheckedChange={handleToggle}
-            className="scale-90"
-          />
+          <Switch checked={isOnline} onCheckedChange={handleToggle} className="scale-90" />
         </div>
         <button className="relative p-2">
           <Bell size={20} className="text-foreground" />
@@ -68,21 +86,10 @@ const HomeTab = () => {
 
       {/* Map area */}
       <div className="flex-1 relative">
-        {isLoaded && apiKey ? (
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={userLocation}
-            zoom={14}
-            options={{
-              disableDefaultUI: true,
-              zoomControl: true,
-              styles: [
-                { featureType: "poi", stylers: [{ visibility: "off" }] },
-              ],
-            }}
-          />
+        {mapLoaded ? (
+          <div id="google-map-container" className="w-full h-full" />
         ) : (
-          <div className="flex-1 h-full bg-accent/30 flex items-center justify-center">
+          <div className="w-full h-full bg-accent/30 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3">
               <MapPin size={48} className="text-primary" />
               <p className="text-muted-foreground text-sm">Loading map...</p>
@@ -95,9 +102,7 @@ const HomeTab = () => {
           <button
             onClick={handleToggle}
             className={`w-full py-3.5 rounded-xl font-heading font-bold text-base transition-colors shadow-lg ${
-              isOnline
-                ? "bg-destructive text-destructive-foreground"
-                : "bg-primary text-primary-foreground"
+              isOnline ? "bg-destructive text-destructive-foreground" : "bg-primary text-primary-foreground"
             }`}
           >
             {isOnline ? "Go Offline" : "Go Online"}
