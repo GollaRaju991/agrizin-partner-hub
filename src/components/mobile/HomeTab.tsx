@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, Bell, Globe, X } from "lucide-react";
+import { MapPin, Bell, Globe, X, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -169,7 +169,13 @@ const HomeTab = () => {
           </div>
         )}
 
-        <div className="absolute bottom-6 left-6 right-6 z-10">
+        <div className="absolute bottom-6 left-6 right-6 z-10 space-y-3">
+          <button
+            onClick={() => navigate("/search")}
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-heading font-bold text-base bg-card text-foreground border border-border shadow-lg transition-colors"
+          >
+            <Search size={20} /> Find Workers & Vehicles
+          </button>
           <button
             onClick={handleToggle}
             className={`w-full py-3.5 rounded-xl font-heading font-bold text-base transition-colors shadow-lg ${
