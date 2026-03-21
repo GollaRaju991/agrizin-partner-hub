@@ -289,8 +289,8 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
           </div>
         </div>
 
-        {/* Aadhaar/PAN Images - only on mobile */}
-        <div className="md:hidden space-y-3">
+        {/* Aadhaar/PAN Images */}
+        <div className="space-y-3">
           <h3 className="font-heading font-semibold text-base text-foreground">Aadhaar / PAN Images *</h3>
           <div className="flex gap-6 justify-center">
             <ImageUpload label="Front Side" field="aadhaarFront" previewField="aadhaarFrontPreview" preview={data.aadhaarFrontPreview} />
