@@ -1,8 +1,6 @@
 // Indian location data: State → District → Mandal mapping
 // Covers major agricultural states with key districts and mandals
 
-import { getTelanganaDistrictNames, getTelanganaMandals } from './telanganaLocations';
-
 export const INDIAN_LOCATIONS: Record<string, Record<string, string[]>> = {
   "Andhra Pradesh": {
     "Anantapur": ["Anantapur", "Dharmavaram", "Hindupur", "Kadiri", "Kalyanadurgam", "Penukonda", "Rayadurg", "Tadipatri", "Uravakonda", "Guntakal"],
@@ -19,14 +17,41 @@ export const INDIAN_LOCATIONS: Record<string, Record<string, string[]>> = {
     "West Godavari": ["Eluru", "Bhimavaram", "Tadepalligudem", "Tanuku", "Narasapuram", "Palacole", "Kovvur", "Nidadavole", "Jangareddygudem", "Chintalapudi"],
     "YSR Kadapa": ["Kadapa", "Proddatur", "Rajampet", "Jammalamadugu", "Pulivendla", "Mydukur", "Badvel", "Rayachoti", "Kamalapuram", "Lakkireddypalle"],
   },
-  "Telangana": (() => {
-    const result: Record<string, string[]> = {};
-    const districts = getTelanganaDistrictNames();
-    districts.forEach((d) => {
-      result[d] = getTelanganaMandals(d);
-    });
-    return result;
-  })(),
+  "Telangana": {
+    "Adilabad": ["Adilabad Rural", "Adilabad Urban", "Bazarhathnoor", "Bela", "Boath", "Gadiguda", "Ichoda", "Indervelly", "Jainad", "Narnoor", "Sirikonda", "Talamadugu", "Tamsi", "Utnoor"],
+    "Bhadradri Kothagudem": ["Allapalli", "Aswapuram", "Aswaraopeta", "Burgampahad", "Chandrugonda", "Cherla", "Chunchupalli", "Dammapeta", "Dummugudem", "Gundala", "Julurpad", "Karakagudem", "Kothagudem", "Manuguru", "Mulakalapalli", "Palvancha", "Pinapaka", "Sujathanagar", "Tekulapalli", "Yellandu"],
+    "Hanumakonda": ["Bheemadevarpalli", "Dharmasagar", "Elkathurthy", "Hanumakonda", "Hasanparthy", "Inavole", "Kamalapur", "Kazipet"],
+    "Hyderabad": ["Amberpet", "Ameerpet", "Asifnagar", "Bahadurpura", "Bandlaguda", "Charminar", "Golconda", "Himayatnagar", "Khairatabad", "Marredpally", "Musheerabad", "Nampally", "Saidabad", "Secunderabad", "Shaikpet", "Tirumalagiri"],
+    "Jagtial": ["Beerpur", "Buggaram", "Dharmapuri", "Gollapalli", "Ibrahimpatnam", "Jagtial Rural", "Jagtial Urban", "Kathlapur", "Kodimyala", "Korutla", "Mallial", "Medipalli", "Metpalli", "Pegadapalli", "Raikal", "Sarangapur", "Velgatoor"],
+    "Jangaon": ["Bachannapet", "Devaruppula", "Ghanpur Station", "Jangaon", "Kodakandla", "Lingalaghanpur", "Narmetta", "Palakurthy", "Raghunathpalle", "Zaffergadh"],
+    "Jayashankar Bhupalpally": ["Bhupalpally", "Chityal", "Ghanpur Mulug", "Kataram", "Kothapally", "Mahadevpur", "Mutharam Mahadevpur", "Regonda", "Tekumatla"],
+    "Jogulamba Gadwal": ["Alampur", "Dharur", "Gadwal", "Gattu", "Ieeja", "Itikyala", "Maldakal", "Manopadu", "Rajoli", "Undavelli"],
+    "Kamareddy": ["Banswada", "Bhiknoor", "Bibipet", "Bichkunda", "Domakonda", "Gandhari", "Jukkal", "Kamareddy", "Lingampet", "Machareddy", "Madnoor", "Nagireddypet", "Nizamsagar", "Pitlam", "Rajampet", "Ramareddy", "Sadashivanagar", "Tadwai", "Yellareddy"],
+    "Karimnagar": ["Choppadandi", "Gangadhara", "Ganneruvaram", "Husnabad", "Huzurabad", "Karimnagar Rural", "Karimnagar Urban", "Kothapalli", "Manakondur", "Ramadugu", "Saidapur", "Shankarapatnam", "Thimmapur", "Veenavanka"],
+    "Khammam": ["Bonakal", "Chinthakani", "Enkoor", "Kallur", "Khammam Rural", "Khammam Urban", "Kusumanchi", "Madhira", "Mudigonda", "Nelakondapalli", "Raghunathapalem", "Sathupalli", "Singareni", "Tallada", "Tirumalayapalem", "Wyra", "Yerrupalem"],
+    "Komaram Bheem Asifabad": ["Asifabad", "Bejjur", "Dahegaon", "Jainoor", "Kagaznagar", "Kerameri", "Kouthala", "Lingapur", "Penchikalpet", "Rebbena", "Sirpur", "Tiryani", "Wankidi"],
+    "Mahabubabad": ["Bayyaram", "Chinnagudur", "Danthalapalle", "Dornakal", "Gangaram", "Garla", "Gudur", "Kesamudram", "Kothaguda", "Kuravi", "Mahabubabad", "Maripeda", "Narsimhulapet", "Nellikudur", "Peddavangara", "Seerole", "Thorrur"],
+    "Mahabubnagar": ["Addakal", "Balanagar", "Bhoothpur", "Chinna Chintakunta", "Devarkadra", "Hanwada", "Jadcherla", "Koilkonda", "Mahabubnagar", "Midjil", "Moosapet", "Nawabpet", "Rajapur"],
+    "Mancherial": ["Bellampalli", "Bheemaram", "Chennur", "Dandepalli", "Hajipur", "Jaipur", "Jannaram", "Kasipet", "Kotapalli", "Luxettipet", "Mancherial", "Mandamarri", "Naspur", "Tandur", "Vemanpalli"],
+    "Medak": ["Alladurg", "Chegunta", "Haveli Ghanpur", "Kowdipally", "Kulcharam", "Medak", "Narsapur", "Nizampet", "Papannapet", "Ramayampet", "Shankarampet A", "Shankarampet R", "Tekmal", "Tupran"],
+    "Medchal-Malkajgiri": ["Alwal", "Bachupally", "Dundigal Gandimaisamma", "Ghatkesar", "Kapra", "Keesara", "Kukatpally", "Malkajgiri", "Medchal", "Quthbullapur", "Shamirpet", "Uppal"],
+    "Mulugu": ["Eturnagaram", "Govindaraopet", "Mangapet", "Mulugu", "Tadvai", "Venkatapur", "Venkatapuram"],
+    "Nagarkurnool": ["Achampet", "Amrabad", "Balmoor", "Bijinapally", "Kalwakurthy", "Kodair", "Kollapur", "Lingal", "Nagarkurnool", "Peddakothapally", "Pentlavelli", "Tadoor", "Telkapally", "Thimmajipet", "Uppunuthala", "Urkonda", "Vangoor"],
+    "Nalgonda": ["Adavidevulapally", "Chandampet", "Chityal", "Dameracherla", "Devarakonda", "Gurrampode", "Kattangur", "Kethepally", "Marriguda", "Miryalaguda", "Munugode", "Nakrekal", "Nalgonda", "Nampally", "Nidamanur", "Peddavoora", "Tipparthi", "Tripuraram"],
+    "Narayanpet": ["Damaragidda", "Kosgi", "Krishna", "Maganoor", "Makthal", "Narayanpet", "Narva", "Utkoor"],
+    "Nirmal": ["Basar", "Bhainsa", "Dasturabad", "Dilawarpur", "Kaddam", "Khanapur", "Kubeer", "Laxmanchanda", "Lokeshwaram", "Mamda", "Mudhole", "Narsapur G", "Nirmal", "Sarangapur", "Soan"],
+    "Nizamabad": ["Armur", "Balkonda", "Bheemgal", "Bodhan", "Dharpally", "Dichpally", "Jakranpally", "Kotgiri", "Makloor", "Mendora", "Mortad", "Nandipet", "Navipet", "Nizamabad Rural", "Nizamabad Urban", "Renjal", "Varni", "Velpur"],
+    "Peddapalli": ["Anthergaon", "Dharmaram", "Julapalli", "Kamanpur", "Manthani", "Mutharam Manthani", "Odela", "Peddapalli", "Ramagundam", "Srirampur", "Sultanabad"],
+    "Rajanna Sircilla": ["Boinpalli", "Chandurthi", "Ellanthakunta", "Gambhiraopet", "Konaraopeta", "Mustabad", "Rudrangi", "Sircilla", "Thangallapalli", "Vemulawada"],
+    "Rangareddy": ["Abdullapurmet", "Amangal", "Balapur", "Chevella", "Farooqnagar", "Ibrahimpatnam", "Kandukur", "Keshampet", "Maheshwaram", "Manchal", "Marpally", "Moinabad", "Nawabpet", "Pargi", "Rajendranagar", "Saroornagar", "Shabad", "Shankarpally", "Talakondapally", "Yacharam"],
+    "Sangareddy": ["Ameenpur", "Andole", "Gummadidala", "Hathnoora", "Jharasangam", "Jogipet", "Kondapur", "Manoor", "Mogudampally", "Munipally", "Narayankhed", "Patancheru", "Pulkal", "Raikode", "Ramachandrapuram", "Sadasivpet", "Sangareddy", "Vatpally", "Zaheerabad"],
+    "Siddipet": ["Bejjanki", "Cheriyal", "Chinnakodur", "Doultabad", "Dubbak", "Gajwel", "Husnabad", "Jagdevpur", "Koheda", "Kondapak", "Maddur", "Markook", "Mirdoddi", "Nangnoor", "Raipole", "Siddipet", "Thoguta", "Wargal"],
+    "Suryapet": ["Ananthagiri", "Athmakur S", "Chivvemla", "Garidepally", "Huzurnagar", "Kodad", "Mattampally", "Mellacheruvu", "Mothey", "Munagala", "Nadigudem", "Nagaram", "Neredcherla", "Penpahad", "Suryapet", "Thirumalagiri", "Tungaturthy"],
+    "Vikarabad": ["Bantwaram", "Basheerabad", "Bomraspet", "Dharur", "Doma", "Kodangal", "Kulkacherla", "Marpally", "Mominpet", "Nawabpet", "Pargi", "Peddemul", "Pudur", "Tandur", "Vikarabad", "Yalal"],
+    "Wanaparthy": ["Atmakur", "Chinnambavi", "Ghanpur", "Kothakota", "Madanapur", "Pangal", "Pebbair", "Revally", "Srirangapur", "Wanaparthy"],
+    "Warangal": ["Duggondi", "Geesugonda", "Nallabelly", "Narsampet", "Parvathagiri", "Raiparthy", "Sangem", "Shayampet", "Wardhannapet"],
+    "Yadadri Bhuvanagiri": ["Addaguduru", "Alair", "Atmakur M", "Bhuvanagiri", "Bibinagar", "Bommalaramaram", "Choutuppal", "Gundala", "Motakondur", "Pochampally", "Rajapet", "Turkapally", "Valigonda", "Yadagirigutta"],
+  },
   "Karnataka": {
     "Bangalore Urban": ["Bangalore North", "Bangalore South", "Bangalore East", "Anekal", "Yelahanka"],
     "Bangalore Rural": ["Devanahalli", "Doddaballapur", "Hosakote", "Nelamangala"],
