@@ -267,35 +267,7 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
         />
       </div>
 
-      {/* Upload Photo */}
-      <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.profileImage ? "border-destructive" : "border-border"}`}>
-        <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
-          <Camera className="w-4 h-4 text-primary" />
-          Upload Photo *
-        </div>
-        <p className="text-xs text-muted-foreground">Upload profile image. Max file size: 10 MB</p>
 
-        <div className="flex items-center gap-4">
-          {data.profileImagePreview ? (
-            <img
-              src={data.profileImagePreview}
-              alt="Preview"
-              className="w-20 h-20 rounded-xl object-cover border border-border"
-            />
-          ) : (
-            <div className={`w-20 h-20 rounded-xl bg-muted border flex items-center justify-center ${errors.profileImage ? "border-destructive" : "border-border"}`}>
-              <Camera className="w-6 h-6 text-muted-foreground" />
-            </div>
-          )}
-          <label className="cursor-pointer">
-            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity">
-              + Upload Photo
-            </span>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          </label>
-        </div>
-        {errors.profileImage && <p className="text-destructive text-xs">{errors.profileImage}</p>}
-      </div>
 
       {/* Next button */}
       <div className="flex items-center justify-between pt-4 border-t border-border">
