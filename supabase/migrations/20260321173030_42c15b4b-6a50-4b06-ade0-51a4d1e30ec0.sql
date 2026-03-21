@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicle_registrations ADD COLUMN age integer, ADD COLUMN gender text;
