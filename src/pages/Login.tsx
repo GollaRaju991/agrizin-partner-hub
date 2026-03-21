@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
 
 const Login = () => {
   const [searchParams] = useSearchParams();
@@ -78,69 +79,82 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-primary mx-auto flex items-center justify-center mb-3">
-            <span className="text-primary-foreground font-heading font-bold text-2xl">A</span>
-          </div>
-          <h1 className="font-heading font-bold text-2xl text-primary">Agrizin</h1>
-          <h2 className="font-heading font-bold text-xl text-foreground mt-2">
-            {isSignUp ? "Register" : "Login"}
-          </h2>
-        </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Back button */}
+      <div className="p-4">
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+        >
+          <ArrowLeft size={18} />
+          <span>Back</span>
+        </button>
+      </div>
 
-        <div className="bg-card rounded-2xl shadow-card p-6">
-          {/* Phone/Email tabs */}
-          <div className="flex border border-border rounded-lg mb-6 overflow-hidden">
-            <button
-              onClick={() => setTab("phone")}
-              className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-                tab === "phone" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              📱 Phone
-            </button>
-            <button
-              onClick={() => setTab("email")}
-              className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
-                tab === "email" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              ✉️ Email
-            </button>
-          </div>
+      <div className="flex-1 flex items-center justify-center px-4 pb-8">
+        <div className="w-full max-w-md">
+          {/* Logo — clickable to home */}
+          <button onClick={() => navigate("/")} className="w-full text-center mb-8 group">
+            <div className="w-16 h-16 rounded-full bg-primary mx-auto flex items-center justify-center mb-3 group-hover:opacity-90 transition-opacity">
+              <span className="text-primary-foreground font-heading font-bold text-2xl">A</span>
+            </div>
+            <h1 className="font-heading font-bold text-2xl text-primary">
+              Agrizin<span className="text-foreground">Partner</span>
+            </h1>
+            <h2 className="font-heading font-bold text-xl text-foreground mt-2">
+              {isSignUp ? "Register" : "Login"}
+            </h2>
+          </button>
 
-          {!otpSent ? (
-            <div className="space-y-4">
-              <div>
-                <Label className="text-foreground">First Name *</Label>
-                <Input
-                  placeholder="Enter your first name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
+          <div className="bg-card rounded-2xl shadow-card p-6">
+            {/* Phone/Email tabs */}
+            <div className="flex border border-border rounded-lg mb-6 overflow-hidden">
+              <button
+                onClick={() => setTab("phone")}
+                className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                  tab === "phone" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                📱 Phone
+              </button>
+              <button
+                onClick={() => setTab("email")}
+                className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                  tab === "email" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                ✉️ Email
+              </button>
+            </div>
 
-              {tab === "phone" ? (
+            {!otpSent ? (
+              <div className="space-y-4">
                 <div>
-                  <Label className="text-foreground">Phone Number *</Label>
-                  <div className="flex gap-2 mt-1">
-                    <div className="flex items-center px-3 border border-input rounded-md bg-muted text-sm text-muted-foreground">
-                      +91
-                    </div>
-                    <Input
-                      placeholder="9876543210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                      type="tel"
-                    />
-                  </div>
+                  <Label className="text-foreground">First Name *</Label>
+                  <Input
+                    placeholder="Enter your first name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="mt-1"
+                  />
                 </div>
-              ) : (
-                <>
+
+                {tab === "phone" ? (
+                  <div>
+                    <Label className="text-foreground">Phone Number *</Label>
+                    <div className="flex gap-2 mt-1">
+                      <div className="flex items-center px-3 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                        +91
+                      </div>
+                      <Input
+                        placeholder="9876543210"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                        type="tel"
+                      />
+                    </div>
+                  </div>
+                ) : (
                   <div>
                     <Label className="text-foreground">Email *</Label>
                     <Input
@@ -151,56 +165,56 @@ const Login = () => {
                       className="mt-1"
                     />
                   </div>
-                </>
-              )}
+                )}
 
-              <div>
-                <Label className="text-muted-foreground">Reference ID</Label>
-                <Input
-                  placeholder="Enter reference ID (optional)"
-                  value={referenceId}
-                  onChange={(e) => setReferenceId(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
+                <div>
+                  <Label className="text-muted-foreground">Reference ID</Label>
+                  <Input
+                    placeholder="Enter reference ID (optional)"
+                    value={referenceId}
+                    onChange={(e) => setReferenceId(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
 
-              <Button onClick={handleSendOTP} className="w-full h-12 text-base font-bold rounded-lg">
-                Send OTP
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground text-center">
-                OTP sent to {tab === "phone" ? `+91 ${phone}` : email}
-              </p>
-              <div>
-                <Label className="text-foreground">Enter OTP</Label>
-                <Input
-                  placeholder="Enter 4-digit OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                  className="mt-1 text-center text-2xl tracking-[0.5em]"
-                  maxLength={4}
-                />
+                <Button onClick={handleSendOTP} className="w-full h-12 text-base font-bold rounded-lg">
+                  Send OTP
+                </Button>
               </div>
-              <Button onClick={handleVerifyOTP} disabled={loading} className="w-full h-12 text-base font-bold rounded-lg">
-                {loading ? "Verifying..." : "Verify & Continue"}
-              </Button>
-              <button
-                onClick={() => { setOtpSent(false); setOtp(""); }}
-                className="w-full text-sm text-primary hover:underline"
-              >
-                ← Change details
+            ) : (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground text-center">
+                  OTP sent to {tab === "phone" ? `+91 ${phone}` : email}
+                </p>
+                <div>
+                  <Label className="text-foreground">Enter OTP</Label>
+                  <Input
+                    placeholder="Enter 4-digit OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    className="mt-1 text-center text-2xl tracking-[0.5em]"
+                    maxLength={4}
+                  />
+                </div>
+                <Button onClick={handleVerifyOTP} disabled={loading} className="w-full h-12 text-base font-bold rounded-lg">
+                  {loading ? "Verifying..." : "Verify & Continue"}
+                </Button>
+                <button
+                  onClick={() => { setOtpSent(false); setOtp(""); }}
+                  className="w-full text-sm text-primary hover:underline"
+                >
+                  ← Change details
+                </button>
+              </div>
+            )}
+
+            <p className="text-center text-sm text-muted-foreground mt-4">
+              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+              <button onClick={() => setIsSignUp(!isSignUp)} className="text-primary font-semibold hover:underline">
+                {isSignUp ? "Login" : "Register"}
               </button>
-            </div>
-          )}
-
-          <p className="text-center text-sm text-muted-foreground mt-4">
-            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-            <button onClick={() => setIsSignUp(!isSignUp)} className="text-primary font-semibold hover:underline">
-              {isSignUp ? "Login" : "Register"}
-            </button>
-          </p>
+            </p>
+          </div>
         </div>
       </div>
     </div>
