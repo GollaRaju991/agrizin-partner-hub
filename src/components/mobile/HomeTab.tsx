@@ -175,10 +175,10 @@ const HomeTab = () => {
           </div>
         )}
 
-        <div className="absolute bottom-6 left-6 right-6 z-[1000]">
+        <div className="absolute bottom-4 left-4 right-4 z-[1000]">
           <button
             onClick={handleToggle}
-            className={`w-full py-3.5 rounded-xl font-heading font-bold text-base transition-colors shadow-lg ${
+            className={`w-full py-3 rounded-xl font-heading font-bold text-sm transition-colors shadow-lg ${
               isOnline ? "bg-destructive text-destructive-foreground" : "bg-primary text-primary-foreground"
             }`}
           >
