@@ -1,7 +1,7 @@
-import { externalSupabase } from "@/integrations/external-supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Sync a profile record to the external Supabase database.
+ * Sync a profile record to the external database via edge function.
  * Fires and forgets — errors are logged but don't block the main flow.
  */
 export const syncProfileToExternal = async (profile: {
@@ -12,16 +12,18 @@ export const syncProfileToExternal = async (profile: {
   is_online?: boolean;
 }) => {
   try {
-    const { error } = await externalSupabase.from("profiles").upsert(
-      {
-        user_id: profile.user_id,
-        first_name: profile.first_name,
-        phone: profile.phone,
-        reference_id: profile.reference_id || null,
-        is_online: profile.is_online ?? false,
+    const { error } = await supabase.functions.invoke("sync-external", {
+      body: {
+        action: "sync_profile",
+        data: {
+          user_id: profile.user_id,
+          first_name: profile.first_name,
+          phone: profile.phone,
+          reference_id: profile.reference_id || null,
+          is_online: profile.is_online ?? false,
+        },
       },
-      { onConflict: "user_id" }
-    );
+    });
     if (error) console.error("External sync (profile) error:", error);
   } catch (err) {
     console.error("External sync (profile) failed:", err);
@@ -29,15 +31,35 @@ export const syncProfileToExternal = async (profile: {
 };
 
 /**
- * Sync a service application record to the external Supabase database.
+ * Sync a service application record to the external database via edge function.
  */
 export const syncApplicationToExternal = async (application: Record<string, any>) => {
   try {
-    const { error } = await externalSupabase
-      .from("service_applications")
-      .upsert(application, { onConflict: "id" });
+    const { error } = await supabase.functions.invoke("sync-external", {
+      body: {
+        action: "sync_application",
+        data: application,
+      },
+    });
     if (error) console.error("External sync (application) error:", error);
   } catch (err) {
     console.error("External sync (application) failed:", err);
+  }
+};
+
+/**
+ * Sync a vehicle registration record to the external database via edge function.
+ */
+export const syncVehicleToExternal = async (vehicle: Record<string, any>) => {
+  try {
+    const { error } = await supabase.functions.invoke("sync-external", {
+      body: {
+        action: "sync_vehicle",
+        data: vehicle,
+      },
+    });
+    if (error) console.error("External sync (vehicle) error:", error);
+  } catch (err) {
+    console.error("External sync (vehicle) failed:", err);
   }
 };
