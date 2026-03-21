@@ -7,13 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// Lovable Cloud (source)
-const sourceUrl = Deno.env.get("SUPABASE_URL")!;
-const sourceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
-// External Supabase (destination)
 const externalUrl = "https://fytnskpijohbxgtngkhj.supabase.co";
-const externalKey = Deno.env.get("EXTERNAL_SUPABASE_KEY")!;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -21,69 +15,52 @@ serve(async (req) => {
   }
 
   try {
-    const sourceClient = createClient(sourceUrl, sourceKey);
+    const externalKey = Deno.env.get("EXTERNAL_SUPABASE_KEY");
+    if (!externalKey) {
+      throw new Error("EXTERNAL_SUPABASE_KEY is not configured");
+    }
+
     const externalClient = createClient(externalUrl, externalKey);
+    const { action, data } = await req.json();
 
-    const { action } = await req.json();
-
-    if (action === "sync_profiles") {
-      const { data: profiles, error: fetchErr } = await sourceClient
+    if (action === "sync_profile") {
+      const { error } = await externalClient
         .from("profiles")
-        .select("*");
-      if (fetchErr) throw fetchErr;
-
-      for (const profile of profiles || []) {
-        const { error: upsertErr } = await externalClient
-          .from("profiles")
-          .upsert(profile, { onConflict: "user_id" });
-        if (upsertErr) console.error("Profile upsert error:", upsertErr);
-      }
+        .upsert(data, { onConflict: "user_id" });
+      if (error) throw error;
 
       return new Response(
-        JSON.stringify({ success: true, synced: profiles?.length || 0, table: "profiles" }),
+        JSON.stringify({ success: true, table: "profiles" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    if (action === "sync_service_applications") {
-      const { data: apps, error: fetchErr } = await sourceClient
+    if (action === "sync_application") {
+      const { error } = await externalClient
         .from("service_applications")
-        .select("*");
-      if (fetchErr) throw fetchErr;
-
-      for (const app of apps || []) {
-        const { error: upsertErr } = await externalClient
-          .from("service_applications")
-          .upsert(app, { onConflict: "id" });
-        if (upsertErr) console.error("Application upsert error:", upsertErr);
-      }
+        .upsert(data, { onConflict: "id" });
+      if (error) throw error;
 
       return new Response(
-        JSON.stringify({ success: true, synced: apps?.length || 0, table: "service_applications" }),
+        JSON.stringify({ success: true, table: "service_applications" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    if (action === "read_external_tables") {
-      // Read profiles from external DB
-      const { data: extProfiles } = await externalClient
-        .from("profiles")
-        .select("*")
-        .limit(50);
-
-      const { data: extApps } = await externalClient
-        .from("service_applications")
-        .select("*")
-        .limit(50);
+    if (action === "sync_vehicle") {
+      const { error } = await externalClient
+        .from("vehicle_registrations")
+        .upsert(data, { onConflict: "id" });
+      if (error) throw error;
 
       return new Response(
-        JSON.stringify({ profiles: extProfiles, service_applications: extApps }),
+        JSON.stringify({ success: true, table: "vehicle_registrations" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     return new Response(
-      JSON.stringify({ error: "Invalid action. Use: sync_profiles, sync_service_applications, read_external_tables" }),
+      JSON.stringify({ error: "Invalid action. Use: sync_profile, sync_application, sync_vehicle" }),
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

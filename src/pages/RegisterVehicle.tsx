@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { syncVehicleToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
@@ -112,7 +113,7 @@ const RegisterVehicle = () => {
         step2.vehicleImages.map((f) => uploadFile(user.id, f, "vehicle"))
       );
 
-      const { error } = await supabase.from("vehicle_registrations").insert({
+      const { data, error } = await supabase.from("vehicle_registrations").insert({
         user_id: user.id,
         full_name: step1.full_name.trim(),
         mobile: step1.mobile.trim(),
@@ -134,12 +135,13 @@ const RegisterVehicle = () => {
         rc_image_url: rcUrl,
         vehicle_image_urls: vehicleUrls.filter(Boolean) as string[],
         vehicle_usage_type: step2.vehicle_usage_type,
-      } as any);
+      } as any).select().single();
 
       if (error) {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
+        if (data) syncVehicleToExternal(data);
         setShowSuccess(true);
       }
     } catch (err) {
