@@ -14,6 +14,7 @@ const services = [
     title: "Farm Worker",
     description: "Hire experienced farm workers for harvesting, cutting, and field work or reaping hook.",
     image: farmWorkerImg,
+    badge: "Field Service",
     serviceType: "farm_maker" as const,
   },
   {
@@ -45,6 +46,7 @@ const ServicesSection = () => {
               title={service.title}
               description={service.description}
               image={service.image}
+              badge={(service as any).badge}
               serviceType={service.serviceType}
               delay={`${0.2 + index * 0.15}s`}
             />
