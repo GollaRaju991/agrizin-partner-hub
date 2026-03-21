@@ -28,6 +28,7 @@ const RegisterVehicle = () => {
   const [submitting, setSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [step1, setStep1] = useState<VehicleStep1Data>({
     full_name: "",
