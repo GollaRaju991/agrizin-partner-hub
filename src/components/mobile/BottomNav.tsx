@@ -1,4 +1,5 @@
 import { Home, LayoutGrid, IndianRupee, User } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export type MobileTab = "home" | "categories" | "earnings" | "account";
 
@@ -8,13 +9,14 @@ interface BottomNavProps {
 }
 
 const tabs = [
-  { id: "home" as const, label: "Home", icon: Home },
-  { id: "categories" as const, label: "Categories", icon: LayoutGrid },
-  { id: "earnings" as const, label: "Earnings", icon: IndianRupee },
-  { id: "account" as const, label: "Account", icon: User },
+  { id: "home" as const, labelKey: "home" as const, icon: Home },
+  { id: "categories" as const, labelKey: "categories" as const, icon: LayoutGrid },
+  { id: "earnings" as const, labelKey: "earnings" as const, icon: IndianRupee },
+  { id: "account" as const, labelKey: "account" as const, icon: User },
 ];
 
 const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
+  const { t } = useLanguage();
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border md:hidden">
       <div className="flex items-center justify-around py-2">
@@ -35,7 +37,7 @@ const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
                   isActive ? "text-primary" : "text-muted-foreground"
                 }`}
               >
-                {tab.label}
+                {t(tab.labelKey)}
               </span>
             </button>
           );

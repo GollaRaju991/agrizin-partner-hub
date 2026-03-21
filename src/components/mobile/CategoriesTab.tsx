@@ -1,57 +1,58 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { ChevronRight, Bell, Clock, CheckCircle2 } from "lucide-react";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import rentVehicleImg from "@/assets/rent-vehicle.png";
 import farmWorkerImg from "@/assets/farm-worker.png";
 import agrizinDriverImg from "@/assets/agrizin-driver.png";
 
-const categories = [
-  {
-    title: "Farm Worker",
-    subtitle: "Find Labor Jobs",
-    icon: "👨‍🌾",
-    image: farmWorkerImg,
-    serviceType: "farm_maker" as const,
-    route: "/register/farm-worker",
-  },
-  {
-    title: "Rent Vehicles",
-    subtitle: "Hire Cars & Bikes",
-    icon: "🚗",
-    image: rentVehicleImg,
-    serviceType: "rent_vehicle" as const,
-    route: "/register/vehicle",
-  },
-  {
-    title: "Agrizin Driver",
-    subtitle: "Agricultural Transport",
-    icon: "🚚",
-    image: agrizinDriverImg,
-    serviceType: "agrizin_driver" as const,
-    route: "/dashboard",
-  },
-];
-
-const StatusBadge = ({ status }: { status: string }) => {
-  if (status === "completed" || status === "approved") {
-    return (
-      <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[hsl(var(--status-completed))] text-[hsl(var(--status-completed-foreground))]">
-        <CheckCircle2 size={12} /> Completed
-      </span>
-    );
-  }
-  return (
-    <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[hsl(var(--status-pending))] text-[hsl(var(--status-pending-foreground))]">
-      <Clock size={12} /> In Progress
-    </span>
-  );
-};
-
 const CategoriesTab = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const { getStatusForService } = useUserApplications();
+
+  const categories = [
+    {
+      title: t("farmWorker"),
+      subtitle: t("farmWorkerSub"),
+      icon: "👨‍🌾",
+      image: farmWorkerImg,
+      serviceType: "farm_maker" as const,
+      route: "/register/farm-worker",
+    },
+    {
+      title: t("rentVehicle"),
+      subtitle: t("rentVehicleSub"),
+      icon: "🚗",
+      image: rentVehicleImg,
+      serviceType: "rent_vehicle" as const,
+      route: "/register/vehicle",
+    },
+    {
+      title: t("agrizinDriver"),
+      subtitle: t("agrizinDriverSub"),
+      icon: "🚚",
+      image: agrizinDriverImg,
+      serviceType: "agrizin_driver" as const,
+      route: "/dashboard",
+    },
+  ];
+
+  const StatusBadge = ({ status }: { status: string }) => {
+    const isComplete = status === "completed" || status === "approved";
+    return (
+      <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
+        isComplete
+          ? "bg-[hsl(var(--status-completed))] text-[hsl(var(--status-completed-foreground))]"
+          : "bg-[hsl(var(--status-pending))] text-[hsl(var(--status-pending-foreground))]"
+      }`}>
+        {isComplete ? <CheckCircle2 size={12} /> : <Clock size={12} />}
+        {isComplete ? t("completed") : t("inProgress")}
+      </span>
+    );
+  };
 
   const handleSelect = (cat: (typeof categories)[0]) => {
     const status = user ? getStatusForService(cat.serviceType) : null;
@@ -67,7 +68,7 @@ const CategoriesTab = () => {
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-border">
         <div className="w-8" />
-        <h1 className="font-heading font-bold text-lg text-foreground">Categories</h1>
+        <h1 className="font-heading font-bold text-lg text-foreground">{t("categories")}</h1>
         <button className="p-2">
           <Bell size={20} className="text-foreground" />
         </button>
@@ -82,13 +83,8 @@ const CategoriesTab = () => {
               onClick={() => handleSelect(cat)}
               className="w-full relative h-40 rounded-2xl overflow-hidden group"
             >
-              <img
-                src={cat.image}
-                alt={cat.title}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+              <img src={cat.image} alt={cat.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
-              {/* Status badge */}
               {status && (
                 <div className="absolute top-3 right-3 z-10">
                   <StatusBadge status={status} />
