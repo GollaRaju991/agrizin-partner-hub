@@ -97,6 +97,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleOnline = async () => {
     if (!user || !profile) return;
+
+    // If going online, check for at least one completed/approved application
+    if (!profile.is_online) {
+      const [appsRes, vehRes] = await Promise.all([
+        supabase.from("service_applications").select("id").eq("user_id", user.id).in("status", ["completed", "approved"]).limit(1),
+        supabase.from("vehicle_registrations").select("id").eq("user_id", user.id).in("status", ["completed", "approved"]).limit(1),
+      ]);
+      const hasCompleted = (appsRes.data?.length ?? 0) > 0 || (vehRes.data?.length ?? 0) > 0;
+      if (!hasCompleted) {
+        throw new Error("NO_COMPLETED_APP");
+      }
+    }
+
     const { error } = await supabase
       .from("profiles")
       .update({ is_online: !profile.is_online })

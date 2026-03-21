@@ -20,6 +20,7 @@ const translations = {
     goOnline: "Go Online",
     goOffline: "Go Offline",
     loadingMap: "Loading map...",
+    completeAppToGoOnline: "Please log in and complete your application to go online.",
     
     // Categories
     farmWorker: "Farm Worker",
@@ -133,6 +134,7 @@ const translations = {
     goOnline: "ऑनलाइन जाएं",
     goOffline: "ऑफ़लाइन जाएं",
     loadingMap: "मानचित्र लोड हो रहा है...",
+    completeAppToGoOnline: "कृपया लॉग इन करें और ऑनलाइन जाने के लिए अपना आवेदन पूरा करें।",
     
     farmWorker: "खेत मजदूर",
     farmWorkerSub: "मजदूरी के काम खोजें",
@@ -237,6 +239,7 @@ const translations = {
     goOnline: "ఆన్‌లైన్ అవ్వండి",
     goOffline: "ఆఫ్‌లైన్ అవ్వండి",
     loadingMap: "మ్యాప్ లోడ్ అవుతోంది...",
+    completeAppToGoOnline: "దయచేసి లాగిన్ చేసి, ఆన్‌లైన్‌కు వెళ్ళడానికి మీ దరఖాస్తును పూర్తి చేయండి.",
     
     farmWorker: "వ్యవసాయ కూలీ",
     farmWorkerSub: "కూలీ పనులు కనుగొనండి",
