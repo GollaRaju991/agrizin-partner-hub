@@ -18,6 +18,8 @@ const ServiceCard = ({ title, description, image, badge, serviceType }: ServiceC
       navigate(user ? "/register/farm-worker" : "/login?redirect=/register/farm-worker");
     } else if (serviceType === "rent_vehicle") {
       navigate(user ? "/register/vehicle" : "/login?redirect=/register/vehicle");
+    } else if (serviceType === "agrizin_driver") {
+      navigate(user ? "/register/agrizin-driver" : "/login?redirect=/register/agrizin-driver");
     } else {
       navigate(user ? `/dashboard?service=${serviceType}` : `/login?redirect=/dashboard?service=${serviceType}`);
     }

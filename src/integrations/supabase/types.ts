@@ -160,11 +160,13 @@ export type Database = {
           aadhaar_back_url: string | null
           aadhaar_front_url: string | null
           aadhaar_pan: string
+          age: number | null
           country: string
           created_at: string
           district: string | null
           driving_license_number: string
           full_name: string
+          gender: string | null
           id: string
           license_back_url: string | null
           license_front_url: string | null
@@ -185,11 +187,13 @@ export type Database = {
           aadhaar_back_url?: string | null
           aadhaar_front_url?: string | null
           aadhaar_pan: string
+          age?: number | null
           country?: string
           created_at?: string
           district?: string | null
           driving_license_number: string
           full_name: string
+          gender?: string | null
           id?: string
           license_back_url?: string | null
           license_front_url?: string | null
@@ -210,11 +214,13 @@ export type Database = {
           aadhaar_back_url?: string | null
           aadhaar_front_url?: string | null
           aadhaar_pan?: string
+          age?: number | null
           country?: string
           created_at?: string
           district?: string | null
           driving_license_number?: string
           full_name?: string
+          gender?: string | null
           id?: string
           license_back_url?: string | null
           license_front_url?: string | null

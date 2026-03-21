@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
-import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
+import AgrizinDriverStep2, { type AgrizinDriverStep2Data } from "@/components/registration/AgrizinDriverStep2";
 import SuccessDialog from "@/components/registration/SuccessDialog";
 
 const BUCKET = "vehicle-documents";
@@ -21,7 +21,7 @@ const uploadFile = async (userId: string, file: File, folder: string): Promise<s
   return data.publicUrl;
 };
 
-const RegisterVehicle = () => {
+const RegisterAgrizinDriver = () => {
   const { user, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -49,7 +49,7 @@ const RegisterVehicle = () => {
     aadhaarBackPreview: "",
   });
 
-  const [step2, setStep2] = useState<VehicleStep2Data>({
+  const [step2, setStep2] = useState<AgrizinDriverStep2Data>({
     vehicle_number: "",
     driving_license_number: "",
     licenseFront: null,
@@ -61,11 +61,13 @@ const RegisterVehicle = () => {
     vehicleImages: [],
     vehicleImagePreviews: [],
     vehicle_usage_type: "",
+    work_duration: "",
+    preferred_location: "",
   });
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate("/login?redirect=/register/vehicle");
+      navigate("/login?redirect=/register/agrizin-driver");
     }
   }, [user, authLoading, navigate]);
 
@@ -73,9 +75,10 @@ const RegisterVehicle = () => {
     const checkExisting = async () => {
       if (!user) return;
       const { data } = await supabase
-        .from("vehicle_registrations")
+        .from("service_applications")
         .select("id")
         .eq("user_id", user.id)
+        .eq("service_type", "agrizin_driver")
         .limit(1);
       if (data && data.length > 0) setAlreadyRegistered(true);
       setCheckingDuplicate(false);
@@ -108,33 +111,26 @@ const RegisterVehicle = () => {
           step2.rcImage ? uploadFile(user.id, step2.rcImage, "rc") : Promise.resolve(null),
         ]);
 
-      const vehicleUrls = await Promise.all(
-        step2.vehicleImages.map((f) => uploadFile(user.id, f, "vehicle"))
-      );
-
-      const { error } = await supabase.from("vehicle_registrations").insert({
+      const { error } = await supabase.from("service_applications").insert({
         user_id: user.id,
-        full_name: step1.full_name.trim(),
-        mobile: step1.mobile.trim(),
+        service_type: "agrizin_driver" as const,
+        first_name: step1.full_name.trim(),
+        phone: step1.mobile.trim(),
         age: step1.age ? parseInt(step1.age) : null,
         gender: step1.gender || null,
-        aadhaar_pan: step1.aadhaar_pan.trim().toUpperCase(),
         country: step1.country,
         state: step1.state || null,
         district: step1.district || null,
         mandal: step1.mandal || null,
         village: step1.village.trim() || null,
         profile_photo_url: profileUrl,
-        aadhaar_front_url: aadhaarFrontUrl,
-        aadhaar_back_url: aadhaarBackUrl,
-        vehicle_number: step2.vehicle_number.trim(),
-        driving_license_number: step2.driving_license_number.trim(),
-        license_front_url: licenseFrontUrl,
-        license_back_url: licenseBackUrl,
-        rc_image_url: rcUrl,
-        vehicle_image_urls: vehicleUrls.filter(Boolean) as string[],
-        vehicle_usage_type: step2.vehicle_usage_type,
-      } as any);
+        vehicle_type: step2.vehicle_usage_type || null,
+        vehicle_make: step2.vehicle_number.trim() || null,
+        vehicle_model: step2.driving_license_number.trim() || null,
+        registration_number: step2.vehicle_number.trim() || null,
+        availability: step2.work_duration || null,
+        farm_location: step2.preferred_location.trim() || null,
+      });
 
       if (error) {
         console.error(error);
@@ -166,15 +162,13 @@ const RegisterVehicle = () => {
   if (alreadyRegistered) {
     return (
       <div className="min-h-screen bg-muted flex items-center justify-center px-4">
-        <div className="bg-card rounded-2xl border border-border p-8 shadow-[var(--shadow-card)] max-w-md w-full text-center space-y-4">
+        <div className="bg-card rounded-2xl border border-border p-8 shadow-sm max-w-md w-full text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
             <span className="text-3xl">⚠️</span>
           </div>
           <h2 className="font-heading font-bold text-xl text-destructive">Duplicate Submission</h2>
           <div className="w-full h-px bg-destructive/30" />
-          <p className="text-muted-foreground text-sm">
-            You have already submitted your application.
-          </p>
+          <p className="text-muted-foreground text-sm">You have already submitted your Agrizin Driver application.</p>
           <button
             onClick={() => navigate("/dashboard")}
             className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-sm hover:opacity-90 transition-opacity"
@@ -190,7 +184,7 @@ const RegisterVehicle = () => {
     <div className="min-h-screen bg-muted">
       <SuccessDialog open={showSuccess} onClose={() => navigate("/")} />
       {/* Green Banner Header */}
-      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
+      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-5 md:py-8 relative">
         <button
           onClick={() => navigate("/")}
           className="absolute top-3 left-3 flex items-center gap-1.5 text-primary-foreground/80 hover:text-primary-foreground text-sm font-medium transition-colors"
@@ -198,18 +192,15 @@ const RegisterVehicle = () => {
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           Back
         </button>
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <h1 className="font-heading font-bold text-xl md:text-3xl">Vehicle Registration</h1>
-            {/* Step indicator */}
-            <div className="flex items-center justify-center gap-3 mt-3">
-              <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-                Step 1
-              </div>
-              <div className="w-8 h-px bg-primary-foreground/40" />
-              <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-                Step 2
-              </div>
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-heading font-bold text-lg md:text-3xl">Agrizin Driver Registration</h1>
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+              Step 1
+            </div>
+            <div className="w-8 h-px bg-primary-foreground/40" />
+            <div className={`px-4 py-1 rounded-full text-[11px] font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+              Step 2
             </div>
           </div>
         </div>
@@ -225,7 +216,7 @@ const RegisterVehicle = () => {
             onBack={() => navigate(-1)}
           />
         ) : (
-          <VehicleStep2
+          <AgrizinDriverStep2
             data={step2}
             onChange={setStep2}
             onSubmit={handleSubmit}
@@ -238,4 +229,4 @@ const RegisterVehicle = () => {
   );
 };
 
-export default RegisterVehicle;
+export default RegisterAgrizinDriver;
