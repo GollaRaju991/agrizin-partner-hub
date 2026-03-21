@@ -204,21 +204,21 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
         </div>
       </div>
 
-      {/* Sticky Submit */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t border-border space-y-2">
-        <Button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-base hover:opacity-90"
-        >
-          {loading ? "Submitting..." : "Submit"}
-        </Button>
+      {/* Submit */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border">
         <button
           onClick={onBack}
-          className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Back to Step 1
         </button>
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="h-11 px-10 rounded-lg bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90"
+        >
+          {loading ? "Submitting..." : "Submit Application"}
+        </Button>
       </div>
     </div>
   );

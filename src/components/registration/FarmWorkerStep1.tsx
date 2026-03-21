@@ -258,20 +258,20 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
         {errors.profileImage && <p className="text-destructive text-xs">{errors.profileImage}</p>}
       </div>
 
-      {/* Sticky buttons */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-lg border-t border-border space-y-2">
-        <Button
-          onClick={handleNext}
-          className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-base hover:opacity-90"
-        >
-          Next →
-        </Button>
+      {/* Next button */}
+      <div className="flex items-center justify-between pt-4 border-t border-border">
         <button
           onClick={onBack}
-          className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1 flex items-center justify-center gap-1"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back
         </button>
+        <Button
+          onClick={handleNext}
+          className="h-11 px-8 rounded-lg bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90"
+        >
+          Next →
+        </Button>
       </div>
     </div>
   );
