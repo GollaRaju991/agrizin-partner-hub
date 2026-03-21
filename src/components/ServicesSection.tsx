@@ -1,6 +1,6 @@
 import ServiceCard from "./ServiceCard";
 import rentVehicleImg from "@/assets/rent-vehicle.png";
-import farmMakerImg from "@/assets/farm-maker.png";
+import farmWorkerImg from "@/assets/farm-worker.png";
 import agrizinDriverImg from "@/assets/agrizin-driver.png";
 
 const services = [
