@@ -33,7 +33,7 @@ const ServiceCard = ({ title, description, image, delay, badge, serviceType }: S
   return (
     <div
       onClick={handleClick}
-      className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 group animate-fade-up opacity-0 cursor-pointer"
+      className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 group animate-fade-up opacity-0 cursor-pointer flex flex-col"
       style={{ animationDelay: delay, animationFillMode: "forwards" }}
     >
       <div className="h-52 bg-accent overflow-hidden">

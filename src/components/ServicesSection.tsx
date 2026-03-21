@@ -46,6 +46,7 @@ const ServicesSection = () => {
               title={service.title}
               description={service.description}
               image={service.image}
+              badge={(service as any).badge}
               serviceType={service.serviceType}
               delay={`${0.2 + index * 0.15}s`}
             />
