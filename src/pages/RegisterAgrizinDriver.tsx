@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import AgrizinDriverStep2, { type AgrizinDriverStep2Data } from "@/components/registration/AgrizinDriverStep2";
@@ -111,7 +112,7 @@ const RegisterAgrizinDriver = () => {
           step2.rcImage ? uploadFile(user.id, step2.rcImage, "rc") : Promise.resolve(null),
         ]);
 
-      const { error } = await supabase.from("service_applications").insert({
+      const { data, error } = await supabase.from("service_applications").insert({
         user_id: user.id,
         service_type: "agrizin_driver" as const,
         first_name: step1.full_name.trim(),
@@ -130,12 +131,13 @@ const RegisterAgrizinDriver = () => {
         registration_number: step2.vehicle_number.trim() || null,
         availability: step2.work_duration || null,
         farm_location: step2.preferred_location.trim() || null,
-      });
+      }).select().single();
 
       if (error) {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
+        if (data) syncApplicationToExternal(data);
         setShowSuccess(true);
       }
     } catch (err) {
