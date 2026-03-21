@@ -62,6 +62,10 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
     setErrors((prev) => ({ ...prev, profileImage: "" }));
   };
 
+  const removeProfileImage = () => {
+    onChange({ ...data, profileImage: null, profileImagePreview: "" });
+  };
+
   const handleNext = () => {
     const newErrors: Record<string, string> = {};
 
