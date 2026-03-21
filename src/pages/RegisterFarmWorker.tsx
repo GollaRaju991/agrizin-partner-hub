@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
+import SuccessDialog from "@/components/registration/SuccessDialog";
 import FarmWorkerStep1, { type Step1Data } from "@/components/registration/FarmWorkerStep1";
 import FarmWorkerStep2, { type Step2Data } from "@/components/registration/FarmWorkerStep2";
 
