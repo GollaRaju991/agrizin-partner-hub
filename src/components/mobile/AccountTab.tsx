@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import {
-  Bell, Phone, User, Truck, LogOut, Edit2,
+  Bell, Phone, User, Truck, LogOut, Edit2, Camera, Trash2,
   Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText,
   Share2, Globe, ChevronRight, Save, X,
 } from "lucide-react";
