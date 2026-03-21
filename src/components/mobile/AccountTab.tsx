@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import {
-  Bell, Phone, User, Truck, LogOut, ChevronRight, Edit2,
-  Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText
+  Bell, Phone, User, Truck, LogOut, Edit2,
+  Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText,
+  Share2, Settings, Globe, BellRing, ChevronRight, Plus,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,8 +12,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+import { ApplicationInfo, VehicleRegInfo } from "@/hooks/useUserApplications";
 
-/* ── Status helpers ── */
+/* ── Status Badge ── */
 const StatusBadge = ({ status }: { status: string }) => {
   const isComplete = status === "completed" || status === "approved";
   return (
@@ -29,10 +31,11 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
+/* ── Status Timeline ── */
 const StatusTimeline = ({ status }: { status: string }) => {
   const steps = ["Submitted", "In Progress", "Completed"];
   const isComplete = status === "completed" || status === "approved";
-  const activeIdx = isComplete ? 2 : status === "pending" || status === "in_progress" ? 1 : 0;
+  const activeIdx = isComplete ? 2 : 1;
 
   return (
     <div className="flex items-center gap-1 mt-3">
@@ -73,6 +76,122 @@ const DetailRow = ({ icon: Icon, label, value }: { icon: any; label: string; val
   );
 };
 
+/* ── Empty State for a module ── */
+const EmptyModuleState = ({ label, onClick }: { label: string; onClick: () => void }) => (
+  <div className="p-5 text-center space-y-3">
+    <p className="text-muted-foreground text-sm">You haven't added details yet</p>
+    <Button
+      onClick={onClick}
+      className="rounded-xl h-10 px-5 font-heading font-bold text-sm gap-2"
+    >
+      <Plus size={14} /> {label}
+    </Button>
+  </div>
+);
+
+/* ── Farm Worker Card Content ── */
+const FarmWorkerContent = ({ app, navigate }: { app: ApplicationInfo; navigate: any }) => (
+  <>
+    <div className="p-4 space-y-2">
+      <DetailRow icon={User} label="Name" value={app.first_name} />
+      <DetailRow icon={Briefcase} label="Skills" value={app.skills?.join(", ")} />
+      <DetailRow icon={Calendar} label="Experience" value={app.experience_years ? `${app.experience_years} years` : null} />
+      <DetailRow icon={MapPin} label="Location" value={[app.village, app.mandal, app.district, app.state].filter(Boolean).join(", ")} />
+      <DetailRow icon={Clock} label="Availability" value={app.availability} />
+      <StatusTimeline status={app.status} />
+      <p className="text-[11px] text-muted-foreground mt-2">
+        Updated {formatDistanceToNow(new Date(app.updated_at), { addSuffix: true })}
+      </p>
+    </div>
+    <div className="px-4 pb-4">
+      <Button variant="outline" onClick={() => navigate("/register/farm-worker")} className="w-full rounded-xl h-9 text-sm font-heading font-bold gap-1">
+        <Edit2 size={14} /> Edit Details
+      </Button>
+    </div>
+  </>
+);
+
+/* ── Rent Vehicle Card Content ── */
+const VehicleContent = ({ reg, navigate }: { reg: VehicleRegInfo; navigate: any }) => (
+  <>
+    <div className="p-4 space-y-2">
+      <DetailRow icon={User} label="Name" value={reg.full_name} />
+      <DetailRow icon={Truck} label="Vehicle" value={`${reg.vehicle_usage_type} — ${reg.vehicle_number}`} />
+      <DetailRow icon={FileText} label="License" value={reg.driving_license_number} />
+      <DetailRow icon={MapPin} label="Location" value={[reg.district, reg.state].filter(Boolean).join(", ")} />
+      <StatusTimeline status={reg.status} />
+      <p className="text-[11px] text-muted-foreground mt-2">
+        Updated {formatDistanceToNow(new Date(reg.updated_at), { addSuffix: true })}
+      </p>
+    </div>
+    <div className="px-4 pb-4">
+      <Button variant="outline" onClick={() => navigate("/register/vehicle")} className="w-full rounded-xl h-9 text-sm font-heading font-bold gap-1">
+        <Edit2 size={14} /> Edit Details
+      </Button>
+    </div>
+  </>
+);
+
+/* ── Driver Card Content ── */
+const DriverContent = ({ app, navigate }: { app: ApplicationInfo; navigate: any }) => (
+  <>
+    <div className="p-4 space-y-2">
+      <DetailRow icon={User} label="Name" value={app.first_name} />
+      <DetailRow icon={Truck} label="Vehicle" value={[app.vehicle_make, app.vehicle_model].filter(Boolean).join(" ")} />
+      <DetailRow icon={FileText} label="Registration" value={app.registration_number} />
+      <DetailRow icon={MapPin} label="Location" value={[app.district, app.state].filter(Boolean).join(", ")} />
+      <StatusTimeline status={app.status} />
+      <p className="text-[11px] text-muted-foreground mt-2">
+        Updated {formatDistanceToNow(new Date(app.updated_at), { addSuffix: true })}
+      </p>
+    </div>
+    <div className="px-4 pb-4">
+      <Button variant="outline" onClick={() => navigate("/dashboard")} className="w-full rounded-xl h-9 text-sm font-heading font-bold gap-1">
+        <Edit2 size={14} /> Edit Details
+      </Button>
+    </div>
+  </>
+);
+
+/* ── Module Card Wrapper ── */
+const ModuleCard = ({
+  icon, title, status, children,
+}: {
+  icon: string; title: string; status: string | null; children: React.ReactNode;
+}) => (
+  <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
+    <div className="flex items-center justify-between p-4 border-b border-border bg-accent/30">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">{icon}</span>
+        <h4 className="font-heading font-bold text-sm text-foreground">{title}</h4>
+      </div>
+      {status && <StatusBadge status={status} />}
+    </div>
+    {children}
+  </div>
+);
+
+/* ── Settings Row ── */
+const SettingsRow = ({
+  icon: Icon, label, subtitle, onClick, danger, trailing,
+}: {
+  icon: any; label: string; subtitle?: string; onClick?: () => void; danger?: boolean; trailing?: React.ReactNode;
+}) => (
+  <button
+    onClick={onClick}
+    className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
+  >
+    <div className="flex items-center gap-3">
+      <Icon size={20} className={danger ? "text-destructive" : "text-primary"} />
+      <div className="text-left">
+        <span className={`text-sm font-medium ${danger ? "text-destructive" : "text-foreground"}`}>{label}</span>
+        {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+      </div>
+    </div>
+    {trailing || <ChevronRight size={16} className="text-muted-foreground" />}
+  </button>
+);
+
 /* ════════════════════════════════════════════ */
 const AccountTab = () => {
   const { user, profile, signUp, signIn, signOut } = useAuth();
@@ -85,7 +204,7 @@ const AccountTab = () => {
   const [otp, setOtp] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
 
-  /* ── Auth handlers (unchanged logic) ── */
+  /* ── Auth handlers ── */
   const handleSendOTP = () => {
     if (!firstName.trim()) { toast.error("Enter your name"); return; }
     if (!phone.trim() || phone.length < 10) { toast.error("Enter valid phone number"); return; }
@@ -120,17 +239,15 @@ const AccountTab = () => {
     setOtpSent(false); setOtp(""); setFirstName(""); setPhone("");
   };
 
-  /* ── Build application cards ── */
+  /* ── Lookup helpers ── */
   const farmApp = applications.find((a) => a.service_type === "farm_maker");
   const driverApp = applications.find((a) => a.service_type === "agrizin_driver");
   const vehicleReg = vehicleRegs[0];
 
-  const hasAnyApp = !!(farmApp || driverApp || vehicleReg);
-
   /* ═══════════ LOGGED-IN VIEW ═══════════ */
   if (user && profile) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full bg-background">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-border">
           <div className="w-8" />
@@ -138,9 +255,9 @@ const AccountTab = () => {
           <button className="p-2"><Bell size={20} className="text-foreground" /></button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
           {/* ── Profile Header Card ── */}
-          <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4">
+          <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 shadow-sm">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
               {profile.first_name ? (
                 <span className="text-primary font-heading font-bold text-2xl">
@@ -162,7 +279,7 @@ const AccountTab = () => {
             </button>
           </div>
 
-          {/* ── My Applications Section ── */}
+          {/* ── My Applications ── */}
           <div>
             <h3 className="font-heading font-bold text-base text-foreground mb-3 px-1">📋 My Applications</h3>
 
@@ -170,129 +287,45 @@ const AccountTab = () => {
               <div className="bg-card rounded-2xl border border-border p-8 flex justify-center">
                 <p className="text-muted-foreground text-sm">Loading applications...</p>
               </div>
-            ) : !hasAnyApp ? (
-              <div className="bg-card rounded-2xl border border-border p-8 text-center space-y-3">
-                <p className="text-muted-foreground text-sm">No applications found</p>
-                <Button
-                  onClick={() => navigate("/register/farm-worker")}
-                  className="rounded-xl h-10 px-6 font-heading font-bold text-sm"
-                >
-                  Apply Now →
-                </Button>
-              </div>
             ) : (
               <div className="space-y-3">
-                {/* ── Farm Worker Card ── */}
-                {farmApp && (
-                  <div className="bg-card rounded-2xl border border-border overflow-hidden">
-                    <div className="flex items-center justify-between p-4 border-b border-border bg-accent/30">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">👨‍🌾</span>
-                        <h4 className="font-heading font-bold text-sm text-foreground">Farm Worker</h4>
-                      </div>
-                      <StatusBadge status={farmApp.status} />
-                    </div>
-                    <div className="p-4 space-y-2">
-                      <DetailRow icon={User} label="Name" value={farmApp.first_name} />
-                      <DetailRow icon={Briefcase} label="Skills" value={farmApp.skills?.join(", ")} />
-                      <DetailRow icon={Calendar} label="Experience" value={farmApp.experience_years ? `${farmApp.experience_years} years` : null} />
-                      <DetailRow icon={MapPin} label="Location" value={[farmApp.village, farmApp.mandal, farmApp.district, farmApp.state].filter(Boolean).join(", ")} />
-                      <DetailRow icon={Clock} label="Availability" value={farmApp.availability} />
-                      <StatusTimeline status={farmApp.status} />
-                      <p className="text-[11px] text-muted-foreground mt-2">
-                        Updated {formatDistanceToNow(new Date(farmApp.updated_at), { addSuffix: true })}
-                      </p>
-                    </div>
-                    <div className="px-4 pb-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/register/farm-worker")}
-                        className="w-full rounded-xl h-9 text-sm font-heading font-bold"
-                      >
-                        <Edit2 size={14} className="mr-1" /> Edit Details
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                {/* Farm Worker */}
+                <ModuleCard icon="👨‍🌾" title="Farm Worker" status={farmApp?.status ?? null}>
+                  {farmApp ? (
+                    <FarmWorkerContent app={farmApp} navigate={navigate} />
+                  ) : (
+                    <EmptyModuleState label="Add Farm Worker Details" onClick={() => navigate("/register/farm-worker")} />
+                  )}
+                </ModuleCard>
 
-                {/* ── Rent Vehicle Card ── */}
-                {vehicleReg && (
-                  <div className="bg-card rounded-2xl border border-border overflow-hidden">
-                    <div className="flex items-center justify-between p-4 border-b border-border bg-accent/30">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🚗</span>
-                        <h4 className="font-heading font-bold text-sm text-foreground">Rent Vehicle</h4>
-                      </div>
-                      <StatusBadge status={vehicleReg.status} />
-                    </div>
-                    <div className="p-4 space-y-2">
-                      <DetailRow icon={User} label="Name" value={vehicleReg.full_name} />
-                      <DetailRow icon={Truck} label="Vehicle" value={`${vehicleReg.vehicle_usage_type} — ${vehicleReg.vehicle_number}`} />
-                      <DetailRow icon={FileText} label="License" value={vehicleReg.driving_license_number} />
-                      <DetailRow icon={MapPin} label="Location" value={[vehicleReg.district, vehicleReg.state].filter(Boolean).join(", ")} />
-                      <StatusTimeline status={vehicleReg.status} />
-                      <p className="text-[11px] text-muted-foreground mt-2">
-                        Updated {formatDistanceToNow(new Date(vehicleReg.updated_at), { addSuffix: true })}
-                      </p>
-                    </div>
-                    <div className="px-4 pb-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/register/vehicle")}
-                        className="w-full rounded-xl h-9 text-sm font-heading font-bold"
-                      >
-                        <Edit2 size={14} className="mr-1" /> Edit Details
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                {/* Rent Vehicle */}
+                <ModuleCard icon="🚗" title="Rent Vehicle" status={vehicleReg?.status ?? null}>
+                  {vehicleReg ? (
+                    <VehicleContent reg={vehicleReg} navigate={navigate} />
+                  ) : (
+                    <EmptyModuleState label="Add Rent Vehicle Details" onClick={() => navigate("/register/vehicle")} />
+                  )}
+                </ModuleCard>
 
-                {/* ── Agrizin Driver Card ── */}
-                {driverApp && (
-                  <div className="bg-card rounded-2xl border border-border overflow-hidden">
-                    <div className="flex items-center justify-between p-4 border-b border-border bg-accent/30">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">🚚</span>
-                        <h4 className="font-heading font-bold text-sm text-foreground">Agrizin Driver</h4>
-                      </div>
-                      <StatusBadge status={driverApp.status} />
-                    </div>
-                    <div className="p-4 space-y-2">
-                      <DetailRow icon={User} label="Name" value={driverApp.first_name} />
-                      <DetailRow icon={Truck} label="Vehicle" value={[driverApp.vehicle_make, driverApp.vehicle_model].filter(Boolean).join(" ")} />
-                      <DetailRow icon={FileText} label="Registration" value={driverApp.registration_number} />
-                      <DetailRow icon={MapPin} label="Location" value={[driverApp.district, driverApp.state].filter(Boolean).join(", ")} />
-                      <StatusTimeline status={driverApp.status} />
-                      <p className="text-[11px] text-muted-foreground mt-2">
-                        Updated {formatDistanceToNow(new Date(driverApp.updated_at), { addSuffix: true })}
-                      </p>
-                    </div>
-                    <div className="px-4 pb-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => navigate("/dashboard")}
-                        className="w-full rounded-xl h-9 text-sm font-heading font-bold"
-                      >
-                        <Edit2 size={14} className="mr-1" /> Edit Details
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                {/* Agrizin Driver */}
+                <ModuleCard icon="🚚" title="Agrizin Driver" status={driverApp?.status ?? null}>
+                  {driverApp ? (
+                    <DriverContent app={driverApp} navigate={navigate} />
+                  ) : (
+                    <EmptyModuleState label="Add Agrizin Driver Details" onClick={() => navigate("/dashboard")} />
+                  )}
+                </ModuleCard>
               </div>
             )}
           </div>
 
-          {/* ── Logout ── */}
-          <div className="bg-card rounded-2xl border border-border overflow-hidden">
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <LogOut size={20} className="text-destructive" />
-                <span className="text-sm font-medium text-destructive">Logout</span>
-              </div>
-            </button>
+          {/* ── Additional Options ── */}
+          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
+            <SettingsRow icon={Share2} label="Refer Agrizin Partner" subtitle="Invite and earn rewards" onClick={() => toast.info("Referral feature coming soon!")} />
+            <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={Globe} label="App Settings" subtitle="Language, notifications" onClick={() => toast.info("Settings coming soon!")} />
+            <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={LogOut} label="Logout" danger onClick={handleSignOut} trailing={<span />} />
           </div>
         </div>
       </div>
@@ -301,14 +334,14 @@ const AccountTab = () => {
 
   /* ═══════════ LOGIN VIEW ═══════════ */
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-background">
       <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-border">
         <div className="w-8" />
         <h1 className="font-heading font-bold text-lg text-foreground">Account</h1>
         <button className="p-2"><Bell size={20} className="text-foreground" /></button>
       </div>
 
-      <div className="flex-1 overflow-y-auto flex items-center justify-center p-6 pb-20">
+      <div className="flex-1 overflow-y-auto flex items-center justify-center p-6 pb-24">
         <div className="w-full max-w-sm">
           <div className="text-center mb-6">
             <div className="w-16 h-16 rounded-full bg-primary mx-auto flex items-center justify-center mb-3">
@@ -317,7 +350,7 @@ const AccountTab = () => {
             <h2 className="font-heading font-bold text-xl text-foreground">Welcome to Agrizin</h2>
           </div>
 
-          <div className="bg-card rounded-2xl border border-border p-5 space-y-4">
+          <div className="bg-card rounded-2xl border border-border p-5 space-y-4 shadow-sm">
             {!otpSent ? (
               <>
                 <div>
