@@ -11,9 +11,9 @@ const services = [
     serviceType: "rent_vehicle" as const,
   },
   {
-    title: "Farm Maker",
-    description: "Access professional farm preparation services — plowing, tilling, and land leveling with modern equipment.",
-    image: farmMakerImg,
+    title: "Farm Worker",
+    description: "Hire experienced farm workers for harvesting, cutting, and field work or reaping hook.",
+    image: farmWorkerImg,
     serviceType: "farm_maker" as const,
   },
   {
