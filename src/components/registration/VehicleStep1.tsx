@@ -213,6 +213,33 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
             {errors.full_name && <p className="text-destructive text-[10px] mt-0.5">{errors.full_name}</p>}
           </div>
 
+          {/* Age & Gender */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <FieldLabel>Age</FieldLabel>
+              <Input
+                type="number"
+                placeholder="E.g. 25"
+                value={data.age}
+                onChange={(e) => update("age", e.target.value.replace(/\D/g, "").slice(0, 3))}
+                className="h-10 rounded-lg text-sm"
+              />
+            </div>
+            <div>
+              <FieldLabel>Gender</FieldLabel>
+              <Select value={data.gender} onValueChange={(v) => update("gender", v)}>
+                <SelectTrigger className="h-10 rounded-lg text-xs">
+                  <SelectValue placeholder="Select Gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male" className="text-xs">Male</SelectItem>
+                  <SelectItem value="female" className="text-xs">Female</SelectItem>
+                  <SelectItem value="other" className="text-xs">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           {/* Mobile */}
           <div>
             <FieldLabel>Mobile Number *</FieldLabel>

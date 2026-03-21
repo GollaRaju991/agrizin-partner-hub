@@ -116,6 +116,8 @@ const RegisterVehicle = () => {
         user_id: user.id,
         full_name: step1.full_name.trim(),
         mobile: step1.mobile.trim(),
+        age: step1.age ? parseInt(step1.age) : null,
+        gender: step1.gender || null,
         aadhaar_pan: step1.aadhaar_pan.trim().toUpperCase(),
         country: step1.country,
         state: step1.state || null,
