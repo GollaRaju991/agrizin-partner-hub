@@ -169,13 +169,7 @@ const HomeTab = () => {
           </div>
         )}
 
-        <div className="absolute bottom-6 left-6 right-6 z-10 space-y-3">
-          <button
-            onClick={() => navigate("/search")}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-heading font-bold text-base bg-card text-foreground border border-border shadow-lg transition-colors"
-          >
-            <Search size={20} /> Find Workers & Vehicles
-          </button>
+        <div className="absolute bottom-6 left-6 right-6 z-10">
           <button
             onClick={handleToggle}
             className={`w-full py-3.5 rounded-xl font-heading font-bold text-base transition-colors shadow-lg ${
