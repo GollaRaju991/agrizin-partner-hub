@@ -49,10 +49,10 @@ const HomeTab = () => {
 
   // Initialize map
   useEffect(() => {
-    if (!mapLoaded || !window.google) return;
+    if (!mapLoaded || !(window as any).google) return;
     const mapDiv = document.getElementById("google-map-container");
     if (!mapDiv) return;
-    new window.google.maps.Map(mapDiv, {
+    new (window as any).google.maps.Map(mapDiv, {
       center: userLocation,
       zoom: 14,
       disableDefaultUI: true,
