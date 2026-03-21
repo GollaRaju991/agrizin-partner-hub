@@ -134,6 +134,7 @@ const translations = {
     goOnline: "ऑनलाइन जाएं",
     goOffline: "ऑफ़लाइन जाएं",
     loadingMap: "मानचित्र लोड हो रहा है...",
+    completeAppToGoOnline: "कृपया लॉग इन करें और ऑनलाइन जाने के लिए अपना आवेदन पूरा करें।",
     
     farmWorker: "खेत मजदूर",
     farmWorkerSub: "मजदूरी के काम खोजें",
