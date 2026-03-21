@@ -239,6 +239,7 @@ const translations = {
     goOnline: "ఆన్‌లైన్ అవ్వండి",
     goOffline: "ఆఫ్‌లైన్ అవ్వండి",
     loadingMap: "మ్యాప్ లోడ్ అవుతోంది...",
+    completeAppToGoOnline: "దయచేసి లాగిన్ చేసి, ఆన్‌లైన్‌కు వెళ్ళడానికి మీ దరఖాస్తును పూర్తి చేయండి.",
     
     farmWorker: "వ్యవసాయ కూలీ",
     farmWorkerSub: "కూలీ పనులు కనుగొనండి",
