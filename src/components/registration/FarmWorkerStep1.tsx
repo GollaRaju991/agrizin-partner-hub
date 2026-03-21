@@ -1,4 +1,4 @@
-import { User, Phone, MapPin, Camera, ArrowLeft } from "lucide-react";
+import { User, Phone, MapPin, Camera, ArrowLeft, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,10 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
     setErrors((prev) => ({ ...prev, profileImage: "" }));
   };
 
+  const removeProfileImage = () => {
+    onChange({ ...data, profileImage: null, profileImagePreview: "" });
+  };
+
   const handleNext = () => {
     const newErrors: Record<string, string> = {};
 
@@ -93,9 +97,44 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
     <div className="space-y-5 pb-24">
       {/* Personal Details */}
       <div className="bg-card rounded-2xl border border-border p-4 shadow-card space-y-4">
-        <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
-          <User className="w-4 h-4 text-primary" />
-          Personal Details
+        {/* Title row with profile image inline */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base pt-1">
+            <User className="w-4 h-4 text-primary" />
+            Personal Details
+          </div>
+          {/* Profile Image - circular, top right */}
+          <div className="flex flex-col items-center shrink-0">
+            {data.profileImagePreview ? (
+              <div className="relative">
+                <img
+                  src={data.profileImagePreview}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-primary/30 shadow-md"
+                />
+                <button
+                  type="button"
+                  onClick={removeProfileImage}
+                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+                <label className="block text-center mt-0.5 cursor-pointer">
+                  <span className="text-[9px] text-primary font-medium hover:underline">Change</span>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                </label>
+              </div>
+            ) : (
+              <label
+                className={`w-16 h-16 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all ${errors.profileImage ? "border-destructive bg-destructive/5" : "border-primary/30"}`}
+              >
+                <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
+                <span className="text-[8px] text-muted-foreground font-medium">Upload</span>
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              </label>
+            )}
+            {errors.profileImage && <p className="text-destructive text-[9px] mt-0.5">{errors.profileImage}</p>}
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -228,35 +267,7 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
         />
       </div>
 
-      {/* Upload Photo */}
-      <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.profileImage ? "border-destructive" : "border-border"}`}>
-        <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
-          <Camera className="w-4 h-4 text-primary" />
-          Upload Photo *
-        </div>
-        <p className="text-xs text-muted-foreground">Upload profile image. Max file size: 10 MB</p>
 
-        <div className="flex items-center gap-4">
-          {data.profileImagePreview ? (
-            <img
-              src={data.profileImagePreview}
-              alt="Preview"
-              className="w-20 h-20 rounded-xl object-cover border border-border"
-            />
-          ) : (
-            <div className={`w-20 h-20 rounded-xl bg-muted border flex items-center justify-center ${errors.profileImage ? "border-destructive" : "border-border"}`}>
-              <Camera className="w-6 h-6 text-muted-foreground" />
-            </div>
-          )}
-          <label className="cursor-pointer">
-            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity">
-              + Upload Photo
-            </span>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-          </label>
-        </div>
-        {errors.profileImage && <p className="text-destructive text-xs">{errors.profileImage}</p>}
-      </div>
 
       {/* Next button */}
       <div className="flex items-center justify-between pt-4 border-t border-border">

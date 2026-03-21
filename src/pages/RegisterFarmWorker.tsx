@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
@@ -188,17 +189,12 @@ const RegisterFarmWorker = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center">
             <h1 className="font-heading font-bold text-2xl md:text-3xl">Farm Worker Registration</h1>
-            <p className="text-primary-foreground/80 text-sm mt-1">
-              {step === 1
-                ? "Enter your personal details below to proceed with your registration."
-                : "Enter your skills and work preferences to complete your registration."}
-            </p>
             {/* Step indicator */}
-            <div className="flex items-center justify-center gap-3 mt-4">
+            <div className="flex items-center justify-center gap-2 mt-4">
               <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
                 Step 1
               </div>
-              <div className="w-8 h-px bg-primary-foreground/40" />
+              <ChevronRight className="w-4 h-4 text-primary-foreground/60" />
               <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
                 Step 2
               </div>
