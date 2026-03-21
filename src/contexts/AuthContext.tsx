@@ -41,6 +41,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .eq("user_id", userId)
       .single();
     setProfile(data);
+
+    // Sync profile to external DB
+    if (data) {
+      syncProfileToExternal(data);
+    }
   };
 
   useEffect(() => {
