@@ -94,7 +94,6 @@ const RegisterVehicle = () => {
     setSubmitting(true);
 
     try {
-      // Upload all images
       const [profileUrl, aadhaarFrontUrl, aadhaarBackUrl, licenseFrontUrl, licenseBackUrl, rcUrl] =
         await Promise.all([
           step1.profileImage ? uploadFile(user.id, step1.profileImage, "profile") : Promise.resolve(null),
@@ -105,7 +104,6 @@ const RegisterVehicle = () => {
           step2.rcImage ? uploadFile(user.id, step2.rcImage, "rc") : Promise.resolve(null),
         ]);
 
-      // Upload vehicle images
       const vehicleUrls = await Promise.all(
         step2.vehicleImages.map((f) => uploadFile(user.id, f, "vehicle"))
       );
@@ -163,13 +161,14 @@ const RegisterVehicle = () => {
   if (alreadyRegistered) {
     return (
       <div className="min-h-screen bg-muted flex items-center justify-center px-4">
-        <div className="bg-card rounded-2xl border border-border p-6 shadow-card max-w-md w-full text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <span className="text-3xl">✅</span>
+        <div className="bg-card rounded-2xl border border-border p-8 shadow-[var(--shadow-card)] max-w-md w-full text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+            <span className="text-3xl">⚠️</span>
           </div>
-          <h2 className="font-heading font-bold text-xl text-foreground">Already Registered</h2>
+          <h2 className="font-heading font-bold text-xl text-destructive">Duplicate Submission</h2>
+          <div className="w-full h-px bg-destructive/30" />
           <p className="text-muted-foreground text-sm">
-            You have already submitted your vehicle registration application. You cannot create another one.
+            You have already submitted your application.
           </p>
           <button
             onClick={() => navigate("/dashboard")}
@@ -184,28 +183,30 @@ const RegisterVehicle = () => {
 
   return (
     <div className="min-h-screen bg-muted">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-card border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
-          </div>
-          <span className="font-heading font-bold text-base text-foreground">
-            Agrizin<span className="text-primary">Partner</span>
-          </span>
-        </div>
-        <h1 className="font-heading font-bold text-xl text-foreground">Vehicle Registration</h1>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-sm text-muted-foreground">Step {step} of 2</span>
-          <div className="flex-1 flex gap-1.5">
-            <div className={`h-1.5 rounded-full flex-1 transition-colors ${step >= 1 ? "bg-primary" : "bg-border"}`} />
-            <div className={`h-1.5 rounded-full flex-1 transition-colors ${step >= 2 ? "bg-primary" : "bg-border"}`} />
+      {/* Green Banner Header */}
+      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-heading font-bold text-2xl md:text-3xl">Vehicle Registration</h1>
+          <p className="text-primary-foreground/80 text-sm mt-1">
+            {step === 1
+              ? "Enter the personal details below to proceed with your vehicle registration."
+              : "Enter the vehicle details below to complete your registration."}
+          </p>
+          {/* Step indicator */}
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+              Step 1
+            </div>
+            <div className="w-8 h-px bg-primary-foreground/40" />
+            <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
+              Step 2
+            </div>
           </div>
         </div>
       </div>
 
       {/* Form content */}
-      <div className="max-w-lg mx-auto px-4 py-5">
+      <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
         {step === 1 ? (
           <VehicleStep1
             data={step1}
