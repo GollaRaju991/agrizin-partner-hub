@@ -36,7 +36,7 @@ const CategoriesTab = () => {
       icon: "🚚",
       image: agrizinDriverImg,
       serviceType: "agrizin_driver" as const,
-      route: "/dashboard",
+      route: "/register/agrizin-driver",
     },
   ];
 
