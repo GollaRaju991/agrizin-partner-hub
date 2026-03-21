@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
-import { MapPin, Bell, Globe, X, Search } from "lucide-react";
+import { MapPin, Bell, Globe, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
