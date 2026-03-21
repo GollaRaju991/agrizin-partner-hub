@@ -137,8 +137,7 @@ const RegisterFarmWorker = () => {
       if (data) {
         syncApplicationToExternal(data);
       }
-      toast.success("Registration submitted successfully!");
-      navigate("/dashboard");
+      setShowSuccess(true);
     }
   };
 
