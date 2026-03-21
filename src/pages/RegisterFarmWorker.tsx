@@ -15,6 +15,7 @@ const RegisterFarmWorker = () => {
   const [submitting, setSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const [checkingDuplicate, setCheckingDuplicate] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [step1, setStep1] = useState<Step1Data>({
     first_name: "",
