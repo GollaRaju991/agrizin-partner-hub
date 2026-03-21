@@ -20,6 +20,7 @@ const translations = {
     goOnline: "Go Online",
     goOffline: "Go Offline",
     loadingMap: "Loading map...",
+    completeAppToGoOnline: "Please log in and complete your application to go online.",
     
     // Categories
     farmWorker: "Farm Worker",
