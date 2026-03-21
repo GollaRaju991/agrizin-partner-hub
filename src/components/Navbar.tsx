@@ -26,7 +26,7 @@ const Navbar = () => {
       await toggleOnline();
     } catch (e: any) {
       if (e?.message === "NO_COMPLETED_APP") {
-        toast.success(t("completeAppToGoOnline") || "Please log in and complete your application to go online.");
+        toast.error(t("completeAppToGoOnline"));
       }
     }
   };
