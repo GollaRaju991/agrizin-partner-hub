@@ -1,0 +1,48 @@
+import { Home, LayoutGrid, IndianRupee, User } from "lucide-react";
+
+export type MobileTab = "home" | "categories" | "earnings" | "account";
+
+interface BottomNavProps {
+  activeTab: MobileTab;
+  onTabChange: (tab: MobileTab) => void;
+}
+
+const tabs = [
+  { id: "home" as const, label: "Home", icon: Home },
+  { id: "categories" as const, label: "Categories", icon: LayoutGrid },
+  { id: "earnings" as const, label: "Earnings", icon: IndianRupee },
+  { id: "account" as const, label: "Account", icon: User },
+];
+
+const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border md:hidden">
+      <div className="flex items-center justify-around py-2">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className="flex flex-col items-center gap-0.5 px-3 py-1 min-w-[60px]"
+            >
+              <tab.icon
+                size={22}
+                className={isActive ? "text-primary" : "text-muted-foreground"}
+              />
+              <span
+                className={`text-[11px] font-medium ${
+                  isActive ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+};
+
+export default BottomNav;
