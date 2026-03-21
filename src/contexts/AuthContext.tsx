@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { syncProfileToExternal } from "@/integrations/external-supabase/sync";
 import type { User, Session } from "@supabase/supabase-js";
 
 interface Profile {
@@ -40,6 +41,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .eq("user_id", userId)
       .single();
     setProfile(data);
+
+    // Sync profile to external DB
+    if (data) {
+      syncProfileToExternal(data);
+    }
   };
 
   useEffect(() => {

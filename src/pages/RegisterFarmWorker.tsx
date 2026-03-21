@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
 import FarmWorkerStep1, { type Step1Data } from "@/components/registration/FarmWorkerStep1";
 import FarmWorkerStep2, { type Step2Data } from "@/components/registration/FarmWorkerStep2";
@@ -98,7 +99,7 @@ const RegisterFarmWorker = () => {
 
     const experienceYears = step2.experience === "0-1" ? 0 : step2.experience === "1-3" ? 2 : step2.experience === "3-5" ? 4 : step2.experience === "5+" ? 6 : null;
 
-    const { error } = await supabase.from("service_applications").insert({
+    const insertData = {
       user_id: user.id,
       service_type: "farm_maker" as const,
       first_name: step1.first_name.trim(),
@@ -116,7 +117,13 @@ const RegisterFarmWorker = () => {
       availability: step2.availability || null,
       expected_wage: step2.expected_wage ? parseFloat(step2.expected_wage) : null,
       wage_type: step2.wage_type,
-    } as any);
+    };
+
+    const { data, error } = await supabase
+      .from("service_applications")
+      .insert(insertData as any)
+      .select()
+      .single();
 
     setSubmitting(false);
 
@@ -124,6 +131,10 @@ const RegisterFarmWorker = () => {
       console.error(error);
       toast.error("Failed to submit application");
     } else {
+      // Sync to external DB
+      if (data) {
+        syncApplicationToExternal(data);
+      }
       toast.success("Registration submitted successfully!");
       navigate("/dashboard");
     }
