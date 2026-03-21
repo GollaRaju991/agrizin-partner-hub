@@ -177,6 +177,9 @@ const RegisterFarmWorker = () => {
       {/* Header */}
       <div className="sticky top-0 z-50 bg-card border-b border-border px-4 py-3">
         <div className="flex items-center gap-2 mb-2">
+          <button onClick={() => navigate("/")} className="mr-1 text-muted-foreground hover:text-foreground transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
           </div>
