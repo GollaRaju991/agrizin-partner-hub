@@ -34,6 +34,11 @@
     --input: 140 15% 88%;
     --ring: 142 55% 35%;
 
+    --status-pending: 33 90% 50%;
+    --status-pending-foreground: 0 0% 100%;
+    --status-completed: 142 60% 40%;
+    --status-completed-foreground: 0 0% 100%;
+
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
