@@ -204,7 +204,7 @@ const RegisterFarmWorker = () => {
             data={step1}
             onChange={setStep1}
             onNext={() => setStep(2)}
-            onBack={() => navigate(-1)}
+            onBack={() => navigate("/")}
           />
         ) : (
           <FarmWorkerStep2
