@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import RegisterFarmWorker from "./pages/RegisterFarmWorker.tsx";
 import RegisterVehicle from "./pages/RegisterVehicle.tsx";
 import RegisterAgrizinDriver from "./pages/RegisterAgrizinDriver.tsx";
+import SearchServices from "./pages/SearchServices.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
