@@ -210,6 +210,7 @@ const RegisterVehicle = () => {
               Step 2
             </div>
           </div>
+          </div>
         </div>
       </div>
 
