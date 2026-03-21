@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { syncApplicationToExternal } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import AgrizinDriverStep2, { type AgrizinDriverStep2Data } from "@/components/registration/AgrizinDriverStep2";
