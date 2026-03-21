@@ -33,6 +33,8 @@ const RegisterVehicle = () => {
   const [step1, setStep1] = useState<VehicleStep1Data>({
     full_name: "",
     mobile: "",
+    age: "",
+    gender: "",
     aadhaar_pan: "",
     country: "India",
     state: "",
