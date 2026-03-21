@@ -155,6 +155,84 @@ export type Database = {
         }
         Relationships: []
       }
+      vehicle_registrations: {
+        Row: {
+          aadhaar_back_url: string | null
+          aadhaar_front_url: string | null
+          aadhaar_pan: string
+          country: string
+          created_at: string
+          district: string | null
+          driving_license_number: string
+          full_name: string
+          id: string
+          license_back_url: string | null
+          license_front_url: string | null
+          mandal: string | null
+          mobile: string
+          profile_photo_url: string | null
+          rc_image_url: string | null
+          state: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          vehicle_image_urls: string[] | null
+          vehicle_number: string
+          vehicle_usage_type: string
+          village: string | null
+        }
+        Insert: {
+          aadhaar_back_url?: string | null
+          aadhaar_front_url?: string | null
+          aadhaar_pan: string
+          country?: string
+          created_at?: string
+          district?: string | null
+          driving_license_number: string
+          full_name: string
+          id?: string
+          license_back_url?: string | null
+          license_front_url?: string | null
+          mandal?: string | null
+          mobile: string
+          profile_photo_url?: string | null
+          rc_image_url?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          vehicle_image_urls?: string[] | null
+          vehicle_number: string
+          vehicle_usage_type: string
+          village?: string | null
+        }
+        Update: {
+          aadhaar_back_url?: string | null
+          aadhaar_front_url?: string | null
+          aadhaar_pan?: string
+          country?: string
+          created_at?: string
+          district?: string | null
+          driving_license_number?: string
+          full_name?: string
+          id?: string
+          license_back_url?: string | null
+          license_front_url?: string | null
+          mandal?: string | null
+          mobile?: string
+          profile_photo_url?: string | null
+          rc_image_url?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          vehicle_image_urls?: string[] | null
+          vehicle_number?: string
+          vehicle_usage_type?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
