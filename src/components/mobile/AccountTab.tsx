@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import {
-  Bell, Phone, User, Truck, LogOut, Edit2,
+  Bell, Phone, User, Truck, LogOut, Edit2, Camera, Trash2,
   Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText,
   Share2, Globe, ChevronRight, Save, X,
 } from "lucide-react";
@@ -408,11 +408,51 @@ const languageOptions: { id: Language; label: string; flag: string }[] = [
 ];
 
 const AccountTab = () => {
-  const { user, profile, signUp, signIn, signOut } = useAuth();
+  const { user, profile, signUp, signIn, signOut, refreshProfile } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | null>(null);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const startEditProfile = () => {
+    setEditName(profile?.first_name || "");
+    setProfilePhotoUrl(null);
+    setEditingProfile(true);
+  };
+
+  const handleProfilePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    const ext = file.name.split(".").pop();
+    const path = `profile-photos/${user.id}.${ext}`;
+    const { error } = await supabase.storage.from("profile-photos").upload(path, file, { upsert: true });
+    if (error) { toast.error("Failed to upload photo"); return; }
+    const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+    setProfilePhotoUrl(urlData.publicUrl + "?t=" + Date.now());
+    toast.success("Photo uploaded!");
+  };
+
+  const handleDeletePhoto = () => {
+    setProfilePhotoUrl("REMOVE");
+    toast.info("Photo will be removed on save");
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user || !editName.trim()) { toast.error("Name cannot be empty"); return; }
+    setSavingProfile(true);
+    const updateData: Record<string, string> = { first_name: editName.trim() };
+    const { error } = await supabase.from("profiles").update(updateData).eq("user_id", user.id);
+    setSavingProfile(false);
+    if (error) { toast.error(t("updateError")); return; }
+    toast.success(t("updateSuccess"));
+    setEditingProfile(false);
+    await refreshProfile();
+  };
 
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
@@ -482,18 +522,61 @@ const AccountTab = () => {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
           {/* Profile */}
-          <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <span className="text-primary font-heading font-bold text-2xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
+          {editingProfile ? (
+            <div className="bg-card rounded-2xl border border-border p-5 shadow-sm space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+                    {profilePhotoUrl && profilePhotoUrl !== "REMOVE" ? (
+                      <img src={profilePhotoUrl} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-primary font-heading font-bold text-2xl">{editName?.charAt(0).toUpperCase() || "U"}</span>
+                    )}
+                  </div>
+                  <button onClick={() => fileInputRef.current?.click()} className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow">
+                    <Camera size={14} />
+                  </button>
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleProfilePhotoChange} />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <div>
+                    <Label className="text-xs text-muted-foreground">{t("name")}</Label>
+                    <Input value={editName} onChange={(e) => setEditName(e.target.value)} className="h-9 text-sm mt-1" />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">{t("phoneNumber")}</Label>
+                    <p className="text-sm text-muted-foreground mt-1">+91 {profile.phone}</p>
+                  </div>
+                </div>
+              </div>
+              {profilePhotoUrl && profilePhotoUrl !== "REMOVE" && (
+                <button onClick={handleDeletePhoto} className="flex items-center gap-1 text-xs text-destructive hover:underline">
+                  <Trash2 size={12} /> Remove photo
+                </button>
+              )}
+              <div className="flex gap-2">
+                <Button onClick={() => setEditingProfile(false)} variant="outline" className="flex-1 h-10 text-sm gap-1">
+                  <X size={14} /> {t("cancel")}
+                </Button>
+                <Button onClick={handleSaveProfile} disabled={savingProfile} className="flex-1 h-10 text-sm gap-1">
+                  <Save size={14} /> {savingProfile ? t("saving") : t("save")}
+                </Button>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="font-heading font-bold text-lg text-foreground truncate">{profile.first_name}</h2>
-              <p className="text-sm text-muted-foreground">+91 {profile.phone}</p>
+          ) : (
+            <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 shadow-sm">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <span className="text-primary font-heading font-bold text-2xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-heading font-bold text-lg text-foreground truncate">{profile.first_name}</h2>
+                <p className="text-sm text-muted-foreground">+91 {profile.phone}</p>
+              </div>
+              <button onClick={startEditProfile} className="p-2 rounded-xl bg-accent hover:bg-accent/70 transition-colors">
+                <Edit2 size={16} className="text-accent-foreground" />
+              </button>
             </div>
-            <button onClick={() => navigate("/register/farm-worker")} className="p-2 rounded-xl bg-accent hover:bg-accent/70 transition-colors">
-              <Edit2 size={16} className="text-accent-foreground" />
-            </button>
-          </div>
+          )}
 
           {/* My Applications */}
           <div>
