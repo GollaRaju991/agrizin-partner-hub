@@ -9,6 +9,8 @@ import { getStates, getDistricts, getMandals } from "@/data/indianLocations";
 export interface VehicleStep1Data {
   full_name: string;
   mobile: string;
+  age: string;
+  gender: string;
   aadhaar_pan: string;
   country: string;
   state: string;
