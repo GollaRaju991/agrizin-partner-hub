@@ -10,7 +10,7 @@ interface ServiceCardProps {
   serviceType: "rent_vehicle" | "farm_maker" | "agrizin_driver";
 }
 
-const ServiceCard = ({ title, description, image, delay, serviceType }: ServiceCardProps) => {
+const ServiceCard = ({ title, description, image, delay, badge, serviceType }: ServiceCardProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
