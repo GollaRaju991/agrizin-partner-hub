@@ -54,6 +54,8 @@ const CategoriesTab = () => {
   const { getStatusForService } = useUserApplications();
 
   const handleSelect = (cat: (typeof categories)[0]) => {
+    const status = user ? getStatusForService(cat.serviceType) : null;
+    if (status === "completed" || status === "approved") return;
     if (!user) {
       navigate(`/login?redirect=${cat.route}`);
     } else {
