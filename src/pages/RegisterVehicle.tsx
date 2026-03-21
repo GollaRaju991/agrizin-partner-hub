@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
+import SuccessDialog from "@/components/registration/SuccessDialog";
 
 const BUCKET = "vehicle-documents";
 
