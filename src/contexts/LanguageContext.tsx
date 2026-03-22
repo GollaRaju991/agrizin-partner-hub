@@ -120,6 +120,7 @@ const translations = {
     vehicleMake: "Vehicle Make",
     vehicleModel: "Vehicle Model",
     registrationNo: "Registration No.",
+    ...settingsAndHelpTranslations.en,
   },
   hi: {
     online: "ऑनलाइन",
