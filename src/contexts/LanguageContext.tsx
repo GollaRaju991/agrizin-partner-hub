@@ -332,6 +332,7 @@ const translations = {
     vehicleMake: "వాహన తయారీ",
     vehicleModel: "వాహన మోడల్",
     registrationNo: "రిజిస్ట్రేషన్ నం.",
+    ...settingsAndHelpTranslations.te,
   },
 } as const;
 
