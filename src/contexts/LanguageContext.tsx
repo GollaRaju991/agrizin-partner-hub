@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { settingsAndHelpTranslations } from "@/data/settingsHelpTranslations";
 
 export type Language = "en" | "hi" | "te";
 
