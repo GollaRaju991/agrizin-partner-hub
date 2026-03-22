@@ -511,6 +511,12 @@ const AccountTab = () => {
     if (driverApp) return <DriverDetail app={driverApp} onBack={() => setSelectedModule(null)} refetch={refetch} t={t} />;
     navigate("/dashboard"); setSelectedModule(null); return null;
   }
+  if (user && profile && selectedModule === "settings") {
+    return <SettingsPage onBack={() => setSelectedModule(null)} />;
+  }
+  if (user && profile && selectedModule === "help") {
+    return <HelpPage onBack={() => setSelectedModule(null)} />;
+  }
 
   /* ═══════════ LOGGED-IN: Main Account ═══════════ */
   if (user && profile) {
