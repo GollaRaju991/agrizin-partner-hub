@@ -5,8 +5,10 @@ import { useUserApplications } from "@/hooks/useUserApplications";
 import {
   Bell, Phone, User, Truck, LogOut, Edit2, Camera, Trash2,
   Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText,
-  Share2, Globe, ChevronRight, Save, X,
+  Share2, Globe, ChevronRight, Save, X, Settings, HelpCircle,
 } from "lucide-react";
+import SettingsPage from "@/components/mobile/SettingsPage";
+import HelpPage from "@/components/mobile/HelpPage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -412,7 +414,7 @@ const AccountTab = () => {
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
   const navigate = useNavigate();
-  const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | null>(null);
+  const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | "settings" | "help" | null>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [editName, setEditName] = useState("");
   const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
@@ -509,6 +511,12 @@ const AccountTab = () => {
     if (driverApp) return <DriverDetail app={driverApp} onBack={() => setSelectedModule(null)} refetch={refetch} t={t} />;
     navigate("/dashboard"); setSelectedModule(null); return null;
   }
+  if (user && profile && selectedModule === "settings") {
+    return <SettingsPage onBack={() => setSelectedModule(null)} />;
+  }
+  if (user && profile && selectedModule === "help") {
+    return <HelpPage onBack={() => setSelectedModule(null)} />;
+  }
 
   /* ═══════════ LOGGED-IN: Main Account ═══════════ */
   if (user && profile) {
@@ -596,10 +604,17 @@ const AccountTab = () => {
             </div>
           </div>
 
-          {/* Settings */}
+          {/* Referral & Settings & Help */}
           <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
             <SettingsRow icon={Share2} label={t("referPartner")} subtitle={t("referSubtitle")} onClick={() => toast.info(t("comingSoon"))} />
             <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={Settings} label={t("settings")} subtitle={t("bankDetailsSub")} onClick={() => setSelectedModule("settings")} />
+            <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={HelpCircle} label={t("help")} subtitle={t("registrationGuides")} onClick={() => setSelectedModule("help")} />
+          </div>
+
+          {/* Language */}
+          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
             <div className="p-4">
               <div className="flex items-center gap-3 mb-3">
                 <Globe size={20} className="text-primary" />

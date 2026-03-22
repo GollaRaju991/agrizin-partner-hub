@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { settingsAndHelpTranslations } from "@/data/settingsHelpTranslations";
 
 export type Language = "en" | "hi" | "te";
 
@@ -119,6 +120,7 @@ const translations = {
     vehicleMake: "Vehicle Make",
     vehicleModel: "Vehicle Model",
     registrationNo: "Registration No.",
+    ...settingsAndHelpTranslations.en,
   },
   hi: {
     online: "ऑनलाइन",
@@ -224,6 +226,7 @@ const translations = {
     vehicleMake: "वाहन कंपनी",
     vehicleModel: "वाहन मॉडल",
     registrationNo: "पंजीकरण नं.",
+    ...settingsAndHelpTranslations.hi,
   },
   te: {
     online: "ఆన్‌లైన్",
@@ -329,6 +332,7 @@ const translations = {
     vehicleMake: "వాహన తయారీ",
     vehicleModel: "వాహన మోడల్",
     registrationNo: "రిజిస్ట్రేషన్ నం.",
+    ...settingsAndHelpTranslations.te,
   },
 } as const;
 
