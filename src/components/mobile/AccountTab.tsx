@@ -5,8 +5,10 @@ import { useUserApplications } from "@/hooks/useUserApplications";
 import {
   Bell, Phone, User, Truck, LogOut, Edit2, Camera, Trash2,
   Clock, CheckCircle2, MapPin, Briefcase, Calendar, FileText,
-  Share2, Globe, ChevronRight, Save, X,
+  Share2, Globe, ChevronRight, Save, X, Settings, HelpCircle,
 } from "lucide-react";
+import SettingsPage from "@/components/mobile/SettingsPage";
+import HelpPage from "@/components/mobile/HelpPage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
