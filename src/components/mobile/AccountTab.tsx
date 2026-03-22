@@ -414,7 +414,7 @@ const AccountTab = () => {
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
   const navigate = useNavigate();
-  const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | null>(null);
+  const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | "settings" | "help" | null>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [editName, setEditName] = useState("");
   const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
