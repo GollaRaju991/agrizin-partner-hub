@@ -604,10 +604,17 @@ const AccountTab = () => {
             </div>
           </div>
 
-          {/* Settings */}
+          {/* Referral & Settings & Help */}
           <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
             <SettingsRow icon={Share2} label={t("referPartner")} subtitle={t("referSubtitle")} onClick={() => toast.info(t("comingSoon"))} />
             <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={Settings} label={t("settings")} subtitle={t("bankDetailsSub")} onClick={() => setSelectedModule("settings")} />
+            <div className="h-px bg-border mx-4" />
+            <SettingsRow icon={HelpCircle} label={t("help")} subtitle={t("registrationGuides")} onClick={() => setSelectedModule("help")} />
+          </div>
+
+          {/* Language */}
+          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
             <div className="p-4">
               <div className="flex items-center gap-3 mb-3">
                 <Globe size={20} className="text-primary" />
