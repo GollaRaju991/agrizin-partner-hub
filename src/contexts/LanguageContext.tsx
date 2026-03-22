@@ -226,6 +226,7 @@ const translations = {
     vehicleMake: "वाहन कंपनी",
     vehicleModel: "वाहन मॉडल",
     registrationNo: "पंजीकरण नं.",
+    ...settingsAndHelpTranslations.hi,
   },
   te: {
     online: "ఆన్‌లైన్",
