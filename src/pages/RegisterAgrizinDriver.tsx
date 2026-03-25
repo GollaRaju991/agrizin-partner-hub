@@ -172,7 +172,7 @@ const RegisterAgrizinDriver = () => {
           <div className="w-full h-px bg-destructive/30" />
           <p className="text-muted-foreground text-sm">You have already submitted your Agrizin Driver application.</p>
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
             className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-sm hover:opacity-90 transition-opacity"
           >
             Go to Dashboard

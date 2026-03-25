@@ -21,7 +21,7 @@ const ServiceCard = ({ title, description, image, badge, serviceType }: ServiceC
     } else if (serviceType === "agrizin_driver") {
       navigate(user ? "/register/agrizin-driver" : "/login?redirect=/register/agrizin-driver");
     } else {
-      navigate(user ? `/dashboard?service=${serviceType}` : `/login?redirect=/dashboard?service=${serviceType}`);
+      navigate(user ? "/" : "/login?redirect=/");
     }
   };
 

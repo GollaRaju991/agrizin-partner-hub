@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index.tsx";
 import Login from "./pages/Login.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
+
 import RegisterFarmWorker from "./pages/RegisterFarmWorker.tsx";
 import RegisterVehicle from "./pages/RegisterVehicle.tsx";
 import RegisterAgrizinDriver from "./pages/RegisterAgrizinDriver.tsx";
@@ -26,7 +26,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Index />} />
               <Route path="/register/farm-worker" element={<RegisterFarmWorker />} />
               <Route path="/register/vehicle" element={<RegisterVehicle />} />
               <Route path="/register/agrizin-driver" element={<RegisterAgrizinDriver />} />

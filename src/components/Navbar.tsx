@@ -33,7 +33,7 @@ const Navbar = () => {
 
   const handleMyEarnings = () => {
     if (!user) { navigate("/login"); return; }
-    navigate("/dashboard");
+    navigate("/");
     setIsOpen(false);
   };
 

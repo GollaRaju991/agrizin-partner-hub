@@ -9,7 +9,7 @@ import { ArrowLeft } from "lucide-react";
 
 const Login = () => {
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/dashboard";
+  const redirect = searchParams.get("redirect") || "/";
   const navigate = useNavigate();
   const { signUp, signIn } = useAuth();
 
