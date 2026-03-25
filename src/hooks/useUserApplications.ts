@@ -8,6 +8,8 @@ export interface ApplicationInfo {
   status: string;
   first_name: string;
   phone: string;
+  gender: string | null;
+  age: number | null;
   skills: string[] | null;
   experience_years: number | null;
   state: string | null;

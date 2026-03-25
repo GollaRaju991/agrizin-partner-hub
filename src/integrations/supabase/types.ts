@@ -17,33 +17,51 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          date_of_birth: string | null
+          district: string | null
           first_name: string
+          gender: string | null
           id: string
           is_online: boolean
+          mandal: string | null
           phone: string
           reference_id: string | null
+          state: string | null
           updated_at: string
           user_id: string
+          village: string | null
         }
         Insert: {
           created_at?: string
+          date_of_birth?: string | null
+          district?: string | null
           first_name: string
+          gender?: string | null
           id?: string
           is_online?: boolean
+          mandal?: string | null
           phone: string
           reference_id?: string | null
+          state?: string | null
           updated_at?: string
           user_id: string
+          village?: string | null
         }
         Update: {
           created_at?: string
+          date_of_birth?: string | null
+          district?: string | null
           first_name?: string
+          gender?: string | null
           id?: string
           is_online?: boolean
+          mandal?: string | null
           phone?: string
           reference_id?: string | null
+          state?: string | null
           updated_at?: string
           user_id?: string
+          village?: string | null
         }
         Relationships: []
       }
