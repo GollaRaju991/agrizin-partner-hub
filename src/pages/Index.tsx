@@ -1,8 +1,6 @@
 import { useIsMobile } from "@/hooks/use-mobile";
-import Navbar from "@/components/Navbar";
-import ServicesSection from "@/components/ServicesSection";
-import Footer from "@/components/Footer";
 import MobileLayout from "@/components/mobile/MobileLayout";
+import DesktopDashboard from "@/components/desktop/DesktopDashboard";
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -11,13 +9,7 @@ const Index = () => {
     return <MobileLayout />;
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <ServicesSection />
-      <Footer />
-    </div>
-  );
+  return <DesktopDashboard />;
 };
 
 export default Index;
