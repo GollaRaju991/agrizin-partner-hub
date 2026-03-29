@@ -194,6 +194,7 @@ const EarningsPanel = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { applications, vehicleRegs } = useUserApplications();
 
   if (!user) {
     return (
@@ -206,49 +207,61 @@ const EarningsPanel = () => {
     );
   }
 
+  const hasCompleted = applications.some(a => a.status === "completed" || a.status === "approved") ||
+    vehicleRegs.some(v => v.status === "completed" || v.status === "approved");
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-6 py-4 bg-card border-b border-border">
         <h2 className="font-heading font-bold text-xl text-foreground">{t("earnings")}</h2>
       </div>
       <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
-          <div className="bg-card rounded-2xl border border-border p-6">
-            <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("totalEarnings")}</h3>
-            <p className="font-heading font-bold text-4xl text-foreground">₹12,540</p>
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t("thisWeek")}</span>
-                <span className="font-semibold text-foreground">₹3,200</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{t("thisMonth")}</span>
-                <span className="font-semibold text-foreground">₹8,750</span>
-              </div>
-            </div>
+        {!hasCompleted ? (
+          <div className="flex flex-col items-center justify-center h-full min-h-[300px]">
+            <Wallet size={48} className="text-muted-foreground mb-4" />
+            <h3 className="font-heading font-bold text-xl text-foreground mb-2">{t("getStartedEarnings")}</h3>
+            <p className="text-muted-foreground text-center max-w-md">{t("getStartedEarningsDesc")}</p>
+            <Button onClick={() => navigate("/")} className="mt-6">{t("categories")}</Button>
           </div>
-          <div className="bg-card rounded-2xl border border-border p-6">
-            <h3 className="font-heading font-bold text-base text-foreground mb-2">{t("dailyEarnings")}</h3>
-            <div className="flex items-baseline justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t("today")}</p>
-                <p className="text-xs text-muted-foreground">12 {t("trips")}</p>
-              </div>
-              <p className="font-heading font-bold text-4xl text-foreground">₹580</p>
-            </div>
-          </div>
-          <div className="bg-card rounded-2xl border border-border p-6">
-            <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("paymentHistory")}</h3>
-            <div className="space-y-3">
-              {[{ date: "Apr 25", amount: "₹800" }, { date: "Apr 24", amount: "₹1,500" }, { date: "Apr 22", amount: "₹600" }].map((item) => (
-                <div key={item.date} className="flex justify-between items-center py-1 border-b border-border last:border-0">
-                  <span className="text-sm text-muted-foreground">{item.date}</span>
-                  <span className="font-semibold text-foreground">{item.amount}</span>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+            <div className="bg-card rounded-2xl border border-border p-6">
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("totalEarnings")}</h3>
+              <p className="font-heading font-bold text-4xl text-foreground">₹12,540</p>
+              <div className="mt-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{t("thisWeek")}</span>
+                  <span className="font-semibold text-foreground">₹3,200</span>
                 </div>
-              ))}
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{t("thisMonth")}</span>
+                  <span className="font-semibold text-foreground">₹8,750</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-card rounded-2xl border border-border p-6">
+              <h3 className="font-heading font-bold text-base text-foreground mb-2">{t("dailyEarnings")}</h3>
+              <div className="flex items-baseline justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("today")}</p>
+                  <p className="text-xs text-muted-foreground">12 {t("trips")}</p>
+                </div>
+                <p className="font-heading font-bold text-4xl text-foreground">₹580</p>
+              </div>
+            </div>
+            <div className="bg-card rounded-2xl border border-border p-6">
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("paymentHistory")}</h3>
+              <div className="space-y-3">
+                {[{ date: "Apr 25", amount: "₹800" }, { date: "Apr 24", amount: "₹1,500" }, { date: "Apr 22", amount: "₹600" }].map((item) => (
+                  <div key={item.date} className="flex justify-between items-center py-1 border-b border-border last:border-0">
+                    <span className="text-sm text-muted-foreground">{item.date}</span>
+                    <span className="font-semibold text-foreground">{item.amount}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
