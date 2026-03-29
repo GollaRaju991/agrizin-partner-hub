@@ -63,3 +63,17 @@ export const syncVehicleToExternal = async (vehicle: Record<string, any>) => {
     console.error("External sync (vehicle) failed:", err);
   }
 };
+
+/**
+ * Sync vehicle registration data to the Agrizin app's vehicle_listings table.
+ */
+export const syncVehicleToAgrizin = async (vehicle: Record<string, any>) => {
+  try {
+    const { error } = await supabase.functions.invoke("sync-vehicle-to-agrizin", {
+      body: { data: vehicle },
+    });
+    if (error) console.error("Agrizin sync (vehicle) error:", error);
+  } catch (err) {
+    console.error("Agrizin sync (vehicle) failed:", err);
+  }
+};
