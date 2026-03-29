@@ -67,6 +67,8 @@ const translations = {
     today: "Today:",
     trips: "Trips",
     paymentHistory: "Payment History",
+    getStartedEarnings: "Get started with your earnings",
+    getStartedEarningsDesc: "Complete a service registration to start tracking your earnings here.",
     
     // Detail labels
     nameLabel: "Name",
@@ -179,6 +181,8 @@ const translations = {
     today: "आज:",
     trips: "यात्राएं",
     paymentHistory: "भुगतान इतिहास",
+    getStartedEarnings: "अपनी कमाई शुरू करें",
+    getStartedEarningsDesc: "यहां अपनी कमाई ट्रैक करने के लिए एक सेवा पंजीकरण पूरा करें।",
     
     nameLabel: "नाम",
     skills: "कौशल",
@@ -285,6 +289,8 @@ const translations = {
     today: "ఈ రోజు:",
     trips: "ట్రిప్‌లు",
     paymentHistory: "చెల్లింపు చరిత్ర",
+    getStartedEarnings: "మీ సంపాదనతో ప్రారంభించండి",
+    getStartedEarningsDesc: "మీ సంపాదనను ఇక్కడ ట్రాక్ చేయడానికి సేవా నమోదును పూర్తి చేయండి.",
     
     nameLabel: "పేరు",
     skills: "నైపుణ్యాలు",
