@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { syncVehicleToExternal } from "@/integrations/external-supabase/sync";
+import { syncVehicleToExternal, syncVehicleToAgrizin } from "@/integrations/external-supabase/sync";
 import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
@@ -141,7 +141,10 @@ const RegisterVehicle = () => {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
-        if (data) syncVehicleToExternal(data);
+        if (data) {
+          syncVehicleToExternal(data);
+          syncVehicleToAgrizin(data);
+        }
         setShowSuccess(true);
       }
     } catch (err) {
