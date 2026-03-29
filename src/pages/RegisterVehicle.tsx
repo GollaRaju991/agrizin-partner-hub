@@ -141,7 +141,10 @@ const RegisterVehicle = () => {
         console.error(error);
         toast.error("Failed to submit application");
       } else {
-        if (data) syncVehicleToExternal(data);
+        if (data) {
+          syncVehicleToExternal(data);
+          syncVehicleToAgrizin(data);
+        }
         setShowSuccess(true);
       }
     } catch (err) {
