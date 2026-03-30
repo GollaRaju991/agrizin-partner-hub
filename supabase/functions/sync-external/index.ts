@@ -48,13 +48,11 @@ serve(async (req) => {
     }
 
     if (action === "sync_vehicle") {
-      const { error } = await externalClient
-        .from("vehicle_registrations")
-        .upsert(data, { onConflict: "id" });
-      if (error) throw error;
-
+      // Vehicle registrations are synced to the Agrizin project via sync-vehicle-to-agrizin function
+      // The external DB does not have a vehicle_registrations table
+      console.log("Skipping vehicle sync to external DB — handled by sync-vehicle-to-agrizin");
       return new Response(
-        JSON.stringify({ success: true, table: "vehicle_registrations" }),
+        JSON.stringify({ success: true, skipped: true, reason: "vehicle sync handled by dedicated function" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
