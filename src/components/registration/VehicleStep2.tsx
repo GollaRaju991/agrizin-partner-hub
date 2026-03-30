@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { Car, FileText, Camera, X, ImagePlus, Upload } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Car, FileText, Camera, X, ImagePlus, Upload, ChevronDown, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const USAGE_TYPES = ["Farm Work", "Loading", "Transport", "Other"];
+const VEHICLE_TYPE_OPTIONS = [
+  { value: "Auto", label: "Auto / ఆటో" },
+  { value: "Mini Truck", label: "Mini Truck / మినీ ట్రక్" },
+  { value: "Truck", label: "Truck / ట్రక్" },
+  { value: "Lorry", label: "Lorry / లారీ" },
+  { value: "Tractor", label: "Tractor / ట్రాక్టర్" },
+  { value: "Harvester", label: "Harvester / హార్వెస్టర్" },
+  { value: "Others", label: "Others / ఇతరులు" },
+];
 
 export interface VehicleStep2Data {
   vehicle_number: string;
@@ -30,6 +38,35 @@ interface Props {
 
 const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Parse stored vehicle_usage_type (comma-separated) into array
+  const selectedTypes = data.vehicle_usage_type ? data.vehicle_usage_type.split(",").filter(Boolean) : [];
+
+  const toggleType = (value: string) => {
+    const updated = selectedTypes.includes(value)
+      ? selectedTypes.filter((v) => v !== value)
+      : [...selectedTypes, value];
+    onChange({ ...data, vehicle_usage_type: updated.join(",") });
+    if (errors.vehicle_usage_type) setErrors((prev) => ({ ...prev, vehicle_usage_type: "" }));
+  };
+
+  const removeType = (value: string) => {
+    const updated = selectedTypes.filter((v) => v !== value);
+    onChange({ ...data, vehicle_usage_type: updated.join(",") });
+  };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const update = (field: keyof VehicleStep2Data, value: string) => {
     onChange({ ...data, [field]: value });
@@ -82,7 +119,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
     if (!data.vehicle_number.trim()) newErrors.vehicle_number = "Vehicle number is required";
     if (!data.driving_license_number.trim()) newErrors.driving_license_number = "License number is required";
     if (!data.licenseBack) newErrors.licenseBack = "License back image is required";
-    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Select vehicle usage type";
+    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Please select at least one vehicle type / కనీసం ఒక వాహనం రకం ఎంచుకోండి";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
@@ -149,6 +186,68 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
       <div className="p-5 md:p-8 space-y-6">
         {/* Mobile step title */}
         <h2 className="md:hidden font-heading font-bold text-lg text-foreground">Step 2: Vehicle Details</h2>
+
+        {/* Vehicle Type - Multi-select dropdown at the top */}
+        <div ref={dropdownRef} className="relative">
+          <FieldLabel>Vehicle Type / వాహనం రకం *</FieldLabel>
+          <div
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className={`min-h-[44px] w-full flex flex-wrap items-center gap-1.5 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
+              errors.vehicle_usage_type ? "border-destructive ring-1 ring-destructive" : dropdownOpen ? "border-primary ring-1 ring-primary" : "border-input"
+            } bg-background`}
+          >
+            {selectedTypes.length === 0 ? (
+              <span className="text-sm text-muted-foreground">Select Vehicle Type / వాహనం రకం ఎంచుకోండి</span>
+            ) : (
+              selectedTypes.map((val) => {
+                const opt = VEHICLE_TYPE_OPTIONS.find((o) => o.value === val);
+                return (
+                  <span
+                    key={val}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium"
+                  >
+                    {opt?.label || val}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); removeType(val); }}
+                      className="hover:text-destructive"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                );
+              })
+            )}
+            <ChevronDown className={`w-4 h-4 text-muted-foreground ml-auto shrink-0 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+          </div>
+          {dropdownOpen && (
+            <div className="absolute z-50 mt-1 w-full bg-popover border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              {VEHICLE_TYPE_OPTIONS.map((opt) => {
+                const isSelected = selectedTypes.includes(opt.value);
+                return (
+                  <div
+                    key={opt.value}
+                    onClick={() => toggleType(opt.value)}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 cursor-pointer text-sm transition-colors ${
+                      isSelected ? "bg-primary/5 text-primary" : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                      isSelected ? "bg-primary border-primary" : "border-border"
+                    }`}>
+                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+                    </div>
+                    {opt.label}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            You can select one or more vehicle types / మీరు ఒకటి లేదా అంతకంటే ఎక్కువ వాహన రకాలను ఎంచుకోవచ్చు
+          </p>
+          {errors.vehicle_usage_type && <p className="text-destructive text-xs mt-1">{errors.vehicle_usage_type}</p>}
+        </div>
 
         {/* Desktop: 2-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -276,32 +375,8 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
               </div>
             </div>
 
-            {/* Vehicle Usage Type */}
-            <div>
-              <FieldLabel>Vehicle Usage Type *</FieldLabel>
-              <div className="flex flex-wrap gap-3 mt-1">
-                {USAGE_TYPES.map((type) => {
-                  const val = type.toLowerCase().replace(/\s/g, "_");
-                  const isSelected = data.vehicle_usage_type === val;
-                  return (
-                    <label
-                      key={type}
-                      className="flex items-center gap-2 cursor-pointer"
-                      onClick={() => {
-                        onChange({ ...data, vehicle_usage_type: val });
-                        setErrors((prev) => ({ ...prev, vehicle_usage_type: "" }));
-                      }}
-                    >
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? "border-primary bg-primary" : errors.vehicle_usage_type ? "border-destructive" : "border-border"}`}>
-                        {isSelected && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
-                      </div>
-                      <span className="text-sm text-foreground">{type}</span>
-                    </label>
-                  );
-                })}
-              </div>
-              {errors.vehicle_usage_type && <p className="text-destructive text-xs mt-1">{errors.vehicle_usage_type}</p>}
-            </div>
+
+
           </div>
         </div>
 
