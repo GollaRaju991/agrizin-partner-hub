@@ -38,6 +38,35 @@ interface Props {
 
 const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Parse stored vehicle_usage_type (comma-separated) into array
+  const selectedTypes = data.vehicle_usage_type ? data.vehicle_usage_type.split(",").filter(Boolean) : [];
+
+  const toggleType = (value: string) => {
+    const updated = selectedTypes.includes(value)
+      ? selectedTypes.filter((v) => v !== value)
+      : [...selectedTypes, value];
+    onChange({ ...data, vehicle_usage_type: updated.join(",") });
+    if (errors.vehicle_usage_type) setErrors((prev) => ({ ...prev, vehicle_usage_type: "" }));
+  };
+
+  const removeType = (value: string) => {
+    const updated = selectedTypes.filter((v) => v !== value);
+    onChange({ ...data, vehicle_usage_type: updated.join(",") });
+  };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const update = (field: keyof VehicleStep2Data, value: string) => {
     onChange({ ...data, [field]: value });
