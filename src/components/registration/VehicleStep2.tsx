@@ -119,7 +119,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
     if (!data.vehicle_number.trim()) newErrors.vehicle_number = "Vehicle number is required";
     if (!data.driving_license_number.trim()) newErrors.driving_license_number = "License number is required";
     if (!data.licenseBack) newErrors.licenseBack = "License back image is required";
-    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Select vehicle usage type";
+    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Please select at least one vehicle type / కనీసం ఒక వాహనం రకం ఎంచుకోండి";
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
