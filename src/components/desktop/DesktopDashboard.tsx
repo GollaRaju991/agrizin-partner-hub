@@ -227,15 +227,15 @@ const EarningsPanel = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
             <div className="bg-card rounded-2xl border border-border p-6">
               <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("totalEarnings")}</h3>
-              <p className="font-heading font-bold text-4xl text-foreground">₹12,540</p>
+              <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
               <div className="mt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{t("thisWeek")}</span>
-                  <span className="font-semibold text-foreground">₹3,200</span>
+                  <span className="font-semibold text-foreground">₹0</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{t("thisMonth")}</span>
-                  <span className="font-semibold text-foreground">₹8,750</span>
+                  <span className="font-semibold text-foreground">₹0</span>
                 </div>
               </div>
             </div>
@@ -244,21 +244,14 @@ const EarningsPanel = () => {
               <div className="flex items-baseline justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{t("today")}</p>
-                  <p className="text-xs text-muted-foreground">12 {t("trips")}</p>
+                  <p className="text-xs text-muted-foreground">0 {t("trips")}</p>
                 </div>
-                <p className="font-heading font-bold text-4xl text-foreground">₹580</p>
+                <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
               </div>
             </div>
             <div className="bg-card rounded-2xl border border-border p-6">
               <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("paymentHistory")}</h3>
-              <div className="space-y-3">
-                {[{ date: "Apr 25", amount: "₹800" }, { date: "Apr 24", amount: "₹1,500" }, { date: "Apr 22", amount: "₹600" }].map((item) => (
-                  <div key={item.date} className="flex justify-between items-center py-1 border-b border-border last:border-0">
-                    <span className="text-sm text-muted-foreground">{item.date}</span>
-                    <span className="font-semibold text-foreground">{item.amount}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-sm text-muted-foreground text-center py-4">No payment history yet</p>
             </div>
           </div>
         )}
