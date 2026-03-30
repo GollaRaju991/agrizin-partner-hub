@@ -83,10 +83,10 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
 
   const handleSubmit = () => {
     const newErrors: Record<string, string> = {};
+    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Please select vehicle type";
     if (!data.vehicle_number.trim()) newErrors.vehicle_number = "Vehicle number is required";
     if (!data.driving_license_number.trim()) newErrors.driving_license_number = "License number is required";
     if (!data.licenseBack) newErrors.licenseBack = "License back image is required";
-    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Select vehicle usage type";
     if (!data.work_duration) newErrors.work_duration = "Select work duration";
     if (!data.preferred_location.trim()) newErrors.preferred_location = "Preferred location is required";
 
