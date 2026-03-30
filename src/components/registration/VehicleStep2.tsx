@@ -187,6 +187,68 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
         {/* Mobile step title */}
         <h2 className="md:hidden font-heading font-bold text-lg text-foreground">Step 2: Vehicle Details</h2>
 
+        {/* Vehicle Type - Multi-select dropdown at the top */}
+        <div ref={dropdownRef} className="relative">
+          <FieldLabel>Vehicle Type / వాహనం రకం *</FieldLabel>
+          <div
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className={`min-h-[44px] w-full flex flex-wrap items-center gap-1.5 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
+              errors.vehicle_usage_type ? "border-destructive ring-1 ring-destructive" : dropdownOpen ? "border-primary ring-1 ring-primary" : "border-input"
+            } bg-background`}
+          >
+            {selectedTypes.length === 0 ? (
+              <span className="text-sm text-muted-foreground">Select Vehicle Type / వాహనం రకం ఎంచుకోండి</span>
+            ) : (
+              selectedTypes.map((val) => {
+                const opt = VEHICLE_TYPE_OPTIONS.find((o) => o.value === val);
+                return (
+                  <span
+                    key={val}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium"
+                  >
+                    {opt?.label || val}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); removeType(val); }}
+                      className="hover:text-destructive"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                );
+              })
+            )}
+            <ChevronDown className={`w-4 h-4 text-muted-foreground ml-auto shrink-0 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+          </div>
+          {dropdownOpen && (
+            <div className="absolute z-50 mt-1 w-full bg-popover border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              {VEHICLE_TYPE_OPTIONS.map((opt) => {
+                const isSelected = selectedTypes.includes(opt.value);
+                return (
+                  <div
+                    key={opt.value}
+                    onClick={() => toggleType(opt.value)}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 cursor-pointer text-sm transition-colors ${
+                      isSelected ? "bg-primary/5 text-primary" : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                      isSelected ? "bg-primary border-primary" : "border-border"
+                    }`}>
+                      {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}
+                    </div>
+                    {opt.label}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground mt-1">
+            You can select one or more vehicle types / మీరు ఒకటి లేదా అంతకంటే ఎక్కువ వాహన రకాలను ఎంచుకోవచ్చు
+          </p>
+          {errors.vehicle_usage_type && <p className="text-destructive text-xs mt-1">{errors.vehicle_usage_type}</p>}
+        </div>
+
         {/* Desktop: 2-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Left Column */}
