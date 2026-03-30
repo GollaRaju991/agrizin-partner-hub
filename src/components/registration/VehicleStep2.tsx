@@ -375,32 +375,8 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
               </div>
             </div>
 
-            {/* Vehicle Usage Type */}
-            <div>
-              <FieldLabel>Vehicle Usage Type *</FieldLabel>
-              <div className="flex flex-wrap gap-3 mt-1">
-                {USAGE_TYPES.map((type) => {
-                  const val = type.toLowerCase().replace(/\s/g, "_");
-                  const isSelected = data.vehicle_usage_type === val;
-                  return (
-                    <label
-                      key={type}
-                      className="flex items-center gap-2 cursor-pointer"
-                      onClick={() => {
-                        onChange({ ...data, vehicle_usage_type: val });
-                        setErrors((prev) => ({ ...prev, vehicle_usage_type: "" }));
-                      }}
-                    >
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? "border-primary bg-primary" : errors.vehicle_usage_type ? "border-destructive" : "border-border"}`}>
-                        {isSelected && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
-                      </div>
-                      <span className="text-sm text-foreground">{type}</span>
-                    </label>
-                  );
-                })}
-              </div>
-              {errors.vehicle_usage_type && <p className="text-destructive text-xs mt-1">{errors.vehicle_usage_type}</p>}
-            </div>
+
+
           </div>
         </div>
 
