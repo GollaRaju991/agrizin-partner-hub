@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { Car, FileText, Camera, X, ImagePlus, Upload } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Car, FileText, Camera, X, ImagePlus, Upload, ChevronDown, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const USAGE_TYPES = ["Farm Work", "Loading", "Transport", "Other"];
+const VEHICLE_TYPE_OPTIONS = [
+  { value: "Auto", label: "Auto / ఆటో" },
+  { value: "Mini Truck", label: "Mini Truck / మినీ ట్రక్" },
+  { value: "Truck", label: "Truck / ట్రక్" },
+  { value: "Lorry", label: "Lorry / లారీ" },
+  { value: "Tractor", label: "Tractor / ట్రాక్టర్" },
+  { value: "Harvester", label: "Harvester / హార్వెస్టర్" },
+  { value: "Others", label: "Others / ఇతరులు" },
+];
 
 export interface VehicleStep2Data {
   vehicle_number: string;
