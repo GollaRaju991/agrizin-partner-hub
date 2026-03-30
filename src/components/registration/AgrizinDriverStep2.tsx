@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Car, FileText, Camera, X, ImagePlus, Upload, Calendar, MapPin } from "lucide-react";
+import { Car, FileText, Camera, X, ImagePlus, Calendar, MapPin, Truck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
-const USAGE_TYPES = ["Farm Work", "Loading", "Transport", "Other"];
+const VEHICLE_TYPES = ["Bike", "Mini Truck", "Truck"];
 const WORK_DURATIONS = ["1 Month", "3 Months", "6 Months", "1 Year"];
 
 export interface AgrizinDriverStep2Data {
@@ -83,10 +83,10 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
 
   const handleSubmit = () => {
     const newErrors: Record<string, string> = {};
+    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Please select vehicle type";
     if (!data.vehicle_number.trim()) newErrors.vehicle_number = "Vehicle number is required";
     if (!data.driving_license_number.trim()) newErrors.driving_license_number = "License number is required";
     if (!data.licenseBack) newErrors.licenseBack = "License back image is required";
-    if (!data.vehicle_usage_type) newErrors.vehicle_usage_type = "Select vehicle usage type";
     if (!data.work_duration) newErrors.work_duration = "Select work duration";
     if (!data.preferred_location.trim()) newErrors.preferred_location = "Preferred location is required";
 
@@ -163,6 +163,25 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
             <Car className="w-4 h-4 text-primary" /> Vehicle Details
           </h3>
 
+          {/* Vehicle Type - at the top */}
+          <div>
+            <FieldLabel>Vehicle Type *</FieldLabel>
+            <Select value={data.vehicle_usage_type} onValueChange={(v) => update("vehicle_usage_type", v)}>
+              <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("vehicle_usage_type")}`}>
+                <div className="flex items-center gap-1.5">
+                  <Truck className="w-3.5 h-3.5 text-primary shrink-0" />
+                  <SelectValue placeholder="Select Vehicle Type" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                {VEHICLE_TYPES.map((type) => (
+                  <SelectItem key={type} value={type.toLowerCase().replace(/\s/g, "_")} className="text-xs">{type}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.vehicle_usage_type && <p className="text-destructive text-[10px] mt-0.5">{errors.vehicle_usage_type}</p>}
+          </div>
+
           <div>
             <FieldLabel>Vehicle Number *</FieldLabel>
             <div className="relative">
@@ -200,29 +219,6 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
             </div>
           </div>
 
-          {/* RC Upload */}
-          <div>
-            <FieldLabel>Upload RC Document (Optional)</FieldLabel>
-            {data.rcImagePreview ? (
-              <div className="relative inline-block">
-                <img src={data.rcImagePreview} alt="RC" className="w-full max-w-xs h-20 rounded-lg object-cover border-2 border-primary/20" />
-                <button
-                  type="button"
-                  onClick={() => removeFile("rcImage", "rcImagePreview")}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            ) : (
-              <label className="flex items-center gap-2 h-10 px-4 rounded-lg border border-border cursor-pointer hover:border-primary/50 transition-colors w-fit">
-                <Upload className="w-4 h-4 text-primary" />
-                <span className="text-xs text-muted-foreground">Upload RC Image</span>
-                <input type="file" accept="image/*" onChange={handleFileUpload("rcImage", "rcImagePreview")} className="hidden" />
-              </label>
-            )}
-          </div>
-
           {/* Vehicle Photos */}
           <div>
             <FieldLabel>Upload Vehicle Photos</FieldLabel>
@@ -245,33 +241,6 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
                 <input type="file" accept="image/*" multiple onChange={handleVehicleImages} className="hidden" />
               </label>
             </div>
-          </div>
-
-          {/* Vehicle Usage Type */}
-          <div>
-            <FieldLabel>Vehicle Usage Type *</FieldLabel>
-            <div className="flex flex-wrap gap-2.5 mt-1">
-              {USAGE_TYPES.map((type) => {
-                const val = type.toLowerCase().replace(/\s/g, "_");
-                const isSelected = data.vehicle_usage_type === val;
-                return (
-                  <label
-                    key={type}
-                    className="flex items-center gap-1.5 cursor-pointer"
-                    onClick={() => {
-                      onChange({ ...data, vehicle_usage_type: val });
-                      setErrors((prev) => ({ ...prev, vehicle_usage_type: "" }));
-                    }}
-                  >
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? "border-primary bg-primary" : errors.vehicle_usage_type ? "border-destructive" : "border-border"}`}>
-                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />}
-                    </div>
-                    <span className="text-xs text-foreground">{type}</span>
-                  </label>
-                );
-              })}
-            </div>
-            {errors.vehicle_usage_type && <p className="text-destructive text-[10px] mt-0.5">{errors.vehicle_usage_type}</p>}
           </div>
         </div>
 
