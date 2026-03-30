@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Car, FileText, Camera, X, ImagePlus, Upload, Calendar, MapPin } from "lucide-react";
+import { Car, FileText, Camera, X, ImagePlus, Calendar, MapPin, Truck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
-const USAGE_TYPES = ["Farm Work", "Loading", "Transport", "Other"];
+const VEHICLE_TYPES = ["Bike", "Mini Truck", "Truck"];
 const WORK_DURATIONS = ["1 Month", "3 Months", "6 Months", "1 Year"];
 
 export interface AgrizinDriverStep2Data {
