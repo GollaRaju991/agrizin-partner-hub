@@ -91,6 +91,7 @@ const translations = {
     shareReferral: "Share Referral",
     referralShareText: "Join Agrizin Partner app and earn! Use my referral code:",
     copiedToClipboard: "Copied to clipboard!",
+    perReferral: "per referral",
     
     // Detail labels
     nameLabel: "Name",
