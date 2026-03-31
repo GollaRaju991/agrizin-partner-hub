@@ -74,6 +74,48 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
 
   return (
     <div className="space-y-5 pb-24">
+      {/* Category */}
+      <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.category ? "border-destructive" : "border-border"}`}>
+        <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
+          <Briefcase className="w-4 h-4 text-primary" />
+          Category / వర్గం *
+        </div>
+        <Select
+          value={data.category}
+          onValueChange={(v) => {
+            onChange({ ...data, category: v, group_count: v === "single" ? "" : data.group_count });
+            setErrors((prev) => ({ ...prev, category: "", group_count: "" }));
+          }}
+        >
+          <SelectTrigger className={`h-11 rounded-xl ${errorClass("category")}`}>
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="single">Single / ఒంటరి</SelectItem>
+            <SelectItem value="group">Group / సమూహం</SelectItem>
+          </SelectContent>
+        </Select>
+        {errors.category && <p className="text-destructive text-xs">{errors.category}</p>}
+
+        {data.category === "group" && (
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground">Number of Workers / కూలీల సంఖ్య *</label>
+            <Input
+              type="number"
+              min={2}
+              placeholder="Enter number of workers"
+              value={data.group_count}
+              onChange={(e) => {
+                onChange({ ...data, group_count: e.target.value });
+                if (errors.group_count) setErrors((prev) => ({ ...prev, group_count: "" }));
+              }}
+              className={`h-11 rounded-xl ${errorClass("group_count")}`}
+            />
+            {errors.group_count && <p className="text-destructive text-xs">{errors.group_count}</p>}
+          </div>
+        )}
+      </div>
+
       {/* Skills & Work */}
       <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.skills ? "border-destructive" : "border-border"}`}>
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
