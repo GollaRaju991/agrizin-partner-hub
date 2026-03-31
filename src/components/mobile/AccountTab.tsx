@@ -189,7 +189,45 @@ const AccountTab = () => {
 
           {/* Referral & Settings & Help */}
           <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
-            <SettingsRow icon={Share2} label={t("referPartner")} subtitle={t("referSubtitle")} onClick={() => toast.info(t("comingSoon"))} />
+            {/* Referral Card */}
+            <div className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <Share2 size={20} className="text-primary" />
+                <div>
+                  <span className="text-sm font-medium text-foreground">{t("referPartner")}</span>
+                  <p className="text-xs text-muted-foreground">{t("referSubtitle")} • ₹5 {t("perReferral")}</p>
+                </div>
+              </div>
+              <div className="bg-accent/50 rounded-xl p-3 mt-2">
+                <p className="text-xs text-muted-foreground mb-1">{t("yourReferralCode")}</p>
+                <div className="flex items-center gap-2">
+                  <span className="font-heading font-bold text-lg text-foreground tracking-wider flex-1">{profile.phone}</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(profile.phone);
+                      toast.success(t("copiedToClipboard"));
+                    }}
+                    className="px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-xs font-bold"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  const text = `${t("referralShareText")} ${profile.phone}`;
+                  if (navigator.share) {
+                    navigator.share({ text });
+                  } else {
+                    navigator.clipboard.writeText(text);
+                    toast.success(t("copiedToClipboard"));
+                  }
+                }}
+                className="mt-3 w-full bg-primary text-primary-foreground py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+              >
+                <Share2 size={16} /> {t("shareReferral")}
+              </button>
+            </div>
             <div className="h-px bg-border mx-4" />
             <SettingsRow icon={Settings} label={t("settings")} subtitle={t("bankDetailsSub")} onClick={() => setSelectedModule("settings")} />
             <div className="h-px bg-border mx-4" />
