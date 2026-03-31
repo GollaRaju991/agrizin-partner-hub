@@ -179,28 +179,20 @@ const RegisterFarmWorker = () => {
   return (
     <div className="min-h-screen bg-muted">
       <SuccessDialog open={showSuccess} onClose={() => navigate("/")} />
-      {/* Green Banner Header */}
-      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-6 md:py-8 relative">
-        <button
-          onClick={() => navigate("/")}
-          className="absolute top-3 left-3 flex items-center gap-1.5 text-primary-foreground/80 hover:text-primary-foreground text-sm font-medium transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          Back
-        </button>
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <h1 className="font-heading font-bold text-2xl md:text-3xl">Farm Worker Registration</h1>
-            {/* Step indicator */}
-            <div className="flex items-center justify-center gap-2 mt-4">
-              <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-                Step 1
-              </div>
-              <ChevronRight className="w-4 h-4 text-primary-foreground/60" />
-              <div className={`px-4 py-1 rounded-full text-xs font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>
-                Step 2
-              </div>
-            </div>
+      {/* Compact Green Banner Header */}
+      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground px-4 py-3 md:py-4 relative">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-1 text-primary-foreground/80 hover:text-primary-foreground text-sm font-medium transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <h1 className="font-heading font-bold text-base md:text-xl">Farm Worker</h1>
+          <div className="flex items-center gap-1">
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>1</span>
+            <ChevronRight className="w-3 h-3 text-primary-foreground/60" />
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${step === 2 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>2</span>
           </div>
         </div>
       </div>
