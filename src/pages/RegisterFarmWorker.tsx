@@ -38,6 +38,8 @@ const RegisterFarmWorker = () => {
     availability: "",
     expected_wage: "",
     wage_type: "per_day",
+    category: "",
+    group_count: "",
   });
 
   useEffect(() => {
