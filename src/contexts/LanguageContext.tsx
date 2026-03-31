@@ -228,6 +228,7 @@ const translations = {
     shareReferral: "रेफरल शेयर करें",
     referralShareText: "Agrizin Partner ऐप से जुड़ें और कमाएं! मेरा रेफरल कोड उपयोग करें:",
     copiedToClipboard: "कॉपी हो गया!",
+    perReferral: "प्रति रेफरल",
     
     nameLabel: "नाम",
     skills: "कौशल",
