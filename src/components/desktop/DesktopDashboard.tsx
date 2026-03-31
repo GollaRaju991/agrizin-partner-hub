@@ -225,33 +225,23 @@ const EarningsPanel = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+            <div className="bg-primary rounded-2xl p-6 text-primary-foreground col-span-1 md:col-span-2">
+              <p className="text-sm opacity-80">{t("availableBalance")}</p>
+              <p className="font-heading font-bold text-4xl mt-1">₹0</p>
+              <div className="mt-3 flex gap-4 text-sm opacity-80">
+                <span>{t("totalEarnings")}: ₹0</span>
+                <span>{t("withdrawn")}: ₹0</span>
+              </div>
+              <p className="text-xs mt-3 opacity-70">{t("noReferralsYet")}</p>
+            </div>
             <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("totalEarnings")}</h3>
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("referralEarnings")}</h3>
               <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("thisWeek")}</span>
-                  <span className="font-semibold text-foreground">₹0</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("thisMonth")}</span>
-                  <span className="font-semibold text-foreground">₹0</span>
-                </div>
-              </div>
+              <p className="text-sm text-muted-foreground mt-2">{t("totalReferrals")}: 0</p>
             </div>
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-2">{t("dailyEarnings")}</h3>
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("today")}</p>
-                  <p className="text-xs text-muted-foreground">0 {t("trips")}</p>
-                </div>
-                <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
-              </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("paymentHistory")}</h3>
-              <p className="text-sm text-muted-foreground text-center py-4">No payment history yet</p>
+            <div className="bg-card rounded-2xl border border-border p-6 col-span-1 md:col-span-3">
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("withdrawalHistory")}</h3>
+              <p className="text-sm text-muted-foreground text-center py-4">{t("noWithdrawalsYet")}</p>
             </div>
           </div>
         )}
@@ -385,7 +375,45 @@ const AccountPanel = () => {
             {/* Quick Links */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
-                <SettingsRow icon={Share2} label={t("referPartner")} subtitle={t("referSubtitle")} onClick={() => toast.info(t("comingSoon"))} />
+                {/* Referral Card */}
+                <div className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Share2 size={20} className="text-primary" />
+                    <div>
+                      <span className="text-sm font-medium text-foreground">{t("referPartner")}</span>
+                      <p className="text-xs text-muted-foreground">{t("referSubtitle")} • ₹5 {t("perReferral")}</p>
+                    </div>
+                  </div>
+                  <div className="bg-accent/50 rounded-xl p-3 mt-2">
+                    <p className="text-xs text-muted-foreground mb-1">{t("yourReferralCode")}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="font-heading font-bold text-lg text-foreground tracking-wider flex-1">{profile.phone}</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(profile.phone);
+                          toast.success(t("copiedToClipboard"));
+                        }}
+                        className="px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-xs font-bold"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const text = `${t("referralShareText")} ${profile.phone}`;
+                      if (navigator.share) {
+                        navigator.share({ text });
+                      } else {
+                        navigator.clipboard.writeText(text);
+                        toast.success(t("copiedToClipboard"));
+                      }
+                    }}
+                    className="mt-3 w-full bg-primary text-primary-foreground py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                  >
+                    <Share2 size={16} /> {t("shareReferral")}
+                  </button>
+                </div>
                 <div className="h-px bg-border mx-4" />
                 <SettingsRow icon={Settings} label={t("settings")} subtitle={t("bankDetailsSub")} onClick={() => setSubPage("settings")} />
                 <div className="h-px bg-border mx-4" />
