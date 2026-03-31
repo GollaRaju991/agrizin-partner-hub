@@ -55,6 +55,8 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
 
   const handleSubmit = () => {
     const newErrors: Record<string, string> = {};
+    if (!data.category) newErrors.category = "Please select a category";
+    if (data.category === "group" && (!data.group_count || parseInt(data.group_count) < 2)) newErrors.group_count = "Enter valid group size (min 2)";
     if (data.skills.length === 0) newErrors.skills = "Select at least one skill";
     if (!data.experience) newErrors.experience = "Select experience level";
     if (!data.availability) newErrors.availability = "Select availability";
