@@ -225,33 +225,23 @@ const EarningsPanel = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+            <div className="bg-primary rounded-2xl p-6 text-primary-foreground col-span-1 md:col-span-2">
+              <p className="text-sm opacity-80">{t("availableBalance")}</p>
+              <p className="font-heading font-bold text-4xl mt-1">₹0</p>
+              <div className="mt-3 flex gap-4 text-sm opacity-80">
+                <span>{t("totalEarnings")}: ₹0</span>
+                <span>{t("withdrawn")}: ₹0</span>
+              </div>
+              <p className="text-xs mt-3 opacity-70">{t("noReferralsYet")}</p>
+            </div>
             <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("totalEarnings")}</h3>
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("referralEarnings")}</h3>
               <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("thisWeek")}</span>
-                  <span className="font-semibold text-foreground">₹0</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{t("thisMonth")}</span>
-                  <span className="font-semibold text-foreground">₹0</span>
-                </div>
-              </div>
+              <p className="text-sm text-muted-foreground mt-2">{t("totalReferrals")}: 0</p>
             </div>
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-2">{t("dailyEarnings")}</h3>
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{t("today")}</p>
-                  <p className="text-xs text-muted-foreground">0 {t("trips")}</p>
-                </div>
-                <p className="font-heading font-bold text-4xl text-foreground">₹0</p>
-              </div>
-            </div>
-            <div className="bg-card rounded-2xl border border-border p-6">
-              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("paymentHistory")}</h3>
-              <p className="text-sm text-muted-foreground text-center py-4">No payment history yet</p>
+            <div className="bg-card rounded-2xl border border-border p-6 col-span-1 md:col-span-3">
+              <h3 className="font-heading font-bold text-base text-foreground mb-3">{t("withdrawalHistory")}</h3>
+              <p className="text-sm text-muted-foreground text-center py-4">{t("noWithdrawalsYet")}</p>
             </div>
           </div>
         )}
