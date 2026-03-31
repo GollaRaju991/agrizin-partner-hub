@@ -23,6 +23,8 @@ export interface Step2Data {
   availability: string;
   expected_wage: string;
   wage_type: string;
+  category: string;
+  group_count: string;
 }
 
 interface Props {
