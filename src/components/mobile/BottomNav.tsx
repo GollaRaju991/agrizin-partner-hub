@@ -30,11 +30,11 @@ const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
             >
               <tab.icon
                 size={22}
-                className={isActive ? "text-primary" : "text-muted-foreground"}
+                className={isActive ? "text-primary-foreground" : "text-primary-foreground/60"}
               />
               <span
                 className={`text-[11px] font-medium ${
-                  isActive ? "text-primary" : "text-muted-foreground"
+                  isActive ? "text-primary-foreground font-bold" : "text-primary-foreground/60"
                 }`}
               >
                 {t(tab.labelKey)}
