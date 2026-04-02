@@ -25,7 +25,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSendOTP = async () => {
-    if (!firstName.trim()) {
+    if (isSignUp && !firstName.trim()) {
       toast.error("Please enter your first name");
       return;
     }
