@@ -167,17 +167,23 @@ const Login = () => {
                   </div>
                 )}
 
-                <div>
-                  <Label className="text-muted-foreground">Referral ID (Optional)</Label>
-                  <Input
-                    placeholder="Enter referral phone number"
-                    value={referenceId}
-                    onChange={(e) => setReferenceId(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    type="tel"
-                    className="mt-1"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">Enter referrer's phone number if you have one</p>
-                </div>
+                {isSignUp && (
+                  <div>
+                    <Label className="text-foreground">Referral ID (Optional)</Label>
+                    <div className="flex gap-2 mt-1">
+                      <div className="flex items-center px-3 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                        +91
+                      </div>
+                      <Input
+                        placeholder="Enter referrer's phone number"
+                        value={referenceId}
+                        onChange={(e) => setReferenceId(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                        type="tel"
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Enter referrer's phone number to earn ₹5 bonus</p>
+                  </div>
+                )}
 
                 <Button onClick={handleSendOTP} className="w-full h-12 text-base font-bold rounded-lg">
                   Send OTP
