@@ -12,6 +12,7 @@ import RegisterFarmWorker from "./pages/RegisterFarmWorker.tsx";
 import RegisterVehicle from "./pages/RegisterVehicle.tsx";
 import RegisterAgrizinDriver from "./pages/RegisterAgrizinDriver.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 
 const queryClient = new QueryClient();
 
