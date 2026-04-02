@@ -129,15 +129,17 @@ const Login = () => {
 
             {!otpSent ? (
               <div className="space-y-4">
-                <div>
-                  <Label className="text-foreground">First Name *</Label>
-                  <Input
-                    placeholder="Enter your first name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
+                {isSignUp && (
+                  <div>
+                    <Label className="text-foreground">First Name *</Label>
+                    <Input
+                      placeholder="Enter your first name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                )}
 
                 {tab === "phone" ? (
                   <div>
