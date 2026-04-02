@@ -12,6 +12,7 @@ import RegisterFarmWorker from "./pages/RegisterFarmWorker.tsx";
 import RegisterVehicle from "./pages/RegisterVehicle.tsx";
 import RegisterAgrizinDriver from "./pages/RegisterAgrizinDriver.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/register/farm-worker" element={<RegisterFarmWorker />} />
               <Route path="/register/vehicle" element={<RegisterVehicle />} />
               <Route path="/register/agrizin-driver" element={<RegisterAgrizinDriver />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
