@@ -594,6 +594,7 @@ const DesktopDashboard = () => {
                 ) : (
                   <span className="text-primary font-heading font-bold text-lg">{profile.first_name?.charAt(0).toUpperCase()}</span>
                 )}
+              </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{profile.first_name}</p>
                 <p className="text-xs text-muted-foreground">+91 {profile.phone}</p>
