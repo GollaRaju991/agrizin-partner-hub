@@ -344,9 +344,12 @@ const AccountPanel = () => {
           <div className="max-w-3xl space-y-6">
             {/* Profile Card */}
             <div className="bg-card rounded-2xl border border-border p-6 flex items-center gap-5 shadow-sm">
-              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <span className="text-primary font-heading font-bold text-3xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
-              </div>
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+                {profilePhotoUrl ? (
+                  <img src={profilePhotoUrl} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-primary font-heading font-bold text-3xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
+                )}
               <div className="flex-1 min-w-0">
                 <h2 className="font-heading font-bold text-xl text-foreground truncate">{profile.first_name}</h2>
                 <p className="text-sm text-muted-foreground">+91 {profile.phone}</p>
