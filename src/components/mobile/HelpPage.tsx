@@ -51,6 +51,7 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
     { icon: HelpCircle, title: t("faqs"), action: () => setActiveGuide("faqs") },
     { icon: Shield, title: t("privacyPolicy") || "Privacy Policy", action: () => navigate("/privacy-policy") },
     { icon: AlertTriangle, title: t("reportIssue"), action: () => toast.info(t("comingSoon")) },
+    { icon: Trash2, title: t("deleteAccount") || "Delete Account", action: () => setShowDeleteDialog(true), destructive: true },
   ];
 
   // Show guide detail
