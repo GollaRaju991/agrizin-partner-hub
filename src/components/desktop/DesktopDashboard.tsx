@@ -587,9 +587,12 @@ const DesktopDashboard = () => {
         {user && profile && (
           <div className="px-4 py-4 border-t border-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <span className="text-primary font-heading font-bold text-lg">{profile.first_name?.charAt(0).toUpperCase()}</span>
-              </div>
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+                {profilePhotoUrl ? (
+                  <img src={profilePhotoUrl} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-primary font-heading font-bold text-lg">{profile.first_name?.charAt(0).toUpperCase()}</span>
+                )}
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{profile.first_name}</p>
                 <p className="text-xs text-muted-foreground">+91 {profile.phone}</p>
