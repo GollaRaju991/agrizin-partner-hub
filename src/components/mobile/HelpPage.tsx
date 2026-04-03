@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   ChevronLeft, ChevronRight, BookOpen, FileText, MapPin, Wallet,
   Upload, UserCheck, Radio, BarChart3, ArrowDownToLine, Map,
-  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield,
+  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield, Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogContent, AlertDialogFooter,
+  AlertDialogAction, AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
 type HelpSection = "menu" | "guide" | null;
 
