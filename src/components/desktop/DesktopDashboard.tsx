@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage, type Language } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";

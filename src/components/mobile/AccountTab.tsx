@@ -159,8 +159,12 @@ const AccountTab = () => {
         <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
           {/* Profile Card */}
           <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <span className="text-primary font-heading font-bold text-2xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+              {profilePhotoUrl ? (
+                <img src={profilePhotoUrl} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-primary font-heading font-bold text-2xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h2 className="font-heading font-bold text-lg text-foreground truncate">{profile.first_name}</h2>
