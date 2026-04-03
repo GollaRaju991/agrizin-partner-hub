@@ -18,6 +18,7 @@ interface GuideItem {
 
 const HelpPage = ({ onBack }: { onBack: () => void }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [activeGuide, setActiveGuide] = useState<string | null>(null);
 
   const registrationGuides: GuideItem[] = [
