@@ -24,7 +24,9 @@ interface GuideItem {
 const HelpPage = ({ onBack }: { onBack: () => void }) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
   const [activeGuide, setActiveGuide] = useState<string | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const registrationGuides: GuideItem[] = [
     { icon: UserCheck, title: t("howRegisterFarmWorker"), content: t("guideFarmWorker") },
