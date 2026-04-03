@@ -39,6 +39,7 @@ export const settingsAndHelpTranslations = {
     faqs: "FAQs",
     reportIssue: "Report an Issue",
     privacyPolicy: "Privacy Policy",
+    deleteAccount: "Delete Account",
     
     // Guides content
     guideFarmWorker: "1. Go to Account → Farm Worker\n2. Fill in your personal details (name, phone, location)\n3. Select your skills (ploughing, harvesting, sowing, etc.)\n4. Set your expected wage and availability\n5. Upload profile photo\n6. Submit your application",
@@ -99,6 +100,7 @@ export const settingsAndHelpTranslations = {
     faqs: "अक्सर पूछे जाने वाले प्रश्न",
     reportIssue: "समस्या रिपोर्ट करें",
     privacyPolicy: "गोपनीयता नीति",
+    deleteAccount: "खाता हटाएं",
     guideFarmWorker: "1. खाता → खेत मजदूर पर जाएं\n2. व्यक्तिगत विवरण भरें\n3. अपने कौशल चुनें\n4. अपेक्षित वेतन सेट करें\n5. प्रोफ़ाइल फोटो अपलोड करें\n6. आवेदन सबमिट करें",
     guideVehicle: "1. खाता → वाहन किराया पर जाएं\n2. वाहन विवरण दर्ज करें\n3. ड्राइविंग लाइसेंस अपलोड करें\n4. आधार कार्ड अपलोड करें\n5. वाहन RC और फोटो अपलोड करें\n6. अनुमोदन के लिए सबमिट करें",
     guideDriver: "1. खाता → एग्रिज़िन ड्राइवर पर जाएं\n2. अपना विवरण दर्ज करें\n3. वाहन की जानकारी प्रदान करें\n4. सेवा क्षेत्र चुनें\n5. आवेदन सबमिट करें",
@@ -155,6 +157,7 @@ export const settingsAndHelpTranslations = {
     faqs: "తరచుగా అడిగే ప్రశ్నలు",
     reportIssue: "సమస్యను నివేదించండి",
     privacyPolicy: "గోప్యతా విధానం",
+    deleteAccount: "ఖాతాను తొలగించండి",
     guideFarmWorker: "1. ఖాతా → వ్యవసాయ కూలీ కు వెళ్ళండి\n2. వ్యక్తిగత వివరాలు నింపండి\n3. మీ నైపుణ్యాలు ఎంచుకోండి\n4. ఆశించిన వేతనం సెట్ చేయండి\n5. ప్రొఫైల్ ఫోటో అప్‌లోడ్ చేయండి\n6. దరఖాస్తు సమర్పించండి",
     guideVehicle: "1. ఖాతా → వాహనం అద్దె కు వెళ్ళండి\n2. వాహన వివరాలు నమోదు చేయండి\n3. డ్రైవింగ్ లైసెన్స్ అప్‌లోడ్ చేయండి\n4. ఆధార్ కార్డ్ అప్‌లోడ్ చేయండి\n5. వాహన RC మరియు ఫోటోలు అప్‌లోడ్ చేయండి",
     guideDriver: "1. ఖాతా → ఎగ్రిజిన్ డ్రైవర్ కు వెళ్ళండి\n2. మీ వివరాలు నమోదు చేయండి\n3. వాహన సమాచారం అందించండి\n4. సేవా ప్రాంతం ఎంచుకోండి\n5. దరఖాస్తు సమర్పించండి",

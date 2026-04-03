@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   ChevronLeft, ChevronRight, BookOpen, FileText, MapPin, Wallet,
   Upload, UserCheck, Radio, BarChart3, ArrowDownToLine, Map,
-  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield,
+  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield, Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogContent, AlertDialogFooter,
+  AlertDialogAction, AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
 type HelpSection = "menu" | "guide" | null;
 
@@ -19,7 +24,9 @@ interface GuideItem {
 const HelpPage = ({ onBack }: { onBack: () => void }) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
   const [activeGuide, setActiveGuide] = useState<string | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const registrationGuides: GuideItem[] = [
     { icon: UserCheck, title: t("howRegisterFarmWorker"), content: t("guideFarmWorker") },
@@ -44,6 +51,7 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
     { icon: HelpCircle, title: t("faqs"), action: () => setActiveGuide("faqs") },
     { icon: Shield, title: t("privacyPolicy") || "Privacy Policy", action: () => navigate("/privacy-policy") },
     { icon: AlertTriangle, title: t("reportIssue"), action: () => toast.info(t("comingSoon")) },
+    { icon: Trash2, title: t("deleteAccount") || "Delete Account", action: () => setShowDeleteDialog(true), destructive: true },
   ];
 
   // Show guide detail
@@ -156,11 +164,11 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
                 {i > 0 && <div className="h-px bg-border mx-4" />}
                 <button
                   onClick={opt.action}
-                  className="w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
+                  className={`w-full flex items-center justify-between p-4 hover:bg-accent/50 transition-colors ${(opt as any).destructive ? '' : ''}`}
                 >
                   <div className="flex items-center gap-3">
-                    <opt.icon size={18} className="text-primary" />
-                    <span className="text-sm font-medium text-foreground">{opt.title}</span>
+                    <opt.icon size={18} className={(opt as any).destructive ? "text-destructive" : "text-primary"} />
+                    <span className={`text-sm font-medium ${(opt as any).destructive ? "text-destructive" : "text-foreground"}`}>{opt.title}</span>
                   </div>
                   <ChevronRight size={16} className="text-muted-foreground" />
                 </button>
@@ -169,6 +177,37 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
           </div>
         </div>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="max-w-[340px] rounded-2xl p-6 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+              <AlertTriangle className="w-9 h-9 text-destructive" />
+            </div>
+            <h3 className="font-heading font-bold text-lg text-foreground leading-snug">
+              Delete Account
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Warning: This action will permanently delete your data and cannot be reversed.
+            </p>
+          </div>
+          <AlertDialogFooter className="mt-4 flex-col gap-2 sm:flex-col sm:space-x-0">
+            <AlertDialogAction
+              onClick={async () => {
+                await signOut();
+                toast.success("Your account deletion request has been submitted. Our team will process it shortly.");
+                navigate("/");
+              }}
+              className="w-full h-11 rounded-xl font-heading font-bold text-sm bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Proceed
+            </AlertDialogAction>
+            <AlertDialogCancel className="w-full h-11 rounded-xl font-heading font-bold text-sm mt-0">
+              Cancel
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
