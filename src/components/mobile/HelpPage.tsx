@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import {
   ChevronLeft, ChevronRight, BookOpen, FileText, MapPin, Wallet,
   Upload, UserCheck, Radio, BarChart3, ArrowDownToLine, Map,
-  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle,
+  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 
