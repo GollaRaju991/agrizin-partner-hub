@@ -77,6 +77,7 @@ const AccountTab = () => {
   const { user, profile, signUp, signIn, signOut } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
+  const profilePhotoUrl = useProfilePhoto();
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | "settings" | "help" | "editProfile" | null>(null);
 
