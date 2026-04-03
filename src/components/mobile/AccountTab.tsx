@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
+import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 import {
   Bell, Phone, User, LogOut, Edit2,
   Clock, CheckCircle2,
