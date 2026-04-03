@@ -543,6 +543,7 @@ const DesktopDashboard = () => {
   const [activeTab, setActiveTab] = useState<DesktopTab>("home");
   const { t, language, setLanguage } = useLanguage();
   const { user, profile } = useAuth();
+  const profilePhotoUrl = useProfilePhoto();
   const [showLangPicker, setShowLangPicker] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
