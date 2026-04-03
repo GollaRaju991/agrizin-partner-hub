@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   ChevronLeft, ChevronRight, BookOpen, FileText, MapPin, Wallet,
   Upload, UserCheck, Radio, BarChart3, ArrowDownToLine, Map,
-  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle,
+  Users, PhoneCall, Mail, MessageCircle, HelpCircle, AlertTriangle, Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,6 +18,7 @@ interface GuideItem {
 
 const HelpPage = ({ onBack }: { onBack: () => void }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [activeGuide, setActiveGuide] = useState<string | null>(null);
 
   const registrationGuides: GuideItem[] = [
@@ -40,6 +42,7 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
     { icon: Mail, title: t("emailSupport"), action: () => { window.location.href = "mailto:support@agrizin.com"; } },
     { icon: MessageCircle, title: t("chatSupport"), action: () => toast.info(t("comingSoon")) },
     { icon: HelpCircle, title: t("faqs"), action: () => setActiveGuide("faqs") },
+    { icon: Shield, title: t("privacyPolicy") || "Privacy Policy", action: () => navigate("/privacy-policy") },
     { icon: AlertTriangle, title: t("reportIssue"), action: () => toast.info(t("comingSoon")) },
   ];
 
