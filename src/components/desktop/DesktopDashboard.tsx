@@ -258,6 +258,7 @@ const AccountPanel = () => {
   const { user, profile, signUp, signIn, signOut } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { applications, vehicleRegs, loading, refetch } = useUserApplications();
+  const profilePhotoUrl = useProfilePhoto();
   const navigate = useNavigate();
   const [subPage, setSubPage] = useState<"main" | "editProfile" | "farm" | "vehicle" | "driver" | "settings" | "help">("main");
 
