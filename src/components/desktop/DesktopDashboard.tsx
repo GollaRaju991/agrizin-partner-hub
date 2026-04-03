@@ -350,6 +350,7 @@ const AccountPanel = () => {
                 ) : (
                   <span className="text-primary font-heading font-bold text-3xl">{profile.first_name?.charAt(0).toUpperCase() || "U"}</span>
                 )}
+              </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-heading font-bold text-xl text-foreground truncate">{profile.first_name}</h2>
                 <p className="text-sm text-muted-foreground">+91 {profile.phone}</p>
