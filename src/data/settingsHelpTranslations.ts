@@ -39,6 +39,7 @@ export const settingsAndHelpTranslations = {
     faqs: "FAQs",
     reportIssue: "Report an Issue",
     privacyPolicy: "Privacy Policy",
+    deleteAccount: "Delete Account",
     
     // Guides content
     guideFarmWorker: "1. Go to Account → Farm Worker\n2. Fill in your personal details (name, phone, location)\n3. Select your skills (ploughing, harvesting, sowing, etc.)\n4. Set your expected wage and availability\n5. Upload profile photo\n6. Submit your application",
