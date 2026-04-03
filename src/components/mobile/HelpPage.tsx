@@ -42,6 +42,7 @@ const HelpPage = ({ onBack }: { onBack: () => void }) => {
     { icon: Mail, title: t("emailSupport"), action: () => { window.location.href = "mailto:support@agrizin.com"; } },
     { icon: MessageCircle, title: t("chatSupport"), action: () => toast.info(t("comingSoon")) },
     { icon: HelpCircle, title: t("faqs"), action: () => setActiveGuide("faqs") },
+    { icon: Shield, title: t("privacyPolicy") || "Privacy Policy", action: () => navigate("/privacy-policy") },
     { icon: AlertTriangle, title: t("reportIssue"), action: () => toast.info(t("comingSoon")) },
   ];
 
