@@ -68,16 +68,6 @@ const Login = () => {
         setIsSignUp(false);
       } else if (msg.includes("Invalid login") || msg.includes("invalid_credentials")) {
         setErrors({ general: "Invalid mobile number or password" });
-      } else if (msg.includes("Email not confirmed")) {
-        // Try to handle unconfirmed accounts by re-signing up to trigger auto-confirm
-        try {
-          await signUp(authEmail, password, firstName || "User", phone);
-          await signIn(authEmail, password);
-          toast.success("Login successful");
-          navigate(redirect);
-        } catch {
-          setErrors({ general: "Invalid mobile number or password" });
-        }
       } else {
         setErrors({ general: "Something went wrong. Please try again" });
       }
