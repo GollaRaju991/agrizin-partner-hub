@@ -22,21 +22,30 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const validate = (): string | null => {
-    if (isSignUp && !firstName.trim()) return "Please enter your name";
-    if (!phone.trim()) return "Please enter your mobile number";
-    if (!/^\d{10}$/.test(phone)) return "Enter a valid 10-digit mobile number";
-    if (!password) return "Please enter your password";
-    if (password.length < 6) return "Password must be at least 6 characters";
-    return null;
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; password?: string; general?: string }>({});
+
+  const clearErrors = () => setErrors({});
+
+  const validate = (): boolean => {
+    const newErrors: typeof errors = {};
+    if (isSignUp && !firstName.trim()) newErrors.name = "Please enter your name";
+    if (!phone.trim()) {
+      newErrors.phone = "Please enter your mobile number";
+    } else if (!/^\d{10}$/.test(phone)) {
+      newErrors.phone = "Enter a valid 10-digit mobile number";
+    }
+    if (!password) {
+      newErrors.password = "Please enter your password";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    const error = validate();
-    if (error) {
-      toast.error(error);
-      return;
-    }
+    clearErrors();
+    if (!validate()) return;
 
     setLoading(true);
     const authEmail = `${phone}@agrizinpartner.in`;
@@ -55,12 +64,22 @@ const Login = () => {
     } catch (err: any) {
       const msg = err.message || "";
       if (msg.includes("already registered") || msg.includes("already been registered")) {
-        toast.error("User already exists. Please login");
+        setErrors({ general: "User already exists. Please login" });
         setIsSignUp(false);
-      } else if (msg.includes("Invalid login")) {
-        toast.error("Invalid mobile number or password");
+      } else if (msg.includes("Invalid login") || msg.includes("invalid_credentials")) {
+        setErrors({ general: "Invalid mobile number or password" });
+      } else if (msg.includes("Email not confirmed")) {
+        // Try to handle unconfirmed accounts by re-signing up to trigger auto-confirm
+        try {
+          await signUp(authEmail, password, firstName || "User", phone);
+          await signIn(authEmail, password);
+          toast.success("Login successful");
+          navigate(redirect);
+        } catch {
+          setErrors({ general: "Invalid mobile number or password" });
+        }
       } else {
-        toast.error("Something went wrong. Please try again");
+        setErrors({ general: "Something went wrong. Please try again" });
       }
     } finally {
       setLoading(false);
@@ -86,6 +105,9 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const ErrorText = ({ message }: { message?: string }) =>
+    message ? <p className="text-destructive text-xs mt-1 font-medium">{message}</p> : null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -114,15 +136,22 @@ const Login = () => {
           </button>
 
           <div className="bg-card rounded-2xl shadow-card p-6 space-y-4">
+            {errors.general && (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-3">
+                <p className="text-destructive text-sm font-medium text-center">{errors.general}</p>
+              </div>
+            )}
+
             {isSignUp && (
               <div>
                 <Label className="text-foreground">Name *</Label>
                 <Input
                   placeholder="Enter your name"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="mt-1"
+                  onChange={(e) => { setFirstName(e.target.value); setErrors(prev => ({ ...prev, name: undefined })); }}
+                  className={`mt-1 ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 />
+                <ErrorText message={errors.name} />
               </div>
             )}
 
@@ -135,10 +164,12 @@ const Login = () => {
                 <Input
                   placeholder="Enter your mobile number"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  onChange={(e) => { setPhone(e.target.value.replace(/\D/g, "").slice(0, 10)); setErrors(prev => ({ ...prev, phone: undefined, general: undefined })); }}
                   type="tel"
+                  className={errors.phone ? "border-destructive focus-visible:ring-destructive" : ""}
                 />
               </div>
+              <ErrorText message={errors.phone} />
             </div>
 
             <div>
@@ -147,9 +178,9 @@ const Login = () => {
                 <Input
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined, general: undefined })); }}
                   type={showPassword ? "text" : "password"}
-                  className="pr-10"
+                  className={`pr-10 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 />
                 <button
                   type="button"
@@ -159,7 +190,8 @@ const Login = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {isSignUp && (
+              <ErrorText message={errors.password} />
+              {isSignUp && !errors.password && (
                 <p className="text-xs text-muted-foreground mt-1">Password must be at least 6 characters</p>
               )}
             </div>
@@ -224,7 +256,7 @@ const Login = () => {
             <p className="text-center text-sm text-muted-foreground mt-2">
               {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
               <button
-                onClick={() => { setIsSignUp(!isSignUp); setPassword(""); }}
+                onClick={() => { setIsSignUp(!isSignUp); setPassword(""); clearErrors(); }}
                 className="text-primary font-semibold hover:underline"
               >
                 {isSignUp ? "Login" : "Register"}
