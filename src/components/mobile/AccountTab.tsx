@@ -257,37 +257,8 @@ const AccountTab = () => {
             <h2 className="font-heading font-bold text-xl text-foreground">{t("welcomeAgrizin")}</h2>
           </div>
           <div className="bg-card rounded-2xl border border-border p-5 space-y-4 shadow-sm">
-            {!otpSent ? (
-              <>
-                <div>
-                  <Label className="text-foreground text-sm">{t("name")} *</Label>
-                  <div className="relative mt-1">
-                    <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input placeholder={t("enterName")} value={firstName} onChange={(e) => setFirstName(e.target.value)} className="pl-9" />
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-foreground text-sm">{t("phoneNumber")} *</Label>
-                  <div className="relative mt-1">
-                    <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input placeholder="9876543210" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))} type="tel" className="pl-9" />
-                  </div>
-                </div>
-                <Button onClick={handleSendOTP} className="w-full h-12 text-base font-bold rounded-xl">{t("login")}</Button>
-              </>
-            ) : (
-              <>
-                <p className="text-sm text-muted-foreground text-center">{t("otpSentTo")} +91 {phone}</p>
-                <div>
-                  <Label className="text-foreground text-sm">{t("enterOtp")}</Label>
-                  <Input placeholder={t("enterOtpPlaceholder")} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))} className="mt-1 text-center text-2xl tracking-[0.5em]" maxLength={4} />
-                </div>
-                <Button onClick={handleVerify} disabled={authLoading} className="w-full h-12 text-base font-bold rounded-xl">
-                  {authLoading ? t("verifying") : t("verifyOtp")}
-                </Button>
-                <button onClick={() => { setOtpSent(false); setOtp(""); }} className="w-full text-sm text-primary hover:underline">{t("changeDetails")}</button>
-              </>
-            )}
+            <p className="text-sm text-muted-foreground text-center">{t("loginToView")}</p>
+            <Button onClick={() => navigate("/login")} className="w-full h-12 text-base font-bold rounded-xl">{t("login")}</Button>
           </div>
         </div>
       </div>
