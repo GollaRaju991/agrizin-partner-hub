@@ -81,42 +81,8 @@ const AccountTab = () => {
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | "settings" | "help" | "editProfile" | null>(null);
 
-  const [firstName, setFirstName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [authLoading, setAuthLoading] = useState(false);
-
-  const handleSendOTP = () => {
-    if (!firstName.trim()) { toast.error("Enter your name"); return; }
-    if (!phone.trim() || phone.length < 10) { toast.error("Enter valid phone number"); return; }
-    setOtpSent(true);
-    toast.success("OTP sent! Use code: 1234 (demo)");
-  };
-
-  const handleVerify = async () => {
-    if (otp !== "1234") { toast.error("Invalid OTP. Use 1234 for demo."); return; }
-    setAuthLoading(true);
-    try {
-      const authEmail = `${phone}@agrizinpartner.in`;
-      const authPassword = `agrizin_${phone}_pass`;
-      try {
-        await signUp(authEmail, authPassword, firstName, phone);
-        toast.success("Account created!");
-      } catch (e: any) {
-        if (e.message?.includes("already registered")) {
-          await signIn(authEmail, authPassword);
-          toast.success("Logged in!");
-        } else throw e;
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
-    } finally { setAuthLoading(false); }
-  };
-
   const handleSignOut = async () => {
     await signOut();
-    setOtpSent(false); setOtp(""); setFirstName(""); setPhone("");
   };
 
   const farmApp = applications.find((a) => a.service_type === "farm_maker");
