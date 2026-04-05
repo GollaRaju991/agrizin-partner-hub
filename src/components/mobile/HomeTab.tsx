@@ -169,8 +169,8 @@ const HomeTab = () => {
       )}
 
       {/* Map area */}
-      <div className="flex-1 relative">
-        <div ref={mapContainerRef} className="w-full h-full" style={{ minHeight: "300px" }} />
+      <div className="flex-1 relative overflow-hidden">
+        <div ref={mapContainerRef} className="absolute inset-0" />
 
         {!mapReady && (
           <div className="absolute inset-0 bg-accent/30 flex items-center justify-center">
