@@ -11,7 +11,7 @@ const MobileLayout = () => {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      <div className="flex-1 overflow-hidden pb-14">
+      <div className="flex-1 overflow-hidden" style={{ paddingBottom: "56px" }}>
         {activeTab === "home" && <HomeTab />}
         {activeTab === "categories" && <CategoriesTab />}
         {activeTab === "earnings" && <EarningsTab />}
