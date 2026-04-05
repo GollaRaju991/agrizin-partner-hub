@@ -101,13 +101,6 @@ const EditProfilePage = ({ onBack }: EditProfilePageProps) => {
               +91 {profile?.phone || "—"}
             </div>
           </div>
-
-          <div>
-            <Label className="text-xs text-muted-foreground">Referral ID</Label>
-            <div className="mt-1 h-10 rounded-lg border border-border bg-muted/50 flex items-center px-3 text-sm text-muted-foreground">
-              {profile?.reference_id || "No referral"}
-            </div>
-          </div>
         </div>
 
         {/* Save Button */}
