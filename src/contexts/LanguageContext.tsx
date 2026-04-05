@@ -51,12 +51,8 @@ const translations = {
     name: "Name",
     enterName: "Enter your name",
     phoneNumber: "Phone Number",
-    otpSentTo: "OTP sent to",
-    enterOtp: "Enter OTP",
-    enterOtpPlaceholder: "Enter 4-digit OTP",
-    verifyOtp: "Verify OTP",
-    verifying: "Verifying...",
-    changeDetails: "← Change details",
+    password: "Password",
+    enterPassword: "Enter your password",
     back: "← Back",
     
     // Earnings
