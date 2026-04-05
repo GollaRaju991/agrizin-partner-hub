@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 import {
-  Bell, LogOut, Edit2,
+  Bell, Phone, User, LogOut, Edit2,
   Clock, CheckCircle2,
   Share2, Globe, ChevronRight, Settings, HelpCircle,
 } from "lucide-react";
@@ -12,6 +12,8 @@ import SettingsPage from "@/components/mobile/SettingsPage";
 import HelpPage from "@/components/mobile/HelpPage";
 import EditProfilePage from "@/components/mobile/EditProfilePage";
 import { FarmWorkerDetail, VehicleDetail, DriverDetail } from "@/components/mobile/ApplicationDetailPages";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -79,8 +81,42 @@ const AccountTab = () => {
   const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<"farm" | "vehicle" | "driver" | "settings" | "help" | "editProfile" | null>(null);
 
+  const [firstName, setFirstName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const handleSendOTP = () => {
+    if (!firstName.trim()) { toast.error("Enter your name"); return; }
+    if (!phone.trim() || phone.length < 10) { toast.error("Enter valid phone number"); return; }
+    setOtpSent(true);
+    toast.success("OTP sent! Use code: 1234 (demo)");
+  };
+
+  const handleVerify = async () => {
+    if (otp !== "1234") { toast.error("Invalid OTP. Use 1234 for demo."); return; }
+    setAuthLoading(true);
+    try {
+      const authEmail = `${phone}@agrizinpartner.in`;
+      const authPassword = `agrizin_${phone}_pass`;
+      try {
+        await signUp(authEmail, authPassword, firstName, phone);
+        toast.success("Account created!");
+      } catch (e: any) {
+        if (e.message?.includes("already registered")) {
+          await signIn(authEmail, authPassword);
+          toast.success("Logged in!");
+        } else throw e;
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    } finally { setAuthLoading(false); }
+  };
+
   const handleSignOut = async () => {
     await signOut();
+    setOtpSent(false); setOtp(""); setFirstName(""); setPhone("");
   };
 
   const farmApp = applications.find((a) => a.service_type === "farm_maker");
@@ -255,8 +291,37 @@ const AccountTab = () => {
             <h2 className="font-heading font-bold text-xl text-foreground">{t("welcomeAgrizin")}</h2>
           </div>
           <div className="bg-card rounded-2xl border border-border p-5 space-y-4 shadow-sm">
-            <p className="text-sm text-muted-foreground text-center">{t("loginToView")}</p>
-            <Button onClick={() => navigate("/login")} className="w-full h-12 text-base font-bold rounded-xl">{t("login")}</Button>
+            {!otpSent ? (
+              <>
+                <div>
+                  <Label className="text-foreground text-sm">{t("name")} *</Label>
+                  <div className="relative mt-1">
+                    <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <Input placeholder={t("enterName")} value={firstName} onChange={(e) => setFirstName(e.target.value)} className="pl-9" />
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-foreground text-sm">{t("phoneNumber")} *</Label>
+                  <div className="relative mt-1">
+                    <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <Input placeholder="9876543210" value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))} type="tel" className="pl-9" />
+                  </div>
+                </div>
+                <Button onClick={handleSendOTP} className="w-full h-12 text-base font-bold rounded-xl">{t("login")}</Button>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground text-center">{t("otpSentTo")} +91 {phone}</p>
+                <div>
+                  <Label className="text-foreground text-sm">{t("enterOtp")}</Label>
+                  <Input placeholder={t("enterOtpPlaceholder")} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))} className="mt-1 text-center text-2xl tracking-[0.5em]" maxLength={4} />
+                </div>
+                <Button onClick={handleVerify} disabled={authLoading} className="w-full h-12 text-base font-bold rounded-xl">
+                  {authLoading ? t("verifying") : t("verifyOtp")}
+                </Button>
+                <button onClick={() => { setOtpSent(false); setOtp(""); }} className="w-full text-sm text-primary hover:underline">{t("changeDetails")}</button>
+              </>
+            )}
           </div>
         </div>
       </div>
