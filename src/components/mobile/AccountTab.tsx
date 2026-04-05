@@ -4,7 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserApplications } from "@/hooks/useUserApplications";
 import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 import {
-  Bell, Phone, User, LogOut, Edit2,
+  Bell, LogOut, Edit2,
   Clock, CheckCircle2,
   Share2, Globe, ChevronRight, Settings, HelpCircle,
 } from "lucide-react";
@@ -12,8 +12,7 @@ import SettingsPage from "@/components/mobile/SettingsPage";
 import HelpPage from "@/components/mobile/HelpPage";
 import EditProfilePage from "@/components/mobile/EditProfilePage";
 import { FarmWorkerDetail, VehicleDetail, DriverDetail } from "@/components/mobile/ApplicationDetailPages";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
