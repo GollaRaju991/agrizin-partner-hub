@@ -13,7 +13,6 @@ import HelpPage from "@/components/mobile/HelpPage";
 import EditProfilePage from "@/components/mobile/EditProfilePage";
 import { FarmWorkerDetail, VehicleDetail, DriverDetail } from "@/components/mobile/ApplicationDetailPages";
 import { Button } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
