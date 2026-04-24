@@ -371,6 +371,63 @@ export type Database = {
         Args: { _referred_user_id: string; _referrer_user_id: string }
         Returns: undefined
       }
+      get_public_drivers: {
+        Args: never
+        Returns: {
+          age: number
+          created_at: string
+          district: string
+          first_name: string
+          gender: string
+          id: string
+          mandal: string
+          preferred_location: string
+          profile_photo_url: string
+          state: string
+          vehicle_type: string
+          village: string
+          work_duration: string
+        }[]
+      }
+      get_public_farm_workers: {
+        Args: never
+        Returns: {
+          age: number
+          availability: string
+          category: string
+          created_at: string
+          district: string
+          expected_wage: number
+          experience_years: number
+          first_name: string
+          gender: string
+          group_count: number
+          id: string
+          mandal: string
+          profile_photo_url: string
+          skills: string[]
+          state: string
+          village: string
+          wage_type: string
+        }[]
+      }
+      get_public_vehicles: {
+        Args: never
+        Returns: {
+          age: number
+          created_at: string
+          district: string
+          full_name: string
+          gender: string
+          id: string
+          mandal: string
+          profile_photo_url: string
+          state: string
+          vehicle_image_urls: string[]
+          vehicle_usage_type: string
+          village: string
+        }[]
+      }
       notify_agrizin_sync: {
         Args: { _kind: string; _row: Json }
         Returns: undefined
