@@ -94,13 +94,18 @@ export type Database = {
       }
       service_applications: {
         Row: {
+          aadhaar_back_url: string | null
+          aadhaar_front_url: string | null
+          aadhaar_pan: string | null
           address: string | null
           age: number | null
           availability: string | null
+          category: string | null
           city: string | null
           country: string | null
           created_at: string
           district: string | null
+          driving_license_number: string | null
           email: string | null
           equipment_owned: string | null
           expected_wage: number | null
@@ -109,11 +114,16 @@ export type Database = {
           farm_size: string | null
           first_name: string
           gender: string | null
+          group_count: number | null
           id: string
           last_name: string | null
+          license_back_url: string | null
+          license_front_url: string | null
           mandal: string | null
           phone: string
+          preferred_location: string | null
           profile_photo_url: string | null
+          rc_image_url: string | null
           registration_number: string | null
           service_type: Database["public"]["Enums"]["service_type"]
           skills: string[] | null
@@ -121,21 +131,29 @@ export type Database = {
           status: string
           updated_at: string
           user_id: string
+          vehicle_image_urls: string[] | null
           vehicle_make: string | null
           vehicle_model: string | null
+          vehicle_number: string | null
           vehicle_type: string | null
           vehicle_year: string | null
           village: string | null
           wage_type: string | null
+          work_duration: string | null
         }
         Insert: {
+          aadhaar_back_url?: string | null
+          aadhaar_front_url?: string | null
+          aadhaar_pan?: string | null
           address?: string | null
           age?: number | null
           availability?: string | null
+          category?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
           district?: string | null
+          driving_license_number?: string | null
           email?: string | null
           equipment_owned?: string | null
           expected_wage?: number | null
@@ -144,11 +162,16 @@ export type Database = {
           farm_size?: string | null
           first_name: string
           gender?: string | null
+          group_count?: number | null
           id?: string
           last_name?: string | null
+          license_back_url?: string | null
+          license_front_url?: string | null
           mandal?: string | null
           phone: string
+          preferred_location?: string | null
           profile_photo_url?: string | null
+          rc_image_url?: string | null
           registration_number?: string | null
           service_type: Database["public"]["Enums"]["service_type"]
           skills?: string[] | null
@@ -156,21 +179,29 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id: string
+          vehicle_image_urls?: string[] | null
           vehicle_make?: string | null
           vehicle_model?: string | null
+          vehicle_number?: string | null
           vehicle_type?: string | null
           vehicle_year?: string | null
           village?: string | null
           wage_type?: string | null
+          work_duration?: string | null
         }
         Update: {
+          aadhaar_back_url?: string | null
+          aadhaar_front_url?: string | null
+          aadhaar_pan?: string | null
           address?: string | null
           age?: number | null
           availability?: string | null
+          category?: string | null
           city?: string | null
           country?: string | null
           created_at?: string
           district?: string | null
+          driving_license_number?: string | null
           email?: string | null
           equipment_owned?: string | null
           expected_wage?: number | null
@@ -179,11 +210,16 @@ export type Database = {
           farm_size?: string | null
           first_name?: string
           gender?: string | null
+          group_count?: number | null
           id?: string
           last_name?: string | null
+          license_back_url?: string | null
+          license_front_url?: string | null
           mandal?: string | null
           phone?: string
+          preferred_location?: string | null
           profile_photo_url?: string | null
+          rc_image_url?: string | null
           registration_number?: string | null
           service_type?: Database["public"]["Enums"]["service_type"]
           skills?: string[] | null
@@ -191,12 +227,15 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+          vehicle_image_urls?: string[] | null
           vehicle_make?: string | null
           vehicle_model?: string | null
+          vehicle_number?: string | null
           vehicle_type?: string | null
           vehicle_year?: string | null
           village?: string | null
           wage_type?: string | null
+          work_duration?: string | null
         }
         Relationships: []
       }
