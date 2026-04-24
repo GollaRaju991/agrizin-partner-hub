@@ -21,7 +21,9 @@ serve(async (req) => {
     }
 
     const agrizinClient = createClient(AGRIZIN_URL, agrizinKey);
-    const { data } = await req.json();
+    const body = await req.json();
+    const kind: string = body.kind || "vehicle";
+    const data = body.data;
 
     if (!data) {
       return new Response(
@@ -30,39 +32,116 @@ serve(async (req) => {
       );
     }
 
-    // Map vehicle_registrations fields to vehicle_listings columns
-    const listing = {
-      user_id: data.user_id,
-      owner_name: data.full_name,
-      owner_phone: data.mobile,
-      vehicle_type: data.vehicle_usage_type || null,
-      vehicle_name: data.vehicle_number || null,
-      model_year: null,
-      daily_rate: null,
-      condition: "good",
-      availability: "available",
-      state: data.state || null,
-      district: data.district || null,
-      mandal: data.mandal || null,
-      village: data.village || null,
-      latitude: null,
-      longitude: null,
-      location_address: [data.village, data.mandal, data.district, data.state]
-        .filter(Boolean)
-        .join(", ") || null,
-      description: `Vehicle: ${data.vehicle_number || ""} | License: ${data.driving_license_number || ""}`,
-      vehicle_images: data.vehicle_image_urls || [],
-    };
+    const locationAddress = (...parts: (string | null | undefined)[]) =>
+      parts.filter(Boolean).join(", ") || null;
 
-    const { error } = await agrizinClient
-      .from("vehicle_listings")
-      .insert(listing);
+    // ---------- VEHICLE REGISTRATION ----------
+    if (kind === "vehicle") {
+      const listing = {
+        source_id: data.id,
+        user_id: data.user_id,
+        owner_name: data.full_name,
+        owner_phone: data.mobile,
+        vehicle_type: data.vehicle_usage_type || null,
+        vehicle_name: data.vehicle_number || null,
+        condition: "good",
+        availability: data.status === "approved" ? "available" : "pending",
+        state: data.state || null,
+        district: data.district || null,
+        mandal: data.mandal || null,
+        village: data.village || null,
+        location_address: locationAddress(data.village, data.mandal, data.district, data.state),
+        description: `Vehicle: ${data.vehicle_number || ""} | License: ${data.driving_license_number || ""}`,
+        vehicle_images: data.vehicle_image_urls || [],
+        updated_at: new Date().toISOString(),
+      };
 
-    if (error) throw error;
+      const { error } = await agrizinClient
+        .from("vehicle_listings")
+        .upsert(listing, { onConflict: "source_id" });
+      if (error) throw error;
+
+      return new Response(
+        JSON.stringify({ success: true, table: "vehicle_listings", kind }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ---------- FARM WORKER ----------
+    if (kind === "farm_worker") {
+      const listing = {
+        source_id: data.id,
+        user_id: data.user_id,
+        worker_name: data.first_name,
+        phone: data.phone,
+        gender: data.gender || null,
+        age: data.age || null,
+        skills: data.skills || [],
+        experience_years: data.experience_years || null,
+        availability: data.availability || null,
+        expected_wage: data.expected_wage || null,
+        wage_type: data.wage_type || null,
+        category: data.category || null,
+        group_count: data.group_count || null,
+        state: data.state || null,
+        district: data.district || null,
+        mandal: data.mandal || null,
+        village: data.village || null,
+        location_address: locationAddress(data.village, data.mandal, data.district, data.state),
+        profile_photo_url: data.profile_photo_url || null,
+        status: data.status || "approved",
+        updated_at: new Date().toISOString(),
+      };
+
+      const { error } = await agrizinClient
+        .from("farm_worker_listings")
+        .upsert(listing, { onConflict: "source_id" });
+      if (error) throw error;
+
+      return new Response(
+        JSON.stringify({ success: true, table: "farm_worker_listings", kind }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ---------- AGRIZIN DRIVER ----------
+    if (kind === "agrizin_driver") {
+      const listing = {
+        source_id: data.id,
+        user_id: data.user_id,
+        driver_name: data.first_name,
+        phone: data.phone,
+        gender: data.gender || null,
+        age: data.age || null,
+        vehicle_type: data.vehicle_type || null,
+        vehicle_number: data.vehicle_number || data.registration_number || null,
+        driving_license_number: data.driving_license_number || null,
+        work_duration: data.work_duration || data.availability || null,
+        preferred_location: data.preferred_location || data.farm_location || null,
+        state: data.state || null,
+        district: data.district || null,
+        mandal: data.mandal || null,
+        village: data.village || null,
+        location_address: locationAddress(data.village, data.mandal, data.district, data.state),
+        profile_photo_url: data.profile_photo_url || null,
+        status: data.status || "approved",
+        updated_at: new Date().toISOString(),
+      };
+
+      const { error } = await agrizinClient
+        .from("driver_listings")
+        .upsert(listing, { onConflict: "source_id" });
+      if (error) throw error;
+
+      return new Response(
+        JSON.stringify({ success: true, table: "driver_listings", kind }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     return new Response(
-      JSON.stringify({ success: true, table: "vehicle_listings" }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ error: `Unknown kind: ${kind}` }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
     console.error("Sync to Agrizin error:", error);
