@@ -57,7 +57,7 @@ const translations = {
     verifyOtp: "Verify OTP",
     verifying: "Verifying...",
     changeDetails: "← Change details",
-    back: "← Back",
+    back: "Back",
     
     // Earnings
     totalEarnings: "Total Earnings",
@@ -195,7 +195,7 @@ const translations = {
     verifyOtp: "OTP सत्यापित करें",
     verifying: "सत्यापित हो रहा है...",
     changeDetails: "← विवरण बदलें",
-    back: "← वापस",
+    back: "वापस",
     
     totalEarnings: "कुल कमाई",
     thisWeek: "इस सप्ताह",
@@ -326,7 +326,7 @@ const translations = {
     verifyOtp: "OTP ధృవీకరించండి",
     verifying: "ధృవీకరిస్తోంది...",
     changeDetails: "← వివరాలు మార్చండి",
-    back: "← వెనుకకు",
+    back: "వెనుకకు",
     
     totalEarnings: "మొత్తం సంపాదన",
     thisWeek: "ఈ వారం",
