@@ -57,7 +57,7 @@ const translations = {
     verifyOtp: "Verify OTP",
     verifying: "Verifying...",
     changeDetails: "← Change details",
-    back: "← Back",
+    back: "Back",
     
     // Earnings
     totalEarnings: "Total Earnings",
