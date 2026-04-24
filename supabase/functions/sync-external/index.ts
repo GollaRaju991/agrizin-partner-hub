@@ -9,6 +9,10 @@ const corsHeaders = {
 
 const externalUrl = "https://fytnskpijohbxgtngkhj.supabase.co";
 
+// The external Supabase project is no longer reachable (DNS no longer resolves).
+// Set this to false if/when the external project is restored.
+const EXTERNAL_DISABLED = true;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -16,12 +20,18 @@ serve(async (req) => {
 
   try {
     const externalKey = Deno.env.get("EXTERNAL_SUPABASE_KEY");
-    if (!externalKey) {
-      throw new Error("EXTERNAL_SUPABASE_KEY is not configured");
+    const { action, data } = await req.json();
+
+    // Skip gracefully — never throw — so client flows aren't blocked.
+    if (EXTERNAL_DISABLED || !externalKey) {
+      console.log(`Skipping ${action} — external project disabled/unavailable.`);
+      return new Response(
+        JSON.stringify({ success: true, skipped: true, reason: "external project unavailable" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const externalClient = createClient(externalUrl, externalKey);
-    const { action, data } = await req.json();
 
     if (action === "sync_profile") {
       const { error } = await externalClient
@@ -48,8 +58,6 @@ serve(async (req) => {
     }
 
     if (action === "sync_vehicle") {
-      // Vehicle registrations are synced to the Agrizin project via sync-vehicle-to-agrizin function
-      // The external DB does not have a vehicle_registrations table
       console.log("Skipping vehicle sync to external DB — handled by sync-vehicle-to-agrizin");
       return new Response(
         JSON.stringify({ success: true, skipped: true, reason: "vehicle sync handled by dedicated function" }),
@@ -63,9 +71,10 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("Sync error:", error);
+    // Return 200 with skipped flag so client never sees a hard failure on sync.
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ success: false, skipped: true, error: (error as Error).message }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
