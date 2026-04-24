@@ -364,164 +364,69 @@ export type Database = {
       }
     }
     Views: {
-      public_drivers: {
-        Row: {
-          age: number | null
-          created_at: string | null
-          district: string | null
-          first_name: string | null
-          gender: string | null
-          id: string | null
-          mandal: string | null
-          preferred_location: string | null
-          profile_photo_url: string | null
-          state: string | null
-          vehicle_type: string | null
-          village: string | null
-          work_duration: string | null
-        }
-        Insert: {
-          age?: number | null
-          created_at?: string | null
-          district?: string | null
-          first_name?: string | null
-          gender?: string | null
-          id?: string | null
-          mandal?: string | null
-          preferred_location?: string | null
-          profile_photo_url?: string | null
-          state?: string | null
-          vehicle_type?: string | null
-          village?: string | null
-          work_duration?: string | null
-        }
-        Update: {
-          age?: number | null
-          created_at?: string | null
-          district?: string | null
-          first_name?: string | null
-          gender?: string | null
-          id?: string | null
-          mandal?: string | null
-          preferred_location?: string | null
-          profile_photo_url?: string | null
-          state?: string | null
-          vehicle_type?: string | null
-          village?: string | null
-          work_duration?: string | null
-        }
-        Relationships: []
-      }
-      public_farm_workers: {
-        Row: {
-          age: number | null
-          availability: string | null
-          category: string | null
-          created_at: string | null
-          district: string | null
-          expected_wage: number | null
-          experience_years: number | null
-          first_name: string | null
-          gender: string | null
-          group_count: number | null
-          id: string | null
-          mandal: string | null
-          profile_photo_url: string | null
-          skills: string[] | null
-          state: string | null
-          village: string | null
-          wage_type: string | null
-        }
-        Insert: {
-          age?: number | null
-          availability?: string | null
-          category?: string | null
-          created_at?: string | null
-          district?: string | null
-          expected_wage?: number | null
-          experience_years?: number | null
-          first_name?: string | null
-          gender?: string | null
-          group_count?: number | null
-          id?: string | null
-          mandal?: string | null
-          profile_photo_url?: string | null
-          skills?: string[] | null
-          state?: string | null
-          village?: string | null
-          wage_type?: string | null
-        }
-        Update: {
-          age?: number | null
-          availability?: string | null
-          category?: string | null
-          created_at?: string | null
-          district?: string | null
-          expected_wage?: number | null
-          experience_years?: number | null
-          first_name?: string | null
-          gender?: string | null
-          group_count?: number | null
-          id?: string | null
-          mandal?: string | null
-          profile_photo_url?: string | null
-          skills?: string[] | null
-          state?: string | null
-          village?: string | null
-          wage_type?: string | null
-        }
-        Relationships: []
-      }
-      public_vehicles: {
-        Row: {
-          age: number | null
-          created_at: string | null
-          district: string | null
-          full_name: string | null
-          gender: string | null
-          id: string | null
-          mandal: string | null
-          profile_photo_url: string | null
-          state: string | null
-          vehicle_image_urls: string[] | null
-          vehicle_usage_type: string | null
-          village: string | null
-        }
-        Insert: {
-          age?: number | null
-          created_at?: string | null
-          district?: string | null
-          full_name?: string | null
-          gender?: string | null
-          id?: string | null
-          mandal?: string | null
-          profile_photo_url?: string | null
-          state?: string | null
-          vehicle_image_urls?: string[] | null
-          vehicle_usage_type?: string | null
-          village?: string | null
-        }
-        Update: {
-          age?: number | null
-          created_at?: string | null
-          district?: string | null
-          full_name?: string | null
-          gender?: string | null
-          id?: string | null
-          mandal?: string | null
-          profile_photo_url?: string | null
-          state?: string | null
-          vehicle_image_urls?: string[] | null
-          vehicle_usage_type?: string | null
-          village?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       credit_referral: {
         Args: { _referred_user_id: string; _referrer_user_id: string }
         Returns: undefined
+      }
+      get_public_drivers: {
+        Args: never
+        Returns: {
+          age: number
+          created_at: string
+          district: string
+          first_name: string
+          gender: string
+          id: string
+          mandal: string
+          preferred_location: string
+          profile_photo_url: string
+          state: string
+          vehicle_type: string
+          village: string
+          work_duration: string
+        }[]
+      }
+      get_public_farm_workers: {
+        Args: never
+        Returns: {
+          age: number
+          availability: string
+          category: string
+          created_at: string
+          district: string
+          expected_wage: number
+          experience_years: number
+          first_name: string
+          gender: string
+          group_count: number
+          id: string
+          mandal: string
+          profile_photo_url: string
+          skills: string[]
+          state: string
+          village: string
+          wage_type: string
+        }[]
+      }
+      get_public_vehicles: {
+        Args: never
+        Returns: {
+          age: number
+          created_at: string
+          district: string
+          full_name: string
+          gender: string
+          id: string
+          mandal: string
+          profile_photo_url: string
+          state: string
+          vehicle_image_urls: string[]
+          vehicle_usage_type: string
+          village: string
+        }[]
       }
       notify_agrizin_sync: {
         Args: { _kind: string; _row: Json }
