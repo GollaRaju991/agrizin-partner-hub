@@ -371,6 +371,10 @@ export type Database = {
         Args: { _referred_user_id: string; _referrer_user_id: string }
         Returns: undefined
       }
+      notify_agrizin_sync: {
+        Args: { _kind: string; _row: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       service_type: "rent_vehicle" | "farm_maker" | "agrizin_driver"
