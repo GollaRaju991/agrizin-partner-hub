@@ -163,6 +163,24 @@ const Login = () => {
             </div>
 
             <div>
+              <Label className="text-foreground">Referral ID (Optional)</Label>
+              <div className="flex gap-2 mt-1">
+                <div className="flex items-center px-3 border border-input rounded-md bg-muted text-sm text-muted-foreground">
+                  +91
+                </div>
+                <Input
+                  placeholder="Enter referrer's mobile number"
+                  value={referenceId}
+                  onChange={(e) => setReferenceId(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  type="tel"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                New users: enter referrer's mobile number to give them ₹5 bonus when you complete a registration.
+              </p>
+            </div>
+
+            <div>
               <Label className="text-foreground">Password *</Label>
               <div className="relative mt-1">
                 <Input
@@ -185,24 +203,6 @@ const Login = () => {
                 <p className="text-xs text-muted-foreground mt-1">Password must be at least 6 characters</p>
               )}
             </div>
-
-            {isSignUp && (
-              <div>
-                <Label className="text-foreground">Referral ID (Optional)</Label>
-                <div className="flex gap-2 mt-1">
-                  <div className="flex items-center px-3 border border-input rounded-md bg-muted text-sm text-muted-foreground">
-                    +91
-                  </div>
-                  <Input
-                    placeholder="Enter referrer's phone number"
-                    value={referenceId}
-                    onChange={(e) => setReferenceId(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    type="tel"
-                  />
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Enter referrer's phone number to earn ₹5 bonus</p>
-              </div>
-            )}
 
             <Button
               onClick={handleSubmit}
