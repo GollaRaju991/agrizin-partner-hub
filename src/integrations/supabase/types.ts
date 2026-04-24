@@ -364,7 +364,159 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_drivers: {
+        Row: {
+          age: number | null
+          created_at: string | null
+          district: string | null
+          first_name: string | null
+          gender: string | null
+          id: string | null
+          mandal: string | null
+          preferred_location: string | null
+          profile_photo_url: string | null
+          state: string | null
+          vehicle_type: string | null
+          village: string | null
+          work_duration: string | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string | null
+          district?: string | null
+          first_name?: string | null
+          gender?: string | null
+          id?: string | null
+          mandal?: string | null
+          preferred_location?: string | null
+          profile_photo_url?: string | null
+          state?: string | null
+          vehicle_type?: string | null
+          village?: string | null
+          work_duration?: string | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string | null
+          district?: string | null
+          first_name?: string | null
+          gender?: string | null
+          id?: string | null
+          mandal?: string | null
+          preferred_location?: string | null
+          profile_photo_url?: string | null
+          state?: string | null
+          vehicle_type?: string | null
+          village?: string | null
+          work_duration?: string | null
+        }
+        Relationships: []
+      }
+      public_farm_workers: {
+        Row: {
+          age: number | null
+          availability: string | null
+          category: string | null
+          created_at: string | null
+          district: string | null
+          expected_wage: number | null
+          experience_years: number | null
+          first_name: string | null
+          gender: string | null
+          group_count: number | null
+          id: string | null
+          mandal: string | null
+          profile_photo_url: string | null
+          skills: string[] | null
+          state: string | null
+          village: string | null
+          wage_type: string | null
+        }
+        Insert: {
+          age?: number | null
+          availability?: string | null
+          category?: string | null
+          created_at?: string | null
+          district?: string | null
+          expected_wage?: number | null
+          experience_years?: number | null
+          first_name?: string | null
+          gender?: string | null
+          group_count?: number | null
+          id?: string | null
+          mandal?: string | null
+          profile_photo_url?: string | null
+          skills?: string[] | null
+          state?: string | null
+          village?: string | null
+          wage_type?: string | null
+        }
+        Update: {
+          age?: number | null
+          availability?: string | null
+          category?: string | null
+          created_at?: string | null
+          district?: string | null
+          expected_wage?: number | null
+          experience_years?: number | null
+          first_name?: string | null
+          gender?: string | null
+          group_count?: number | null
+          id?: string | null
+          mandal?: string | null
+          profile_photo_url?: string | null
+          skills?: string[] | null
+          state?: string | null
+          village?: string | null
+          wage_type?: string | null
+        }
+        Relationships: []
+      }
+      public_vehicles: {
+        Row: {
+          age: number | null
+          created_at: string | null
+          district: string | null
+          full_name: string | null
+          gender: string | null
+          id: string | null
+          mandal: string | null
+          profile_photo_url: string | null
+          state: string | null
+          vehicle_image_urls: string[] | null
+          vehicle_usage_type: string | null
+          village: string | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string | null
+          district?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          mandal?: string | null
+          profile_photo_url?: string | null
+          state?: string | null
+          vehicle_image_urls?: string[] | null
+          vehicle_usage_type?: string | null
+          village?: string | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string | null
+          district?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string | null
+          mandal?: string | null
+          profile_photo_url?: string | null
+          state?: string | null
+          vehicle_image_urls?: string[] | null
+          vehicle_usage_type?: string | null
+          village?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       credit_referral: {
