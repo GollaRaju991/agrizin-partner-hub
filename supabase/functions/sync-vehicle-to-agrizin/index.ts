@@ -51,7 +51,7 @@ serve(async (req) => {
         mandal: data.mandal || null,
         village: data.village || null,
         location_address: locationAddress(data.village, data.mandal, data.district, data.state),
-        description: `Vehicle: ${data.vehicle_number || ""} | License: ${data.driving_license_number || ""}`,
+        description: `Vehicle type: ${data.vehicle_usage_type || ""}`,
         vehicle_images: data.vehicle_image_urls || [],
         updated_at: new Date().toISOString(),
       };
@@ -114,8 +114,6 @@ serve(async (req) => {
         gender: data.gender || null,
         age: data.age || null,
         vehicle_type: data.vehicle_type || null,
-        vehicle_number: data.vehicle_number || data.registration_number || null,
-        driving_license_number: data.driving_license_number || null,
         work_duration: data.work_duration || data.availability || null,
         preferred_location: data.preferred_location || data.farm_location || null,
         state: data.state || null,
