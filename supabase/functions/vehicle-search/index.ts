@@ -27,13 +27,10 @@ Deno.serve(async (req) => {
     const limit = Math.min(parseInt(url.searchParams.get("limit") || "20"), 50);
     const offset = (page - 1) * limit;
 
+    // Safe public view via RPC — never leaks phone/Aadhaar/license
     let query = supabase
-      .from("vehicle_registrations")
-      .select(
-        "id, full_name, mobile, vehicle_number, vehicle_usage_type, state, district, mandal, village, profile_photo_url, vehicle_image_urls, status, created_at",
-        { count: "exact" }
-      )
-      .eq("status", "approved")
+      .from("public_vehicles" as any)
+      .select("*", { count: "exact" })
       .range(offset, offset + limit - 1)
       .order("created_at", { ascending: false });
 
