@@ -122,6 +122,8 @@ const RegisterFarmWorker = () => {
       availability: step2.availability || null,
       expected_wage: step2.expected_wage ? parseFloat(step2.expected_wage) : null,
       wage_type: step2.wage_type,
+      category: step2.category || null,
+      group_count: step2.group_count ? parseInt(step2.group_count) : null,
     };
 
     const { data, error } = await supabase

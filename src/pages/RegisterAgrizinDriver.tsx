@@ -112,6 +112,10 @@ const RegisterAgrizinDriver = () => {
           step2.rcImage ? uploadFile(user.id, step2.rcImage, "rc") : Promise.resolve(null),
         ]);
 
+      const vehicleUrls = await Promise.all(
+        step2.vehicleImages.map((f) => uploadFile(user.id, f, "vehicle"))
+      );
+
       const { data, error } = await supabase.from("service_applications").insert({
         user_id: user.id,
         service_type: "agrizin_driver" as const,
@@ -119,19 +123,28 @@ const RegisterAgrizinDriver = () => {
         phone: step1.mobile.trim(),
         age: step1.age ? parseInt(step1.age) : null,
         gender: step1.gender || null,
+        aadhaar_pan: step1.aadhaar_pan.trim().toUpperCase() || null,
         country: step1.country,
         state: step1.state || null,
         district: step1.district || null,
         mandal: step1.mandal || null,
         village: step1.village.trim() || null,
         profile_photo_url: profileUrl,
+        aadhaar_front_url: aadhaarFrontUrl,
+        aadhaar_back_url: aadhaarBackUrl,
         vehicle_type: step2.vehicle_usage_type || null,
-        vehicle_make: step2.vehicle_number.trim() || null,
-        vehicle_model: step2.driving_license_number.trim() || null,
+        vehicle_number: step2.vehicle_number.trim() || null,
         registration_number: step2.vehicle_number.trim() || null,
+        driving_license_number: step2.driving_license_number.trim() || null,
+        license_front_url: licenseFrontUrl,
+        license_back_url: licenseBackUrl,
+        rc_image_url: rcUrl,
+        vehicle_image_urls: vehicleUrls.filter(Boolean) as string[],
         availability: step2.work_duration || null,
+        work_duration: step2.work_duration || null,
         farm_location: step2.preferred_location.trim() || null,
-      }).select().single();
+        preferred_location: step2.preferred_location.trim() || null,
+      } as any).select().single();
 
       if (error) {
         console.error(error);
