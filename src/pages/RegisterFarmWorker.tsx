@@ -30,6 +30,8 @@ const RegisterFarmWorker = () => {
     village: "",
     profileImage: null,
     profileImagePreview: "",
+    latitude: null,
+    longitude: null,
   });
 
   const [step2, setStep2] = useState<Step2Data>({
@@ -117,6 +119,8 @@ const RegisterFarmWorker = () => {
       mandal: step1.mandal.trim() || null,
       village: step1.village.trim() || null,
       profile_photo_url: profilePhotoUrl,
+      latitude: step1.latitude ?? null,
+      longitude: step1.longitude ?? null,
       skills: step2.skills,
       experience_years: experienceYears,
       availability: step2.availability || null,
