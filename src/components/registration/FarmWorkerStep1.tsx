@@ -1,4 +1,4 @@
-import { User, Phone, MapPin, Camera, ArrowLeft, X } from "lucide-react";
+import { User, Phone, MapPin, Camera, ArrowLeft, X, Navigation, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,8 @@ export interface Step1Data {
   village: string;
   profileImage: File | null;
   profileImagePreview: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 interface Props {
@@ -31,6 +33,7 @@ interface Props {
 
 const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [locating, setLocating] = useState(false);
 
   const update = (field: keyof Step1Data, value: string | File | null) => {
     onChange({ ...data, [field]: value });
@@ -64,6 +67,30 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
   const removeProfileImage = () => {
     onChange({ ...data, profileImage: null, profileImagePreview: "" });
+  };
+
+  const captureCurrentLocation = () => {
+    if (!("geolocation" in navigator)) {
+      toast.error("Geolocation not supported on this device");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        onChange({
+          ...data,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
+        setLocating(false);
+        toast.success("GPS location captured");
+      },
+      (err) => {
+        setLocating(false);
+        toast.error(err.message || "Could not get location");
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
   };
 
   const handleNext = () => {
@@ -265,6 +292,28 @@ const FarmWorkerStep1 = ({ data, onChange, onNext, onBack }: Props) => {
           onChange={(e) => update("village", e.target.value)}
           className="h-11 rounded-xl border-border focus:border-primary"
         />
+
+        {/* GPS capture */}
+        <div className="pt-1">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={captureCurrentLocation}
+            disabled={locating}
+            className="w-full h-11 rounded-xl border-primary/40 text-primary hover:bg-primary/5 font-medium text-sm"
+          >
+            {locating ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Getting location…</>
+            ) : data.latitude && data.longitude ? (
+              <><Navigation className="w-4 h-4 mr-2" /> GPS captured ({data.latitude.toFixed(4)}, {data.longitude.toFixed(4)}) — tap to refresh</>
+            ) : (
+              <><Navigation className="w-4 h-4 mr-2" /> Use my current location (recommended)</>
+            )}
+          </Button>
+          <p className="text-[10px] text-muted-foreground mt-1 text-center">
+            Helps farmers find you in "Nearby" search on agrizin.com
+          </p>
+        </div>
       </div>
 
 

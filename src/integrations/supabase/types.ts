@@ -141,8 +141,10 @@ export type Database = {
           group_count: number | null
           id: string
           last_name: string | null
+          latitude: number | null
           license_back_url: string | null
           license_front_url: string | null
+          longitude: number | null
           mandal: string | null
           phone: string
           preferred_location: string | null
@@ -189,8 +191,10 @@ export type Database = {
           group_count?: number | null
           id?: string
           last_name?: string | null
+          latitude?: number | null
           license_back_url?: string | null
           license_front_url?: string | null
+          longitude?: number | null
           mandal?: string | null
           phone: string
           preferred_location?: string | null
@@ -237,8 +241,10 @@ export type Database = {
           group_count?: number | null
           id?: string
           last_name?: string | null
+          latitude?: number | null
           license_back_url?: string | null
           license_front_url?: string | null
+          longitude?: number | null
           mandal?: string | null
           phone?: string
           preferred_location?: string | null
@@ -276,8 +282,10 @@ export type Database = {
           full_name: string
           gender: string | null
           id: string
+          latitude: number | null
           license_back_url: string | null
           license_front_url: string | null
+          longitude: number | null
           mandal: string | null
           mobile: string
           profile_photo_url: string | null
@@ -303,8 +311,10 @@ export type Database = {
           full_name: string
           gender?: string | null
           id?: string
+          latitude?: number | null
           license_back_url?: string | null
           license_front_url?: string | null
+          longitude?: number | null
           mandal?: string | null
           mobile: string
           profile_photo_url?: string | null
@@ -330,8 +340,10 @@ export type Database = {
           full_name?: string
           gender?: string | null
           id?: string
+          latitude?: number | null
           license_back_url?: string | null
           license_front_url?: string | null
+          longitude?: number | null
           mandal?: string | null
           mobile?: string
           profile_photo_url?: string | null
