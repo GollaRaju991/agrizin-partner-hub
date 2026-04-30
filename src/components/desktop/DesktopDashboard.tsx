@@ -120,14 +120,6 @@ const HomePanel = () => {
             </div>
           </div>
         )}
-        <div className="absolute bottom-6 left-6 right-6 z-[1000]">
-          <button onClick={handleToggle}
-            className={`w-full max-w-md mx-auto block py-3 rounded-xl font-heading font-bold text-sm transition-colors shadow-lg ${
-              isOnline ? "bg-destructive text-destructive-foreground" : "bg-primary text-primary-foreground"
-            }`}>
-            {isOnline ? t("goOffline") : t("goOnline")}
-          </button>
-        </div>
       </div>
     </div>
   );
