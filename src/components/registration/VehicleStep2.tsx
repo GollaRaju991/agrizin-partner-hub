@@ -3,6 +3,7 @@ import { Car, FileText, Camera, X, ImagePlus, Upload, ChevronDown, Check } from 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const VEHICLE_TYPE_OPTIONS = [
   { value: "Auto", label: "Auto / ఆటో" },
@@ -37,6 +38,7 @@ interface Props {
 }
 
 const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
+  const { t } = useLanguage();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -123,7 +125,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Please fill all required fields");
+      toast.error(t("fillRequired"));
       return;
     }
     onSubmit();
@@ -189,7 +191,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
         {/* Vehicle Type - Multi-select dropdown at the top */}
         <div ref={dropdownRef} className="relative">
-          <FieldLabel>Vehicle Type / వాహనం రకం *</FieldLabel>
+          <FieldLabel>{t("vehicleTypeReq")}</FieldLabel>
           <div
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className={`min-h-[44px] w-full flex flex-wrap items-center gap-1.5 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
@@ -197,7 +199,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
             } bg-background`}
           >
             {selectedTypes.length === 0 ? (
-              <span className="text-sm text-muted-foreground">Select Vehicle Type / వాహనం రకం ఎంచుకోండి</span>
+              <span className="text-sm text-muted-foreground">{t("selectVehicleType")}</span>
             ) : (
               selectedTypes.map((val) => {
                 const opt = VEHICLE_TYPE_OPTIONS.find((o) => o.value === val);
@@ -244,7 +246,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
             </div>
           )}
           <p className="text-xs text-muted-foreground mt-1">
-            You can select one or more vehicle types / మీరు ఒకటి లేదా అంతకంటే ఎక్కువ వాహన రకాలను ఎంచుకోవచ్చు
+            {t("canSelectMultiple")}
           </p>
           {errors.vehicle_usage_type && <p className="text-destructive text-xs mt-1">{errors.vehicle_usage_type}</p>}
         </div>
@@ -255,11 +257,11 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
           <div className="space-y-5">
             {/* Vehicle Number */}
             <div>
-              <FieldLabel>Vehicle Number *</FieldLabel>
+              <FieldLabel>{t("vehicleNumberReq")}</FieldLabel>
               <div className="relative">
                 <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                 <Input
-                  placeholder="E.g. MH01AB1234"
+                  placeholder={t("egVehicleNum")}
                   value={data.vehicle_number}
                   onChange={(e) => update("vehicle_number", e.target.value.toUpperCase())}
                   className={`pl-10 h-11 rounded-lg ${errorClass("vehicle_number")}`}
@@ -270,11 +272,11 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
             {/* DL Number */}
             <div>
-              <FieldLabel>Driving License Number *</FieldLabel>
+              <FieldLabel>{t("drivingLicenseReq")}</FieldLabel>
               <div className="relative">
                 <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                 <Input
-                  placeholder="E.g. DL1234567890123"
+                  placeholder={t("egDl")}
                   value={data.driving_license_number}
                   onChange={(e) => update("driving_license_number", e.target.value.toUpperCase())}
                   className={`pl-10 h-11 rounded-lg ${errorClass("driving_license_number")}`}
@@ -285,7 +287,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
             {/* RC Upload */}
             <div>
-              <FieldLabel>Upload RC Document (Optional)</FieldLabel>
+              <FieldLabel>{t("uploadRcOptional")}</FieldLabel>
               {data.rcImagePreview ? (
                 <div className="relative inline-block">
                   <img src={data.rcImagePreview} alt="RC" className="w-full max-w-xs h-24 rounded-lg object-cover border-2 border-primary/30" />
@@ -300,7 +302,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
               ) : (
                 <label className="flex items-center gap-2 h-11 px-4 rounded-lg border border-border cursor-pointer hover:border-primary/50 transition-colors w-fit">
                   <Upload className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-muted-foreground">Upload RC Image</span>
+                  <span className="text-sm text-muted-foreground">{t("uploadRcImage")}</span>
                   <input type="file" accept="image/*" onChange={handleFileUpload("rcImage", "rcImagePreview")} className="hidden" />
                 </label>
               )}
@@ -308,7 +310,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
             {/* Vehicle Photos */}
             <div>
-              <FieldLabel>Upload Vehicle Photos *</FieldLabel>
+              <FieldLabel>{t("uploadVehiclePhotos")} *</FieldLabel>
               <div className="flex flex-wrap gap-3">
                 {data.vehicleImagePreviews.map((preview, i) => (
                   <div key={i} className="relative">
@@ -368,10 +370,10 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
 
             {/* Driving License Upload */}
             <div>
-              <FieldLabel>Upload Driving License *</FieldLabel>
+              <FieldLabel>{t("uploadDrivingLicense")} *</FieldLabel>
               <div className="flex gap-4">
-                <DocUpload label="Front Image" preview={data.licenseFrontPreview} field="licenseFront" previewField="licenseFrontPreview" />
-                <DocUpload label="Back Image" preview={data.licenseBackPreview} field="licenseBack" previewField="licenseBackPreview" required />
+                <DocUpload label={t("frontImage")} preview={data.licenseFrontPreview} field="licenseFront" previewField="licenseFrontPreview" />
+                <DocUpload label={t("backImage")} preview={data.licenseBackPreview} field="licenseBack" previewField="licenseBackPreview" required />
               </div>
             </div>
 
