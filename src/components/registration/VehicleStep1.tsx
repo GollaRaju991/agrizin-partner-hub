@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { getStates, getDistricts, getMandals } from "@/data/indianLocations";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface VehicleStep1Data {
   full_name: string;
@@ -33,6 +34,7 @@ interface Props {
 }
 
 const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
+  const { t } = useLanguage();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const update = (field: keyof VehicleStep1Data, value: string) => {
@@ -91,7 +93,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Please fill all required fields");
+      toast.error(t("fillRequired"));
       return;
     }
     onNext();
@@ -135,7 +137,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
             <X className="w-3 h-3" />
           </button>
           <label className="mt-0.5 cursor-pointer block text-center">
-            <span className="text-[10px] text-primary font-medium hover:underline">Change</span>
+            <span className="text-[10px] text-primary font-medium hover:underline">{t("change")}</span>
             <input type="file" accept="image/*" onChange={handleImageUpload(field, previewField)} className="hidden" />
           </label>
         </div>
@@ -144,7 +146,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
           className={`w-[100px] h-[68px] md:w-28 md:h-20 rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all ${errors[field] ? "border-destructive bg-destructive/5" : "border-border"}`}
         >
           <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
-          <span className="text-[9px] text-muted-foreground font-medium">Upload</span>
+          <span className="text-[9px] text-muted-foreground font-medium">{t("upload")}</span>
           <input type="file" accept="image/*" onChange={handleImageUpload(field, previewField)} className="hidden" />
         </label>
       )}
@@ -160,7 +162,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
         {/* Title row with profile image inline */}
         <div className="flex items-start justify-between gap-4">
           <h2 className="font-heading font-bold text-base md:text-lg text-foreground pt-1">
-            Step 1: Personal Details
+            {t("step1Personal")}
           </h2>
           {/* Profile Image - circular, top right */}
           <div className="flex flex-col items-center shrink-0">
@@ -179,7 +181,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
                   <X className="w-3 h-3" />
                 </button>
                 <label className="block text-center mt-0.5 cursor-pointer">
-                  <span className="text-[9px] text-primary font-medium hover:underline">Change</span>
+                  <span className="text-[9px] text-primary font-medium hover:underline">{t("change")}</span>
                   <input type="file" accept="image/*" onChange={handleImageUpload("profileImage", "profileImagePreview")} className="hidden" />
                 </label>
               </div>
@@ -188,7 +190,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
                 className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all ${errors.profileImage ? "border-destructive bg-destructive/5" : "border-primary/30"}`}
               >
                 <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
-                <span className="text-[8px] text-muted-foreground font-medium">Upload</span>
+                <span className="text-[8px] text-muted-foreground font-medium">{t("upload")}</span>
                 <input type="file" accept="image/*" onChange={handleImageUpload("profileImage", "profileImagePreview")} className="hidden" />
               </label>
             )}
@@ -200,11 +202,11 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
         <div className="space-y-3.5">
           {/* Full Name */}
           <div>
-            <FieldLabel>Full Name *</FieldLabel>
+            <FieldLabel>{t("nameRequired")}</FieldLabel>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. John Doe"
+                placeholder={t("egJohn")}
                 value={data.full_name}
                 onChange={(e) => update("full_name", e.target.value)}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("full_name")}`}
@@ -216,25 +218,25 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
           {/* Age & Gender */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <FieldLabel>Age</FieldLabel>
+              <FieldLabel>{t("age")}</FieldLabel>
               <Input
                 type="number"
-                placeholder="E.g. 25"
+                placeholder={t("eg25")}
                 value={data.age}
                 onChange={(e) => update("age", e.target.value.replace(/\D/g, "").slice(0, 3))}
                 className="h-10 rounded-lg text-sm"
               />
             </div>
             <div>
-              <FieldLabel>Gender</FieldLabel>
+              <FieldLabel>{t("gender")}</FieldLabel>
               <Select value={data.gender} onValueChange={(v) => update("gender", v)}>
                 <SelectTrigger className="h-10 rounded-lg text-xs">
-                  <SelectValue placeholder="Select Gender" />
+                  <SelectValue placeholder={t("selectGender")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male" className="text-xs">Male</SelectItem>
-                  <SelectItem value="female" className="text-xs">Female</SelectItem>
-                  <SelectItem value="other" className="text-xs">Other</SelectItem>
+                  <SelectItem value="male" className="text-xs">{t("male")}</SelectItem>
+                  <SelectItem value="female" className="text-xs">{t("female")}</SelectItem>
+                  <SelectItem value="other" className="text-xs">{t("other")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -242,11 +244,11 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
           {/* Mobile */}
           <div>
-            <FieldLabel>Mobile Number *</FieldLabel>
+            <FieldLabel>{t("mobileRequired")}</FieldLabel>
             <div className="relative">
               <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. 9876543210"
+                placeholder={t("egMobile")}
                 value={data.mobile}
                 onChange={(e) => update("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("mobile")}`}
@@ -257,11 +259,11 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
           {/* Aadhaar / PAN */}
           <div>
-            <FieldLabel>Aadhaar / PAN Number *</FieldLabel>
+            <FieldLabel>{t("aadhaarPanLabel")}</FieldLabel>
             <div className="relative">
               <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. 123456789012 or ABCDE1234F"
+                placeholder={t("egAadhaar")}
                 value={data.aadhaar_pan}
                 onChange={(e) => update("aadhaar_pan", e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12))}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("aadhaar_pan")}`}
@@ -276,7 +278,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
         {/* Address Details */}
         <div className="space-y-3.5">
-          <h3 className="font-heading font-semibold text-sm text-foreground">Address Details</h3>
+          <h3 className="font-heading font-semibold text-sm text-foreground">{t("addressDetails")}</h3>
 
           <div className="grid grid-cols-2 gap-3">
             {/* Country */}
@@ -284,8 +286,8 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
               <div className="relative">
                 <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-primary z-10" />
                 <div className="flex items-center h-10 rounded-lg border border-input bg-muted/50 pl-9 pr-3">
-                  <span className="text-xs text-foreground">Country</span>
-                  <span className="ml-auto text-xs text-muted-foreground">India</span>
+                  <span className="text-xs text-foreground">{t("country")}</span>
+                  <span className="ml-auto text-xs text-muted-foreground">{t("india")}</span>
                 </div>
               </div>
             </div>
@@ -295,7 +297,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
                 <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("state")}`}>
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
-                    <SelectValue placeholder="Select State *" />
+                    <SelectValue placeholder={t("selectStateReq")} />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -310,7 +312,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
                 <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("district")}`}>
                   <div className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
-                    <SelectValue placeholder="District *" />
+                    <SelectValue placeholder={t("districtReq")} />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -325,7 +327,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
                 <SelectTrigger className="h-10 rounded-lg text-xs">
                   <div className="flex items-center gap-1.5">
                     <Home className="w-3.5 h-3.5 text-primary shrink-0" />
-                    <SelectValue placeholder="Mandal" />
+                    <SelectValue placeholder={t("selectMandal")} />
                   </div>
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -339,7 +341,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-primary" />
               <Input
-                placeholder="Enter Village Name"
+                placeholder={t("enterVillage")}
                 value={data.village}
                 onChange={(e) => update("village", e.target.value)}
                 className="pl-9 h-10 rounded-lg text-sm"
@@ -353,10 +355,10 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
 
         {/* Aadhaar/PAN Images */}
         <div className="space-y-2.5">
-          <h3 className="font-heading font-semibold text-sm text-foreground">Aadhaar / PAN Images *</h3>
+          <h3 className="font-heading font-semibold text-sm text-foreground">{t("uploadAadhaarPan")}</h3>
           <div className="flex gap-6 justify-center">
-            <DocImageUpload label="Front Side" field="aadhaarFront" previewField="aadhaarFrontPreview" preview={data.aadhaarFrontPreview} />
-            <DocImageUpload label="Back Side" field="aadhaarBack" previewField="aadhaarBackPreview" preview={data.aadhaarBackPreview} />
+            <DocImageUpload label={t("frontSide")} field="aadhaarFront" previewField="aadhaarFrontPreview" preview={data.aadhaarFrontPreview} />
+            <DocImageUpload label={t("backSide")} field="aadhaarBack" previewField="aadhaarBackPreview" preview={data.aadhaarBackPreview} />
           </div>
         </div>
 
@@ -366,7 +368,7 @@ const VehicleStep1 = ({ data, onChange, onNext, onBack }: Props) => {
             onClick={handleNext}
             className="w-full h-11 rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90 shadow-md"
           >
-            Next →
+            {t("next")}
           </Button>
         </div>
       </div>

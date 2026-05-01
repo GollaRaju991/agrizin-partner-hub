@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import VehicleStep1, { type VehicleStep1Data } from "@/components/registration/VehicleStep1";
 import VehicleStep2, { type VehicleStep2Data } from "@/components/registration/VehicleStep2";
 import SuccessDialog from "@/components/registration/SuccessDialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const BUCKET = "vehicle-documents";
 
@@ -24,6 +25,7 @@ const uploadFile = async (userId: string, file: File, folder: string): Promise<s
 
 const RegisterVehicle = () => {
   const { user, profile, loading: authLoading } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -160,7 +162,7 @@ const RegisterVehicle = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <span className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">{t("loading")}</p>
         </div>
       </div>
     );
@@ -175,16 +177,16 @@ const RegisterVehicle = () => {
           <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
             <span className="text-3xl">⚠️</span>
           </div>
-          <h2 className="font-heading font-bold text-xl text-destructive">Duplicate Submission</h2>
+          <h2 className="font-heading font-bold text-xl text-destructive">{t("duplicateSubmission")}</h2>
           <div className="w-full h-px bg-destructive/30" />
           <p className="text-muted-foreground text-sm">
-            You have already submitted your application.
+            {t("alreadySubmittedApp")}
           </p>
           <button
             onClick={() => navigate("/")}
             className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-sm hover:opacity-90 transition-opacity"
           >
-            Go to Dashboard
+            {t("goToDashboard")}
           </button>
         </div>
       </div>
@@ -203,7 +205,7 @@ const RegisterVehicle = () => {
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-          <h1 className="font-heading font-bold text-base md:text-xl">Vehicle Registration</h1>
+          <h1 className="font-heading font-bold text-base md:text-xl">{t("vehicleRegistration")}</h1>
           <div className="flex items-center gap-1">
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>1</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground/60"><path d="m9 18 6-6-6-6"/></svg>
