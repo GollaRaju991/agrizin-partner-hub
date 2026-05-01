@@ -175,7 +175,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
           className={`w-32 h-20 md:w-36 md:h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 transition-colors ${errors[field] ? "border-destructive" : "border-border"}`}
         >
           <Camera className="w-5 h-5 text-muted-foreground mb-1" />
-          <span className="text-[10px] text-muted-foreground">Upload Image</span>
+          <span className="text-[10px] text-muted-foreground">{t("uploadImage")}</span>
           <input type="file" accept="image/*" onChange={handleFileUpload(field, previewField)} className="hidden" />
         </label>
       )}
@@ -187,7 +187,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
     <div className="bg-card rounded-2xl border border-border shadow-[var(--shadow-card)] overflow-hidden">
       <div className="p-5 md:p-8 space-y-6">
         {/* Mobile step title */}
-        <h2 className="md:hidden font-heading font-bold text-lg text-foreground">Step 2: Vehicle Details</h2>
+        <h2 className="md:hidden font-heading font-bold text-lg text-foreground">{t("step2Vehicle")}</h2>
 
         {/* Vehicle Type - Multi-select dropdown at the top */}
         <div ref={dropdownRef} className="relative">
@@ -323,7 +323,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
                       <X className="w-3.5 h-3.5" />
                     </button>
                     <label className="block text-center mt-1 cursor-pointer">
-                      <span className="text-xs text-primary font-medium hover:underline">Change</span>
+                      <span className="text-xs text-primary font-medium hover:underline">{t("change")}</span>
                       <input type="file" accept="image/*" onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
@@ -339,7 +339,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
                 ))}
                 <label className="w-28 h-20 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors">
                   <ImagePlus className="w-5 h-5 text-muted-foreground mb-1" />
-                  <span className="text-[10px] text-muted-foreground">Upload Image</span>
+                  <span className="text-[10px] text-muted-foreground">{t("uploadImage")}</span>
                   <input type="file" accept="image/*" multiple onChange={handleVehicleImages} className="hidden" />
                 </label>
               </div>
@@ -350,19 +350,18 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
           <div className="space-y-5">
             {/* Aadhaar/PAN Images (desktop only - mobile shows in step1) */}
             <div className="hidden md:block">
-              <FieldLabel>Upload Aadhaar / PAN Images *</FieldLabel>
-              <p className="text-xs text-muted-foreground mb-3">Front and back side images</p>
+              <FieldLabel>{t("uploadAadhaarPan")}</FieldLabel>
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-1">
-                  <span className="text-xs font-medium text-foreground">Front Side Image</span>
+                  <span className="text-xs font-medium text-foreground">{t("frontImage")}</span>
                   <div className="w-36 h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/30">
-                    <span className="text-xs text-muted-foreground">From Step 1</span>
+                    <span className="text-xs text-muted-foreground">—</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <span className="text-xs font-medium text-foreground">Back Side Image</span>
+                  <span className="text-xs font-medium text-foreground">{t("backImage")}</span>
                   <div className="w-36 h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/30">
-                    <span className="text-xs text-muted-foreground">From Step 1</span>
+                    <span className="text-xs text-muted-foreground">—</span>
                   </div>
                 </div>
               </div>
@@ -388,7 +387,7 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
             onClick={onBack}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to Step 1
+            {t("backToStep1")}
           </button>
           <Button
             onClick={handleSubmit}
@@ -398,10 +397,10 @@ const VehicleStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
             {loading ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                Submitting...
+                {t("submitting")}
               </span>
             ) : (
-              "Submit Application"
+              t("submit")
             )}
           </Button>
         </div>
