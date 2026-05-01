@@ -8,9 +8,11 @@ import { toast } from "sonner";
 import SuccessDialog from "@/components/registration/SuccessDialog";
 import FarmWorkerStep1, { type Step1Data } from "@/components/registration/FarmWorkerStep1";
 import FarmWorkerStep2, { type Step2Data } from "@/components/registration/FarmWorkerStep2";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const RegisterFarmWorker = () => {
   const { user, profile, loading: authLoading } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -153,7 +155,7 @@ const RegisterFarmWorker = () => {
   if (authLoading || checkingDuplicate) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t("loading")}</p>
       </div>
     );
   }
@@ -167,15 +169,15 @@ const RegisterFarmWorker = () => {
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
             <span className="text-3xl">✅</span>
           </div>
-          <h2 className="font-heading font-bold text-xl text-foreground">Already Registered</h2>
+          <h2 className="font-heading font-bold text-xl text-foreground">{t("alreadyRegistered")}</h2>
           <p className="text-muted-foreground text-sm">
-            You have already submitted a farm worker application. You cannot create another one.
+            {t("alreadyRegisteredFarm")}
           </p>
           <button
             onClick={() => navigate("/")}
             className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-heading font-bold text-sm hover:opacity-90 transition-opacity"
           >
-            Go to Dashboard
+            {t("goToDashboard")}
           </button>
         </div>
       </div>
@@ -194,7 +196,7 @@ const RegisterFarmWorker = () => {
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-          <h1 className="font-heading font-bold text-base md:text-xl">Farm Worker</h1>
+          <h1 className="font-heading font-bold text-base md:text-xl">{t("farmWorkerTitle")}</h1>
           <div className="flex items-center gap-1">
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${step === 1 ? "bg-primary-foreground text-primary" : "bg-primary-foreground/20 text-primary-foreground"}`}>1</span>
             <ChevronRight className="w-3 h-3 text-primary-foreground/60" />
