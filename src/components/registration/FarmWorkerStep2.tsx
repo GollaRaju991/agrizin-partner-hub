@@ -7,13 +7,7 @@ import { toast } from "sonner";
 import { WORKER_TYPES } from "@/data/workerTypes";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
-
-const EXPERIENCE_OPTIONS = [
-  { value: "0-1", label: "0–1 years" },
-  { value: "1-3", label: "1–3 years" },
-  { value: "3-5", label: "3–5 years" },
-  { value: "5+", label: "5+ years" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const AVAILABILITY_OPTIONS = ["Full-time", "Part-time", "Daily", "Seasonal"];
 
@@ -36,8 +30,25 @@ interface Props {
 }
 
 const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
+  const { t } = useLanguage();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [skillsOpen, setSkillsOpen] = useState(false);
+
+  const EXPERIENCE_OPTIONS = [
+    { value: "0-1", label: t("exp01") },
+    { value: "1-3", label: t("exp13") },
+    { value: "3-5", label: t("exp35") },
+    { value: "5+", label: t("exp5") },
+  ];
+  const availabilityLabel = (opt: string) => {
+    const map: Record<string, string> = {
+      "Full-time": t("fullTime"),
+      "Part-time": t("partTime"),
+      Daily: t("daily"),
+      Seasonal: t("seasonal"),
+    };
+    return map[opt] || opt;
+  };
 
   const toggleSkill = (skill: string) => {
     const updated = data.skills.includes(skill)
@@ -63,7 +74,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Please fill all required fields");
+      toast.error(t("fillRequired"));
       return;
     }
     onSubmit();
@@ -78,7 +89,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
       <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.category ? "border-destructive" : "border-border"}`}>
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Briefcase className="w-4 h-4 text-primary" />
-          Category / వర్గం *
+          {t("categoryReq")}
         </div>
         <Select
           value={data.category}
@@ -88,22 +99,22 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
           }}
         >
           <SelectTrigger className={`h-11 rounded-xl ${errorClass("category")}`}>
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder={t("selectCategory")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="single">Single / ఒంటరి</SelectItem>
-            <SelectItem value="group">Group / సమూహం</SelectItem>
+            <SelectItem value="single">{t("single")}</SelectItem>
+            <SelectItem value="group">{t("group")}</SelectItem>
           </SelectContent>
         </Select>
         {errors.category && <p className="text-destructive text-xs">{errors.category}</p>}
 
         {data.category === "group" && (
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Number of Workers / కూలీల సంఖ్య *</label>
+            <label className="text-sm font-medium text-foreground">{t("workersCount")}</label>
             <Input
               type="number"
               min={2}
-              placeholder="Enter number of workers"
+              placeholder={t("enterWorkers")}
               value={data.group_count}
               onChange={(e) => {
                 onChange({ ...data, group_count: e.target.value });
@@ -120,7 +131,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
       <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.skills ? "border-destructive" : "border-border"}`}>
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Briefcase className="w-4 h-4 text-primary" />
-          Skills & Work Type *
+          {t("skillsWorkType")}
         </div>
 
         <Popover open={skillsOpen} onOpenChange={setSkillsOpen}>
@@ -130,7 +141,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
               className={`flex items-center justify-between w-full h-11 px-3 rounded-xl border text-sm bg-background ${errorClass("skills")} hover:border-primary/50 transition-colors`}
             >
               <span className={data.skills.length > 0 ? "text-foreground" : "text-muted-foreground"}>
-                {data.skills.length > 0 ? `${data.skills.length} selected` : "Select work types..."}
+                {data.skills.length > 0 ? `${data.skills.length} ${t("selected")}` : t("selectWorkTypes")}
               </span>
               <ChevronDown className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -173,14 +184,14 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
       <div className="bg-card rounded-2xl border border-border p-4 shadow-card space-y-3">
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Briefcase className="w-4 h-4 text-primary" />
-          Experience *
+          {t("experienceReq")}
         </div>
         <Select value={data.experience} onValueChange={(v) => {
           onChange({ ...data, experience: v });
           setErrors((prev) => ({ ...prev, experience: "" }));
         }}>
           <SelectTrigger className={`h-11 rounded-xl ${errorClass("experience")}`}>
-            <SelectValue placeholder="Select experience" />
+            <SelectValue placeholder={t("selectExperience")} />
           </SelectTrigger>
           <SelectContent>
             {EXPERIENCE_OPTIONS.map((o) => (
@@ -195,7 +206,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
       <div className={`bg-card rounded-2xl border p-4 shadow-card space-y-3 ${errors.availability ? "border-destructive" : "border-border"}`}>
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Clock className="w-4 h-4 text-primary" />
-          Availability *
+          {t("availabilityReq")}
         </div>
         <div className="flex flex-wrap gap-2">
           {AVAILABILITY_OPTIONS.map((opt) => (
@@ -212,7 +223,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
                   : `bg-card text-foreground hover:border-primary/50 ${errors.availability ? "border-destructive" : "border-border"}`
               }`}
             >
-              {opt}
+              {availabilityLabel(opt)}
               {data.availability === opt.toLowerCase() && " ✓"}
             </button>
           ))}
@@ -224,7 +235,7 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
       <div className="bg-card rounded-2xl border border-border p-4 shadow-card space-y-3">
         <div className="flex items-center gap-2 text-foreground font-heading font-semibold text-base">
           <Banknote className="w-4 h-4 text-primary" />
-          Expected Wage
+          {t("expectedWageLabel")}
         </div>
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -242,9 +253,9 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="per_day">/ per day</SelectItem>
-              <SelectItem value="per_hour">/ per hour</SelectItem>
-              <SelectItem value="per_month">/ per month</SelectItem>
+              <SelectItem value="per_day">{t("perDayShort")}</SelectItem>
+              <SelectItem value="per_hour">{t("perHourShort")}</SelectItem>
+              <SelectItem value="per_month">{t("perMonthShort")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -256,14 +267,14 @@ const FarmWorkerStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) =
           onClick={onBack}
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Back to Step 1
+          {t("backToStep1")}
         </button>
         <Button
           onClick={handleSubmit}
           disabled={loading}
           className="h-11 px-10 rounded-lg bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-heading font-bold text-sm hover:opacity-90"
         >
-          {loading ? "Submitting..." : "Submit Application"}
+          {loading ? t("submitting") : t("submit")}
         </Button>
       </div>
     </div>
