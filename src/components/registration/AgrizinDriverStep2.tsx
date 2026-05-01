@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const VEHICLE_TYPES = ["Bike", "Mini Truck", "Truck"];
 const WORK_DURATIONS = ["1 Month", "3 Months", "6 Months", "1 Year"];
@@ -33,6 +34,7 @@ interface Props {
 }
 
 const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props) => {
+  const { t } = useLanguage();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const update = (field: keyof AgrizinDriverStep2Data, value: string) => {
@@ -92,7 +94,7 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Please fill all required fields");
+      toast.error(t("fillRequired"));
       return;
     }
     onSubmit();
@@ -133,7 +135,7 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
             <X className="w-3 h-3" />
           </button>
           <label className="block text-center mt-0.5 cursor-pointer">
-            <span className="text-[10px] text-primary font-medium hover:underline">Change</span>
+            <span className="text-[10px] text-primary font-medium hover:underline">{t("change")}</span>
             <input type="file" accept="image/*" onChange={handleFileUpload(field, previewField)} className="hidden" />
           </label>
         </div>
@@ -142,7 +144,7 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
           className={`w-[100px] h-[68px] md:w-36 md:h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer hover:border-primary/60 transition-colors ${errors[field] ? "border-destructive" : "border-border"}`}
         >
           <Camera className="w-4 h-4 text-muted-foreground mb-0.5" />
-          <span className="text-[9px] text-muted-foreground">Upload</span>
+          <span className="text-[9px] text-muted-foreground">{t("upload")}</span>
           <input type="file" accept="image/*" onChange={handleFileUpload(field, previewField)} className="hidden" />
         </label>
       )}
@@ -154,23 +156,23 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
     <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="p-4 md:p-8 space-y-5">
         <h2 className="font-heading font-bold text-base md:text-lg text-foreground">
-          Step 2: Vehicle & Preferences
+          {t("step2VehiclePref")}
         </h2>
 
         {/* Vehicle Details */}
         <div className="space-y-3.5">
           <h3 className="font-heading font-semibold text-sm text-foreground flex items-center gap-1.5">
-            <Car className="w-4 h-4 text-primary" /> Vehicle Details
+            <Car className="w-4 h-4 text-primary" /> {t("vehicleDetails")}
           </h3>
 
           {/* Vehicle Type - at the top */}
           <div>
-            <FieldLabel>Vehicle Type *</FieldLabel>
+            <FieldLabel>{t("vehicleTypeReq")}</FieldLabel>
             <Select value={data.vehicle_usage_type} onValueChange={(v) => update("vehicle_usage_type", v)}>
               <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("vehicle_usage_type")}`}>
                 <div className="flex items-center gap-1.5">
                   <Truck className="w-3.5 h-3.5 text-primary shrink-0" />
-                  <SelectValue placeholder="Select Vehicle Type" />
+                  <SelectValue placeholder={t("selectVehicleType")} />
                 </div>
               </SelectTrigger>
               <SelectContent>
@@ -183,11 +185,11 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
           </div>
 
           <div>
-            <FieldLabel>Vehicle Number *</FieldLabel>
+            <FieldLabel>{t("vehicleNumberReq")}</FieldLabel>
             <div className="relative">
               <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. MH01AB1234"
+                placeholder={t("egVehicleNum")}
                 value={data.vehicle_number}
                 onChange={(e) => update("vehicle_number", e.target.value.toUpperCase())}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("vehicle_number")}`}
@@ -197,11 +199,11 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
           </div>
 
           <div>
-            <FieldLabel>Driving License Number *</FieldLabel>
+            <FieldLabel>{t("drivingLicenseReq")}</FieldLabel>
             <div className="relative">
               <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. DL1234567890123"
+                placeholder={t("egDl")}
                 value={data.driving_license_number}
                 onChange={(e) => update("driving_license_number", e.target.value.toUpperCase())}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("driving_license_number")}`}
@@ -212,16 +214,16 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
 
           {/* Driving License Upload */}
           <div>
-            <FieldLabel>Upload Driving License *</FieldLabel>
+            <FieldLabel>{t("uploadDrivingLicense")} *</FieldLabel>
             <div className="flex gap-4 justify-center">
-              <DocUpload label="Front Image" preview={data.licenseFrontPreview} field="licenseFront" previewField="licenseFrontPreview" />
-              <DocUpload label="Back Image" preview={data.licenseBackPreview} field="licenseBack" previewField="licenseBackPreview" required />
+              <DocUpload label={t("frontImage")} preview={data.licenseFrontPreview} field="licenseFront" previewField="licenseFrontPreview" />
+              <DocUpload label={t("backImage")} preview={data.licenseBackPreview} field="licenseBack" previewField="licenseBackPreview" required />
             </div>
           </div>
 
           {/* Vehicle Photos */}
           <div>
-            <FieldLabel>Upload Vehicle Photos</FieldLabel>
+            <FieldLabel>{t("uploadVehiclePhotos")}</FieldLabel>
             <div className="flex flex-wrap gap-2.5">
               {data.vehicleImagePreviews.map((preview, i) => (
                 <div key={i} className="relative">
@@ -237,7 +239,7 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
               ))}
               <label className="w-24 h-16 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors">
                 <ImagePlus className="w-4 h-4 text-muted-foreground mb-0.5" />
-                <span className="text-[9px] text-muted-foreground">Add Photo</span>
+                <span className="text-[9px] text-muted-foreground">{t("addPhoto")}</span>
                 <input type="file" accept="image/*" multiple onChange={handleVehicleImages} className="hidden" />
               </label>
             </div>
@@ -250,17 +252,17 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
         {/* Driver Preferences */}
         <div className="space-y-3.5">
           <h3 className="font-heading font-semibold text-sm text-foreground flex items-center gap-1.5">
-            📍 Driver Preferences
+            📍 {t("driverPreferences")}
           </h3>
 
           {/* Work Duration */}
           <div>
-            <FieldLabel>📅 Work Duration *</FieldLabel>
+            <FieldLabel>📅 {t("workDuration")}</FieldLabel>
             <Select value={data.work_duration} onValueChange={(v) => update("work_duration", v)}>
               <SelectTrigger className={`h-10 rounded-lg text-xs ${errorClass("work_duration")}`}>
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-primary shrink-0" />
-                  <SelectValue placeholder="Select Duration" />
+                  <SelectValue placeholder={t("selectDuration")} />
                 </div>
               </SelectTrigger>
               <SelectContent>
@@ -274,11 +276,11 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
 
           {/* Preferred Location */}
           <div>
-            <FieldLabel>📍 Preferred Location *</FieldLabel>
+            <FieldLabel>📍 {t("preferredLocation")}</FieldLabel>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
               <Input
-                placeholder="E.g. Hyderabad, Warangal, Guntur"
+                placeholder={t("egPreferredLoc")}
                 value={data.preferred_location}
                 onChange={(e) => update("preferred_location", e.target.value)}
                 className={`pl-10 h-10 rounded-lg text-sm ${errorClass("preferred_location")}`}
@@ -294,7 +296,7 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
             onClick={onBack}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to Step 1
+            {t("backToStep1")}
           </button>
           <Button
             onClick={handleSubmit}
@@ -304,10 +306,10 @@ const AgrizinDriverStep2 = ({ data, onChange, onSubmit, onBack, loading }: Props
             {loading ? (
               <span className="flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                Submitting...
+                {t("submitting")}
               </span>
             ) : (
-              "Submit Application"
+              t("submit")
             )}
           </Button>
         </div>
